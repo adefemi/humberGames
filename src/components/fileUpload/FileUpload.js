@@ -1,5 +1,4 @@
 import React from "react";
-import shortId from "shortid";
 import axios from "axios";
 import propTypes from "prop-types";
 
@@ -8,7 +7,6 @@ import emptyFile from "./assets/file-blank.png";
 import brokenFile from "./assets/file-broken.png";
 import { addClass, hasClass } from "../select/Select";
 import { Icon } from "../icons";
-import { Notification } from "../notification";
 import { isDescendant } from "../../utils/helper";
 
 let proptypes = {
@@ -30,7 +28,7 @@ let proptypes = {
 
 class FileUpload extends React.Component {
   fileRef = {};
-  id = shortId.generate();
+  id = 0;
   state = {
     fileArray: []
   };
@@ -231,7 +229,7 @@ class FileUpload extends React.Component {
     const filesData = [];
 
     for (let i = 0; i < files.length; i++) {
-      let contentID = shortId.generate();
+      let contentID = 0;
 
       let content = (
         <div key={contentID} id={contentID} className="file-upload-items">

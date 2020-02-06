@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import propTypes from "prop-types";
-import { Icon } from "../../common";
+import { Icon } from "../";
 import "./Rater.css";
 export default function Rater({ rate, total, size, changeable, getRate }) {
   const [rateState, changeRateState] = useState(rate);

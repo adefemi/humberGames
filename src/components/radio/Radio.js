@@ -1,6 +1,5 @@
-import React, { Fragment } from "react";
+import React  from "react";
 import PropTypes from "prop-types";
-import shortId from "shortid";
 
 import "./Radio.css";
 
@@ -30,7 +29,7 @@ Radio.propTypes = {
 
 //default proptypes
 Radio.defaultProps = {
-  id: shortId.generate(),
+  id: 0,
   label: "",
   name: "",
   onChange: null,

@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import countryControl from "country-state-city";
 
 import "./Input.css";
-import { decodeCurrency } from "../../currency";
 import { Select } from "../select";
-import { connect } from "react-redux";
 const defaultPropList = {
   value: PropTypes.any,
   type: PropTypes.oneOf([
@@ -205,11 +203,7 @@ const Input = props => {
             }}
             {...newProps}
             value={
-              props.type === "currency"
-                ? props.value
-                  ? decodeCurrency(("" + props.value).replace(/,/g, ""))
-                  : ""
-                : convertValue(props, defaultCode)
+              convertValue(props, defaultCode)
             }
           />
           {props.iconRight}
@@ -239,4 +233,4 @@ Input.defaultProps = {
   setPhoneNumber: () => null
 };
 
-export default connect(state => ({ currencies: state.currencies }))(Input);
+export default Input;

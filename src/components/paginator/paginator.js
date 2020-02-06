@@ -1,6 +1,6 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
-import AppIcon from "../common/icons/Icon";
+import AppIcon from "../icons/Icon";
 import "./paginator.css";
 import proptypes from "prop-types";
 

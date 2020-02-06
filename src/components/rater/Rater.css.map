@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,MAAM,CAAC;EACL,OAAO,EAAE,IAAI;CAcd;;AAfD,AAGI,MAHE,CAEJ,YAAY,CACV,GAAG,CAAC;EACF,IAAI,EAAE,OAAO;CACd;;AALL,AASI,MATE,CAQJ,cAAc,CACZ,GAAG,CAAC;EACF,MAAM,EAAE,OAAO;EACf,IAAI,EAAE,KAAK;EACX,YAAY,EAAE,IAAI;CACnB",
-    "sources": [
-        "Rater.scss"
-    ],
-    "names": [],
-    "file": "Rater.css"
-}

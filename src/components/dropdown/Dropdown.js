@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import "./Dropdown.css";
-import shortID from "shortid";
 import { hasClass, addClass, removeClass } from "../select/Select";
 import { hasSomeParentTheClass } from "../../utils/helper";
 import propTypes from "prop-types";
-import { connect } from "react-redux";
 const proptypes = {
   dropDownWidth: propTypes.string,
   active: propTypes.any.isRequired,
@@ -23,8 +21,8 @@ class DropDown extends Component {
     active: this.props.active
   };
 
-  dropDownID = shortID.generate();
-  dropDownUlID = shortID.generate();
+  dropDownID = 0;
+  dropDownUlID = 0;
 
   dropDownRef = null;
   dropDownUlRef = null;
@@ -126,4 +124,4 @@ DropDown.defaultProps = {
   staticContent: false
 };
 
-export default connect(state => ({ user: state.user }))(DropDown);
+export default DropDown;

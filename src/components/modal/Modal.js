@@ -9,8 +9,6 @@ import { randomIDGenerator } from "../../utils/helper";
 import { getIconType } from "../notification/Notification";
 import { Button } from "../button";
 import { addClass } from "../select/Select";
-import { Spinner } from "../spinner";
-import { Loading } from "../../utils/loading";
 
 const modalTypes = Object.freeze({
   confirm: "confirm",
@@ -139,7 +137,7 @@ Modal.comps = props => {
       style={{ ...props.style }}
     >
       {props.loading ? (
-        Loading
+        "loading"
       ) : (
         <>
           <ModalElement

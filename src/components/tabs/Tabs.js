@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 
 import "./Tabs.css";
-import { Typography } from "../../../components";
 export default class Tabs extends Component {
   constructor(props) {
     super(props);
@@ -82,11 +81,9 @@ export default class Tabs extends Component {
   //Static method for tab panes
   static TabPane({ tab }) {
     return (
-      <Fragment>
-        <Typography className="tab-item" variant="h3">
-          {tab}
-        </Typography>
-      </Fragment>
+     <div>
+       {tab}
+     </div>
     );
   }
 
