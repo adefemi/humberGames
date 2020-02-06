@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans+Condensed:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("https://s3.eu-west-2.amazonaws.com/algorism-artisan/fonts/proxima_ssv/ProximaNova-Regular.otf") format("opentype"); }
+
+@font-face {
+  font-family: "Museo";
+  src: url("https://s3.eu-west-2.amazonaws.com/algorism-artisan/fonts/Museo_Sans_Cyrillic/MuseoSansCyrl.woff.ttf") format("woff"); }
+
+.DatePicker .SingleDatePicker_picker {
+  z-index: 2000; }
+
+.DatePicker > *,
+.DatePicker .SingleDatePickerInput,
+.DatePicker .DateInput,
+.DatePicker .DateInput_input {
+  width: 100% !important;
+  display: block !important; }
+
+.DatePicker .DateInput_input__focused {
+  border-color: #1CA0D7; }
+
+.DatePicker .DateInput_input {
+  box-sizing: border-box;
+  height: 40px;
+  font-size: 14px; }
+
+.DatePicker .DayPickerKeyboardShortcuts_show__bottomRight::before {
+  border-right-color: #1CA0D7; }
+
+.DatePicker .CalendarDay__selected,
+.DatePicker .CalendarDay__selected:active,
+.DatePicker .CalendarDay__selected:hover {
+  background: #1CA0D7;
+  border-color: #1CA0D7; }

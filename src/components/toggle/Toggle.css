@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans+Condensed:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("https://s3.eu-west-2.amazonaws.com/algorism-artisan/fonts/proxima_ssv/ProximaNova-Regular.otf") format("opentype"); }
+
+@font-face {
+  font-family: "Museo";
+  src: url("https://s3.eu-west-2.amazonaws.com/algorism-artisan/fonts/Museo_Sans_Cyrillic/MuseoSansCyrl.woff.ttf") format("woff"); }
+
+.Toggle .toggle-wrapper {
+  width: 70px;
+  height: 32px;
+  border-radius: 15px;
+  display: flex;
+  box-sizing: border-box;
+  padding: 3px;
+  align-items: center;
+  position: relative;
+  background: #e6e6e6;
+  cursor: pointer;
+  border: 2px solid #1CA0D7;
+  overflow: hidden; }
+  .Toggle .toggle-wrapper .toggle-switch {
+    width: 45%;
+    height: 100%;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.3s ease;
+    right: 100%;
+    transform: translateX(100%); }
+    .Toggle .toggle-wrapper .toggle-switch.active {
+      right: 0 !important;
+      transform: translateX(0); }
+  .Toggle .toggle-wrapper.active {
+    background: #1CA0D7; }

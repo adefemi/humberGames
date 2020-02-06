@@ -1,0 +1,74 @@
+@import "../../../styles/theme";
+.react-autosuggest__suggestion--highlighted {
+  background: $primary-color !important;
+}
+
+.Typeahead {
+  width: 100%;
+  text-transform: initial;
+  margin: 0 auto;
+  .typeahead-wrapper {
+    position: relative;
+
+    .inputbox-wrapper {
+      position: relative;
+      padding: 1px;
+      .icon-wrapper {
+        position: absolute;
+        top: 31%;
+        right: 10px;
+      }
+    }
+    input {
+      padding: 0 10px;
+      height: 50px;
+      border: none;
+      font-family: $primary-font;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .typeahead-options {
+      width: 100%;
+      margin-top: 0px;
+      box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+      position: relative;
+      ul {
+        list-style: none;
+        // border: 1px solid #c7c7c7;
+        max-height: 300px;
+        overflow-y: auto;
+        box-sizing: border-box;
+        margin: 0;
+        background: white;
+        padding: 0;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        z-index: 2000;
+        li {
+          background-color: white;
+          border-bottom: 1px solid #c7c7c7;
+          height: 40px;
+          box-sizing: border-box;
+          a {
+            padding: 0 10px;
+            height: 100%;
+            display: flex;
+            text-decoration: none;
+            color: black;
+            align-items: center;
+            &:focus {
+              background: gray;
+            }
+          }
+        }
+
+        li:last-child {
+          border: none;
+        }
+      }
+    }
+  }
+}

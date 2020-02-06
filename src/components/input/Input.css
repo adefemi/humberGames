@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans+Condensed:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("https://s3.eu-west-2.amazonaws.com/algorism-artisan/fonts/proxima_ssv/ProximaNova-Regular.otf") format("opentype"); }
+
+@font-face {
+  font-family: "Museo";
+  src: url("https://s3.eu-west-2.amazonaws.com/algorism-artisan/fonts/Museo_Sans_Cyrillic/MuseoSansCyrl.woff.ttf") format("woff"); }
+
+.input-control {
+  position: relative; }
+  .input-control > * {
+    font-family: "Nunito Sans", sans-serif; }
+  .input-control .input-container-cover {
+    display: flex; }
+  .input-control .input-error-text {
+    margin-top: 5px;
+    color: #ff4d2d;
+    font-size: 13px; }
+  .input-control .currency-selector {
+    width: 90px; }
+    .input-control .currency-selector .select-control {
+      min-width: 80px; }
+      .input-control .currency-selector .select-control .select-button {
+        border: none;
+        border-right: 1px solid #cccccc; }
+  .input-control .dropdown-control {
+    height: 50px;
+    width: 120px;
+    margin-right: 10px; }
+    .input-control .dropdown-control input {
+      text-align: center; }
+  .input-control .phone-dropdown {
+    padding: 0 3px !important; }
+  .input-control .input-field {
+    width: 100%;
+    height: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 2px;
+    position: relative;
+    transition: 0.5s ease; }
+    .input-control .input-field i:first-child {
+      display: block;
+      padding-left: 10px; }
+    .input-control .input-field i:last-child {
+      display: block;
+      padding-right: 10px; }
+    .input-control .input-field:hover, .input-control .input-field:focus-within {
+      border-color: #c7e9f8;
+      box-shadow: 0 0 10px 0 rgba(28, 160, 215, 0.2); }
+  .input-control .input-field.disabled:hover,
+  .input-control .input-field.disabled:focus {
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    box-shadow: none !important; }
+  .input-control input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    outline: none;
+    background-color: #ffffff;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border: none;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 14px; }
+    .input-control input:disabled {
+      cursor: not-allowed; }
+    .input-control input i {
+      float: right;
+      text-align: right !important; }
+  .input-control input::-webkit-input-placeholder {
+    color: rgba(0, 0, 0, 0.5); }
+
+.input-control.error .input-field {
+  border-color: #ff4d2d; }
+  .input-control.error .input-field input {
+    color: #ff4d2d; }
+
+.input-control.small .input-field {
+  height: 25px; }
+  .input-control.small .input-field input {
+    font-size: 12px; }
+
+.input-control.large .input-field {
+  height: 55px; }
+  .input-control.large .input-field input {
+    font-size: 18px; }
