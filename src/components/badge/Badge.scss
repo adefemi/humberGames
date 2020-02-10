@@ -1,4 +1,4 @@
-@import "../../../styles/_theme";
+@import "../../styles/theme";
 
 .badge-text:after {
   content: attr(data-value);
