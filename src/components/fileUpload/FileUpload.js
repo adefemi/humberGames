@@ -26,7 +26,7 @@ let proptypes = {
   multiple: propTypes.bool
 };
 
-class FileUpload extends React.Component {
+export class FileUpload extends React.Component {
   fileRef = {};
   id = 0;
   state = {
@@ -359,5 +359,3 @@ FileUpload.defaultProps = {
   single: false,
   multiple: true
 };
-
-export default FileUpload;

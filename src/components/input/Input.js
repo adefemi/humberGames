@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import countryControl from "country-state-city";
-
 import "./Input.css";
 import { Select } from "../select";
+import {getNewProps, getCountryCodes,convertValue} from "../../utils/helper";
+
 const defaultPropList = {
   value: PropTypes.any,
   type: PropTypes.oneOf([
@@ -33,59 +33,8 @@ const defaultPropList = {
   noCurrencySelect: PropTypes.bool
 };
 
-export const getNewProps = (props, defaultPropList) => {
-  let newProps = { ...props };
 
-  for (let key in defaultPropList) {
-    if (newProps.hasOwnProperty(key) || newProps.hasOwnProperty("isError")) {
-      delete newProps[key.toString()];
-    }
-  }
-  return newProps;
-};
-
-const getCountryCodes = () => {
-  let allCountry = countryControl.getAllCountries();
-  let arrayContent = [];
-
-  allCountry.map(country => {
-    arrayContent.push({
-      value: country.phonecode,
-      content: `${country.phonecode}`,
-      displayed: `+${country.phonecode}`
-    });
-    return null;
-  });
-
-  return arrayContent;
-};
-
-const convertValue = (props, code) => {
-  if (!props.value) {
-    return "";
-  }
-  if (props.type !== "phone") {
-    return props.value;
-  }
-  let value = props.value.split("");
-  let newValue = props.value.split("");
-  let codeConvert = value[0] === "+" ? `+${code}`.split("") : code.split("");
-
-  if (codeConvert.length > value.length) {
-    return props.value;
-  }
-
-  for (let i = 0; i < codeConvert.length; i++) {
-    if (codeConvert[parseInt(i, 10)] === value[parseInt(i, 10)]) {
-      newValue.splice(0, 1);
-    } else {
-      return props.value;
-    }
-  }
-  return newValue.join("");
-};
-
-const Input = props => {
+export const Input = props => {
   let newProps = getNewProps(props, defaultPropList);
   let inputType = props.type;
   if (inputType === "currency") {

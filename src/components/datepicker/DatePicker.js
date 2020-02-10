@@ -5,7 +5,8 @@ import moment from "moment";
 import { SingleDatePicker } from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
 import "./DatePicker.css";
-class DatePicker extends Component {
+
+export class DatePicker extends Component {
   constructor(props) {
     super(props);
 
@@ -69,5 +70,3 @@ DatePicker.defaultProps = {
   numberOfMonths: 1,
   getDate: () => null
 };
-
-export default DatePicker;

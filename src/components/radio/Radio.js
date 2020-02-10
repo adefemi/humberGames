@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import "./Radio.css";
 
-const Radio = props => {
+export const Radio = props => {
   const properties = {
     ...props,
     className: "Radio " + props.className,
@@ -35,5 +35,3 @@ Radio.defaultProps = {
   onChange: null,
   className: ""
 };
-
-export default Radio;

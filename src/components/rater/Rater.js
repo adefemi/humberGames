@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import propTypes from "prop-types";
 import { Icon } from "../";
 import "./Rater.css";
-export default function Rater({ rate, total, size, changeable, getRate }) {
+
+export function Rater({ rate=0, total=5, size=24, changeable, getRate }) {
   const [rateState, changeRateState] = useState(rate);
   const changeRateStateAndCB = rate => {
     changeRateState(rate);
@@ -35,17 +35,3 @@ export default function Rater({ rate, total, size, changeable, getRate }) {
   };
   return <div className="Rater">{generateRating()}</div>;
 }
-
-Rater.propTypes = {
-  rate: propTypes.number.isRequired,
-  total: propTypes.number,
-  size: propTypes.number,
-  changeable: propTypes.bool
-};
-
-Rater.defaultProps = {
-  total: 5,
-  size: 24,
-  rate: 0,
-  getRate: () => null
-};

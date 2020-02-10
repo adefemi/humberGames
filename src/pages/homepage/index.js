@@ -1,6 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-function Index(props) {
+function Index(_) {
+    const [name, setName] = useState({});
+
+    useEffect(() => {
+        return () => {
+
+        }
+    }, []);
+
     return (
         <div>Home</div>
     );

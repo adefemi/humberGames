@@ -1,7 +1,7 @@
 import Autosuggest from "react-autosuggest";
 import React from "react";
 
-export default class Typeahead extends React.Component {
+export class Typeahead extends React.Component {
   constructor() {
     super();
 

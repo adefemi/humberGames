@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import "./Badge.css";
+
 export default function Badge(props) {
   return (
     <Fragment>

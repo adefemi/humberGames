@@ -1,8 +1,9 @@
 import React from "react";
 import AnimateHeight from "react-animate-height";
-import { Typography, Icon } from "../../common";
 import "./Accordion.css";
-export default function Accordion({
+import AppIcon from "../icons/Icon";
+
+export function Accordion({
   accordionState,
   id,
   children,
@@ -22,15 +23,9 @@ export default function Accordion({
                 changeAccordionState(id, accordionState[id.toString()]);
               }}
             >
-              <Typography
-                variant="normal"
-                wrapperClass="flex-grow-1"
-                className="toggle black-text font-16 bolder-text"
-              >
-                {title}
-              </Typography>
+              {title}
 
-              <Icon
+              <AppIcon
                 name={
                   !accordionState[id.toString()] ? "chevronDown" : "chevronUp"
                 }

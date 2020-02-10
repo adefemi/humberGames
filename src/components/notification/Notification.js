@@ -10,8 +10,7 @@ import { question } from "react-icons-kit/metrize/question";
 import ReactDOM from "react-dom";
 
 import "./Notification.css";
-import { addClass, removeClass } from "../select/Select";
-import { randomIDGenerator } from "../../utils/helper";
+import {addClass, removeClass, randomIDGenerator} from "../../utils/helper";
 
 export const getIconType = propType => {
   let icon;
@@ -58,7 +57,7 @@ const onOpen = () => {
   removeClass(el, "close");
 };
 
-const Notification = props => {
+export const Notification = props => {
   let icon = getIconType(props.type);
 
   if (!props.visible) {
@@ -172,5 +171,3 @@ Notification.propTypes = {
   visible: PropTypes.bool,
   setVisible: PropTypes.func.isRequired
 };
-
-export default Notification;

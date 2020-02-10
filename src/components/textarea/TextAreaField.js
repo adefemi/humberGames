@@ -3,7 +3,7 @@ import React from "react";
 
 import "./TextAreaField.css";
 
-const TextAreaField = props => {
+export const TextAreaField = props => {
   return (
     <React.Fragment>
       <textarea
@@ -43,5 +43,3 @@ TextAreaField.defaultProps = {
   error: false,
   errorText: "Error validating the input"
 };
-
-export default TextAreaField;

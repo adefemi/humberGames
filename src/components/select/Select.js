@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import "./Select.css";
-import { getNewProps } from "../input/Input";
+import {getNewProps} from "../../utils/helper";
 
 let selectCount = 0;
 
@@ -24,32 +24,6 @@ const defaultPropList = {
   defaultOption: PropTypes.bool,
   noInitial: PropTypes.bool,
   selectName: PropTypes.string
-};
-
-// function to check if an element has a class
-export const hasClass = (el, className) => {
-  if (!el) {
-    return;
-  }
-  return el.classList.contains(className);
-};
-
-// function to add a class to an element
-export const addClass = (el, className) => {
-  if (!el) {
-    return;
-  }
-  el.classList.add(className);
-};
-
-// function to remove a class from an element
-export const removeClass = (ele, cls) => {
-  if (!ele) {
-    return;
-  }
-  if (hasClass(ele, cls)) {
-    ele.classList.remove(cls);
-  }
 };
 
 const fixChildren = (children, props) => {
@@ -90,7 +64,7 @@ const fixChildren = (children, props) => {
 };
 
 // base functional component for select, makes use of react hooks...
-const Select = props => {
+export const Select = props => {
   let newProps = getNewProps(props, defaultPropList);
   for (let key in newProps) {
     if (
@@ -198,5 +172,3 @@ Select.defaultProps = {
   showDropDown: true,
   secondary: false
 };
-
-export default Select;

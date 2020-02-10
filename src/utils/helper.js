@@ -1,5 +1,5 @@
-import { hasClass, removeClass } from "../common/select/Select";
 import moment from "moment";
+import countryControl from "country-state-city";
 
 export const errorHandler = ({ graphQLErrors, networkError }) => {
   let messageString = "";
@@ -173,3 +173,81 @@ export const closeNav = _ => {
 
 export const normalize24hTime = time =>
   moment(time, "hh:mm:ss").format("h:mm A");
+
+// function to check if an element has a class
+export const hasClass = (el, className) => {
+  if (!el) {
+    return;
+  }
+  return el.classList.contains(className);
+};
+
+// function to add a class to an element
+export const addClass = (el, className) => {
+  if (!el) {
+    return;
+  }
+  el.classList.add(className);
+};
+
+// function to remove a class from an element
+export const removeClass = (ele, cls) => {
+  if (!ele) {
+    return;
+  }
+  if (hasClass(ele, cls)) {
+    ele.classList.remove(cls);
+  }
+};
+
+export const getNewProps = (props, defaultPropList) => {
+  let newProps = { ...props };
+
+  for (let key in defaultPropList) {
+    if (newProps.hasOwnProperty(key) || newProps.hasOwnProperty("isError")) {
+      delete newProps[key.toString()];
+    }
+  }
+  return newProps;
+};
+
+export const getCountryCodes = () => {
+  let allCountry = countryControl.getAllCountries();
+  let arrayContent = [];
+
+  allCountry.map(country => {
+    arrayContent.push({
+      value: country.phonecode,
+      content: `${country.phonecode}`,
+      displayed: `+${country.phonecode}`
+    });
+    return null;
+  });
+
+  return arrayContent;
+};
+
+export const convertValue = (props, code) => {
+  if (!props.value) {
+    return "";
+  }
+  if (props.type !== "phone") {
+    return props.value;
+  }
+  let value = props.value.split("");
+  let newValue = props.value.split("");
+  let codeConvert = value[0] === "+" ? `+${code}`.split("") : code.split("");
+
+  if (codeConvert.length > value.length) {
+    return props.value;
+  }
+
+  for (let i = 0; i < codeConvert.length; i++) {
+    if (codeConvert[parseInt(i, 10)] === value[parseInt(i, 10)]) {
+      newValue.splice(0, 1);
+    } else {
+      return props.value;
+    }
+  }
+  return newValue.join("");
+};
