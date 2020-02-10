@@ -1,0 +1,57 @@
+@import "../../styles/default";
+@import "../../styles/theme";
+
+.team {
+  flex-direction: row;
+  min-height: 100vh;
+  margin: 0 10%;
+}
+
+.team-svg > img {
+  width: 250px;
+}
+
+.button {
+  border-radius: 20px !important;
+  padding: 7px 30px !important;
+}
+h3 {
+  &.team-text {
+    color: $color-text;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .team {
+    margin: 0 20%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+}
+@media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 600px) {
+  .team {
+    margin: 0 5%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .team {
+    justify-content: center;
+    flex-direction: column-reverse;
+    margin: 0 5%;
+  }
+  .team-text {
+    text-align: center;
+  }
+
+  .team-svg > img {
+    width: 200px;
+  }
+
+  .button {
+    margin: 0 auto;
+  }
+}
