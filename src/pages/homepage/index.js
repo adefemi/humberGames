@@ -1,12 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 function Index(_) {
-  const [name, setName] = useState({});
-
-  useEffect(() => {
-    return () => {};
-  }, []);
-
   return <div>Home</div>;
 }
 
