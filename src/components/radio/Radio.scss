@@ -6,11 +6,12 @@ $left: -9999px;
 
 @mixin labeling(){
   font-family: $secondary-font;
-  font-size: $default-font-size;
   position: relative;
   padding-left: 28px;
   cursor: pointer;
-  line-height: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
   display: inline-block;
   color: #666;
 }
@@ -22,9 +23,10 @@ $left: -9999px;
   top: 0;
   width: 18px;
   height: 18px;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   border-radius: 100%;
   background: $color;
+
 }
 
 @mixin label-after($color:$primary-color){
@@ -33,11 +35,12 @@ $left: -9999px;
   height: 12px;
   background: $color;
   position: absolute;
-  top: 4px;
-  left: 4px;
+  top: 5px;
+  left: 5px;
   border-radius: 100%;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
+
 
 }
 
@@ -49,9 +52,10 @@ $left: -9999px;
 
     & + label{
       @include labeling();
-
+      color:darken( $primary-color, 20%);
       &:before{
         @include label-before();
+        border-color: $primary-color;
       }
 
       &:after{

@@ -67,7 +67,7 @@ $sideBarWidth : 250px;
     }
 
     .pageTitle{
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 600;
       color: $black-color;
     }
@@ -100,7 +100,7 @@ $sideBarWidth : 250px;
   }
 
   .contentMain{
-    max-width: 1440px;
+    max-width: 1240px;
     width: 100%;
     margin: 0 auto;
     padding: 0 20px;
@@ -111,6 +111,8 @@ $sideBarWidth : 250px;
     width: calc(100% - 250px);
     position: fixed;
     min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
     top: 0;
     left: $sideBarWidth;
     transition: .3s ease;
