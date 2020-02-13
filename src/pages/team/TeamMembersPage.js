@@ -23,50 +23,52 @@ const TeamMembersPage = () => {
               <span>Add Member</span>
             </Button>
           </div>
-          <div className="team-members-card">
-            <Card className="single-card">
+          <div className="team-members-card grid-card-container">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
-            <Card className="single-card">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
-            <Card className="single-card">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
-            <Card className="single-card">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
-            <Card className="single-card">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
-            <Card className="single-card">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
-            <Card className="single-card">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
-            <Card className="single-card">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
-            <Card className="single-card">
+            <Card className="single-card grid-card">
               <MembershipCard />
             </Card>
           </div>
         </div>
         <div className="team-requests">
           <h3>Requests from Agents</h3>
-          <Card className="single-request">
-            <RequestCard />
-          </Card>
-          <Card className="single-request">
-            <RequestCard />
-          </Card>
-          <Card className="single-request">
-            <RequestCard />
-          </Card>
-          <Card className="single-request">
-            <RequestCard />
-          </Card>
+          <div className="team-request-content">
+            <Card className="single-request">
+              <RequestCard />
+            </Card>
+            <Card className="single-request">
+              <RequestCard />
+            </Card>
+            <Card className="single-request">
+              <RequestCard />
+            </Card>
+            <Card className="single-request">
+              <RequestCard />
+            </Card>
+          </div>
         </div>
       </div>
     </div>

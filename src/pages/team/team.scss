@@ -49,7 +49,7 @@ h3 {
   }
 }
 
-@media screen and (min-width: 1920px) {
+@media screen and (max-width: 2560px) {
   .team {
     margin: 0 200px 0 100px;
   }
@@ -59,6 +59,16 @@ h3 {
   }
   .team-text {
     text-align: justify;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .team-content {
+    padding-right: 75px;
+  }
+  .team {
+    padding-top: 25vh;
+    margin: 0 5%;
   }
 }
 
@@ -73,6 +83,9 @@ h3 {
     justify-content: center;
     flex-direction: column-reverse;
     padding-top: 15vh;
+  }
+  .team-content {
+    padding-right: 0px;
   }
   .team-text {
     text-align: center;
@@ -313,7 +326,6 @@ h3 {
   left: 65.99%;
   right: 4.08%;
   top: 5.66%;
-  bottom: 81.13%;
   font-size: 12px;
   color: #565555;
   margin-top: 0px;
@@ -375,14 +387,250 @@ h3 {
   padding-left: 10px;
 }
 
-@media screen and (max-width: 1380px) {
-  .card-main.single-card {
-    width: 200px;
+// #---------------------------TeamMembersPage-----------------------------------------#
+
+@media screen and (max-width: 1674px) {
+  .card-main.single-card.grid-card {
+    width: 270px;
     height: 300px;
-    margin-bottom: 20px;
-    background: #ffffff;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+  }
+
+  .team-members-card.grid-card-container {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    // grid-template-rows: repeat(1, auto);
   }
 }
-// #---------------------------TeamMembersPage-----------------------------------------#
+
+@media screen and (max-width: 1630px) {
+  .card-main.single-card.grid-card {
+    width: 270px;
+    height: 300px;
+  }
+
+  .team-members-card.grid-card-container {
+    justify-content: space-evenly;
+    grid-template-columns: repeat(2, auto);
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  .card-main.single-card.grid-card {
+    width: 270px;
+    height: 300px;
+  }
+
+  .team-members-card.grid-card-container {
+    grid-template-columns: repeat(2, auto);
+    justify-content: space-between;
+  }
+
+  .team-members {
+    width: 60%;
+  }
+
+  .team-requests {
+    width: 40%;
+  }
+
+  .request-time {
+    left: unset;
+  }
+
+  .card-main.single-request {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 1348px) {
+  .team-members-container {
+    flex-direction: column-reverse;
+  }
+
+  .team-members {
+    width: 100%;
+  }
+
+  .team-members-card.grid-card-container {
+    grid-template-columns: repeat(3, auto);
+  }
+
+  .card-main.single-card.grid-card {
+    width: 270px;
+    height: 250px;
+  }
+
+  .team-members-header {
+    margin-bottom: 20px;
+  }
+
+  .team-requests {
+    width: 100%;
+    margin: 0px;
+    margin-bottom: 20px;
+  }
+
+  .team-request-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 1185px) {
+  .team-request-content {
+    display: flex;
+    margin-left: 0px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+
+  .team-requests {
+    width: 100%;
+    margin-left: 0px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+  }
+  .team-requests > h3 {
+    text-align: center;
+  }
+
+  .request-time {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+
+  .card-main.single-request {
+    width: 300px;
+  }
+
+  .request-picture {
+    margin-left: 20px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .agent-name {
+    position: absolute;
+    left: 30%;
+    top: 30%;
+    font-size: 12px;
+    padding-left: unset;
+  }
+
+  .agent-properties {
+    position: absolute;
+    left: 30%;
+    top: 45%;
+    font-size: 10px;
+  }
+
+  .accept-decline {
+    height: 50px;
+    left: 62%;
+  }
+
+  .accept-decline button {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+}
+
+@media screen and (max-width: 1120px) {
+  .team-members-card.grid-card-container {
+    justify-content: space-evenly;
+    grid-template-columns: repeat(2, auto);
+  }
+  .team-members-container {
+    flex-direction: column-reverse;
+    margin-top: 0px;
+  }
+
+  .team-members {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .team-members-card.grid-card-container {
+    justify-content: space-between;
+    grid-template-columns: repeat(2, auto);
+  }
+  .team-members-container {
+    flex-direction: column-reverse;
+    margin-top: 0px;
+  }
+
+  .team-members {
+    width: 100%;
+  }
+
+  .team-request-content {
+    display: flex;
+    margin-left: 0px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .team-requests {
+    width: 100%;
+    margin-left: 0px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+  }
+  .team-requests > h3 {
+    text-align: center;
+  }
+
+  .request-time {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+
+  .card-main.single-request {
+    width: 300px;
+  }
+
+  .request-picture {
+    margin-left: 20px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .agent-name {
+    position: absolute;
+    left: 30%;
+    top: 30%;
+    font-size: 12px;
+    padding-left: unset;
+  }
+
+  .agent-properties {
+    position: absolute;
+    left: 30%;
+    top: 45%;
+    font-size: 10px;
+  }
+
+  .accept-decline {
+    height: 50px;
+    left: 62%;
+  }
+
+  .accept-decline button {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .team-request-content {
+    justify-content: center;
+  }
+  .team-members-card.grid-card-container {
+    justify-content: center;
+    grid-template-columns: repeat(1, auto);
+  }
+}
