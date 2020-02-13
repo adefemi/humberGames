@@ -1,7 +1,9 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import MainLayout from "./components/mainLayout/mainLayout";
 const HomeIndex = lazy(() => import("./pages/homepage"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
+const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 
 const RouterMain = props => {
   return (
@@ -9,21 +11,36 @@ const RouterMain = props => {
       <Switch>
         <Route
           path="/"
-          exact
           component={props => (
-            <Suspense fallback={() => <h2>Loading...</h2>}>
-              <HomeIndex {...props} />
-            </Suspense>
-          )}
-        />
-
-        <Route
-          path="/team"
-          exact
-          component={props => (
-            <Suspense fallback={() => <h2>Loading...</h2>}>
-              <TeamCreatePage {...props} />
-            </Suspense>
+            <MainLayout {...props}>
+              <Route
+                path="/"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <HomeIndex {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/team"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <TeamCreatePage {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/team/members"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <TeamMembersPage {...props} />
+                  </Suspense>
+                )}
+              />
+            </MainLayout>
           )}
         />
       </Switch>

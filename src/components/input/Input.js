@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./Input.css";
-import { Select } from "../select";
-import {getNewProps, getCountryCodes,convertValue} from "../../utils/helper";
+import { Select } from "../select/Select";
+import { getNewProps, getCountryCodes, convertValue } from "../../utils/helper";
 
 const defaultPropList = {
   value: PropTypes.any,
@@ -32,7 +32,6 @@ const defaultPropList = {
   isError: PropTypes.bool,
   noCurrencySelect: PropTypes.bool
 };
-
 
 export const Input = props => {
   let newProps = getNewProps(props, defaultPropList);
@@ -151,9 +150,7 @@ export const Input = props => {
               }
             }}
             {...newProps}
-            value={
-              convertValue(props, defaultCode)
-            }
+            value={convertValue(props, defaultCode)}
           />
           {props.iconRight}
         </div>

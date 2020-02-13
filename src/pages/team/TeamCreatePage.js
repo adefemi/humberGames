@@ -1,26 +1,61 @@
-import React from "react";
-import "./team.css";
-import img from "../../assets/teamCreate.svg";
+import React, { useState } from "react";
+import TeamTemplate from "./components/TeamTemplate";
+import preRegister from "../../assets/preRegister.svg";
+import Register from "../../assets/Register.svg";
 import { Button } from "../../components/button/Button";
+import Input from "../../components/input/Input";
+import "./team.css";
 
-function TeamCreatePage() {
-  console.log(window.innerHeight, window.innerWidth);
-  return (
-    <div className="flex align-center team">
-      <div>
-        <h3 className="team-text">Welcome to your team</h3>
-        <p className="team-text">
-          In here you would be able to manage your team members by assigning
-          them to different roles and duty post. But before you get a chance to
-          do all this, you need to first create a team.{" "}
-        </p>
-        <Button className="button">Get Started Now</Button>
+const TeamCreatePage = props => {
+  const [text, setText] = useState("");
+  const [getStartedPage, setGetStartedPage] = useState(true);
+
+  const onFormSubmit = e => {
+    e.preventDefault();
+    console.log(text);
+    setText("");
+  };
+
+  let content = getStartedPage ? (
+    <Button onClick={() => setGetStartedPage(false)} className="button">
+      Get Started
+    </Button>
+  ) : (
+    <>
+      <div className="team-input-div">
+        {" "}
+        <p className="team-input-text">Give your team a name</p>
+        <Input
+          type="text"
+          className="team-input"
+          onChange={e => {
+            setText(e.target.value);
+          }}
+          value={text}
+          placeholder="Team Name (e.g. The Elites)"
+          required
+        />
+        <br />
+        <br />
+        <div className="flex">
+          <Button type="submit" className="team-button">
+            Create Team
+          </Button>
+          <a className="cancel" onClick={() => setGetStartedPage(true)}>
+            Cancel
+          </a>
+        </div>
       </div>
-      <div className="team-svg">
-        <img src={img} alt="svg" />
-      </div>
-    </div>
+    </>
   );
-}
+
+  return (
+    <TeamTemplate
+      content={content}
+      undraw={getStartedPage ? preRegister : Register}
+      onFormSubmit={onFormSubmit}
+    />
+  );
+};
 
 export default TeamCreatePage;

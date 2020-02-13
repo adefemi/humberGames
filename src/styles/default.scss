@@ -7,7 +7,9 @@ body {
   position: relative;
   box-sizing: border-box;
   font-family: $primary-font;
-  background-color: #f5f5fb;
+  & > * {
+    transition: 0.3s ease;
+  }
 }
 a {
   color: $primary-color-dark !important;
@@ -51,5 +53,18 @@ a {
 
   &.justify-between {
     justify-content: space-between;
+  }
+}
+
+.mobile {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .mobile {
+    display: inherit;
+  }
+  .desktop {
+    display: none;
   }
 }
