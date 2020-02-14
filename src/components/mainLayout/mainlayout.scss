@@ -1,16 +1,16 @@
 @import "../../styles/theme";
 
-$sideBarWidth : 250px;
+$sideBarWidth: 250px;
 
-.mainLayout{
-  background-color: #F5F5FB;
+.mainLayout {
+  background-color: #f5f5fb;
   min-height: 100vh;
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
 
-  .sideBar{
+  .sideBar {
     width: $sideBarWidth;
     min-width: $sideBarWidth;
     background-color: $white-color;
@@ -24,36 +24,35 @@ $sideBarWidth : 250px;
     overflow-y: auto;
     position: fixed;
 
-
-    .logo{
+    .logo {
       width: 80px;
     }
 
-    .sideLinks{
+    .sideLinks {
       margin-top: 100px;
     }
 
-    .sideLink{
+    .sideLink {
       margin-bottom: 46px;
       font-size: 14px;
       font-weight: 600;
       color: darken($white-color, 50%);
-      transition: .3s ease;
-      .icon-main{
+      transition: 0.3s ease;
+      .icon-main {
         margin-right: 30px;
       }
 
-      &.active{
+      &.active {
         color: $black-color;
       }
 
-      &:hover{
+      &:hover {
         color: darken($white-color, 80%);
       }
     }
   }
 
-  .navBar{
+  .navBar {
     height: 80px;
     width: 100%;
     display: flex;
@@ -61,7 +60,7 @@ $sideBarWidth : 250px;
     justify-content: space-between;
 
     @media screen and (max-width: 600px) {
-      .mobile{
+      .mobile {
         display: flex;
       }
     }
@@ -72,28 +71,28 @@ $sideBarWidth : 250px;
       color: $black-color;
     }
 
-    .navLeft{
+    .navLeft {
       min-width: 150px;
     }
 
-    .navRight{
+    .navRight {
       display: flex;
       align-items: center;
 
-      .navItem{
+      .navItem {
         margin-right: 20px;
-        &:last-child{
+        &:last-child {
           margin-right: 0;
         }
       }
     }
   }
 
-  .navLogo{
+  .navLogo {
     width: 50px;
   }
 
-  .moreSide{
+  .moreSide {
     display: block;
     margin-right: 10px;
     margin-bottom: 10px;
@@ -107,7 +106,7 @@ $sideBarWidth : 250px;
     box-sizing: border-box;
     min-width: 320px;
   }
-  .mainBar{
+  .mainBar {
     width: calc(100% - 250px);
     position: fixed;
     min-height: 100vh;
@@ -115,11 +114,13 @@ $sideBarWidth : 250px;
     overflow-y: auto;
     top: 0;
     left: $sideBarWidth;
-    transition: .3s ease;
+    transition: 0.3s ease;
+    overflow-y: auto;
 
-    .overlay{
+    .overlay {
       position: absolute;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       background-color: transparent;
@@ -128,19 +129,19 @@ $sideBarWidth : 250px;
   }
 
   @media screen and (max-width: 600px) {
-    .mobile.closed{
-      .sideBar{
+    .mobile.closed {
+      .sideBar {
         left: -$sideBarWidth;
       }
 
-      &~.mainBar{
+      & ~ .mainBar {
         left: 0;
         width: 100%;
 
-        .pageTitle{
+        .pageTitle {
           font-size: 20px;
         }
-        .overlay{
+        .overlay {
           display: none;
         }
       }
