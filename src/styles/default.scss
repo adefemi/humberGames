@@ -7,8 +7,10 @@ body {
   position: relative;
   box-sizing: border-box;
   font-family: $primary-font;
-  & > * {
-    transition: 0.3s ease;
+  max-height: 100vh;
+  overflow-y: hidden;
+  &>*{
+    // transition: .3s ease;
   }
 }
 a {
