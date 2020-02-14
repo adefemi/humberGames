@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import "./mainlayout.css";
 import { Button } from "../button/Button";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 import { Icon } from "../icons";
 import { addClass, hasClass, removeClass } from "../../utils/helper";
+import { store } from "../../stateManagement/store";
 
 function MainLayout(props) {
+  const {
+    state: { pageTitle }
+  } = useContext(store);
+
   const toggleSlider = () => {
     const el = document.getElementById("sideBar");
     if (hasClass(el, "closed")) {
@@ -15,6 +20,13 @@ function MainLayout(props) {
       addClass(el, "closed");
     }
   };
+
+  const [title, setTitle] = useState(pageTitle);
+
+  useEffect(() => {
+    setTitle(pageTitle);
+  }, [pageTitle]);
+
   return (
     <div className="mainLayout">
       <div className="desktop">
@@ -23,7 +35,7 @@ function MainLayout(props) {
       <div id="sideBar" className="mobile closed">
         <SideBar />
       </div>
-      <div className="mainBar">
+      <div id="mainBar" className="mainBar">
         <div className="overlay mobile" onClick={toggleSlider} />
         <div className="contentMain">
           <div className="navBar">
@@ -37,15 +49,17 @@ function MainLayout(props) {
                   onClick={toggleSlider}
                 />
                 <img src={logo} className="mobile navLogo" alt="logo" />
-                <div className="pageTitle desktop">Main Layout</div>
               </div>
+              <div className="pageTitle desktop">{title}</div>
             </div>
             <div className="navRight">
-              <Button className="navItem">Post Property</Button>
+              <Link to="/add-property" className="navItem">
+                <Button>Post Property</Button>
+              </Link>
               <div className="navItem">user-profile</div>
             </div>
           </div>
-          <div className="children">MainLayout{props.children}</div>
+          <div className="children">{props.children}</div>
         </div>
       </div>
     </div>

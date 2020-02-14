@@ -26,8 +26,8 @@ $input: #ffffff;
 $border-light: rgba(0, 0, 0, 0.2);
 
 // Primary Colors
-$primary-color: #4b25b9;
-$secondary-color: #f18910;
+$primary-color: #5B68A4;
+$secondary-color: #FF6363;
 $success-color: #49B26D;
 $danger-color: rgb(255, 77, 45);
 $warning-color: rgb(151, 122, 94);
@@ -45,3 +45,8 @@ $secondary-color-light: lighten($secondary-color, 10%);
 $success-color-light: lighten($success-color, 10%);;
 $danger-color-light: lighten($danger-color, 10%);;
 $warning-color-light: lighten($warning-color, 10%);
+
+// new colors
+$yellow-con: #FFEA9F;
+$green-con: #A1FEE2;
+$blue-con: #CAF6FF
