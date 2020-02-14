@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "./propertyListing.css";
 import gardenIcon from "../../assets/images/garden.svg";
 import moneyIcon from "../../assets/images/money.svg";
 import homeIcon from "../../assets/images/house.svg";
 import commentIcon from "../../assets/images/comment.svg";
 import PropertyBasicInfo from "./propertyBasicInfo";
+import { store } from "../../stateManagement/store";
+import { setPageTitleAction } from "../../stateManagement/actions";
 
 function PropertyListing(props) {
+  const { dispatch } = useContext(store);
+  useEffect(() => {
+    dispatch({ type: setPageTitleAction, payload: "New Property" });
+  }, []);
   return (
     <div className="propertyListingMain">
       <div className="main-zone">

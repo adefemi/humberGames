@@ -109,6 +109,8 @@ export const Select = props => {
       item => item.title === selection
     );
     if (valueCheck.length > 0) {
+      const inputElement = document.getElementById(selectId);
+      inputElement.onblur = e => false;
       setSelectedOption(valueCheck[0]);
       setActiveOption(valueCheck[0].title);
       if (props.onChange) {
@@ -183,7 +185,7 @@ export const Select = props => {
       onBlur={_ => {
         if (!selectedOption) {
           setActiveOption("");
-          setOptionList(defaultOptionList);
+          setTimeout(() => setOptionList(defaultOptionList), 500);
         }
       }}
       onChange={onChange}

@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import "./mainlayout.css";
 import { Button } from "../button/Button";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 import { Icon } from "../icons";
 import { addClass, hasClass, removeClass } from "../../utils/helper";
+import { store } from "../../stateManagement/store";
 
 function MainLayout(props) {
+  const {
+    state: { pageTitle }
+  } = useContext(store);
+
   const toggleSlider = () => {
     const el = document.getElementById("sideBar");
     if (hasClass(el, "closed")) {
@@ -16,13 +21,11 @@ function MainLayout(props) {
     }
   };
 
-  const [title, setTitle] = useState("Main Layout");
+  const [title, setTitle] = useState(pageTitle);
 
   useEffect(() => {
-    if (props.location.pathname.toString().includes("add-property")) {
-      setTitle("New Property");
-    }
-  }, [props.location.pathname]);
+    setTitle(pageTitle);
+  }, [pageTitle]);
 
   return (
     <div className="mainLayout">
