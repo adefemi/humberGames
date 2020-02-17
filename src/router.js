@@ -38,9 +38,12 @@ const RouterMain = props => {
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <TeamMembersPage {...props} />
-                    </Suspense> )} />
-                    
-                <Route path="/add-property"
+                  </Suspense>
+                )}
+              />
+
+              <Route
+                path="/add-property"
                 exact
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
