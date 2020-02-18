@@ -32,7 +32,7 @@ export default class Tabs extends Component {
     this.currentElementBound = this.tabsProperties.find(
       tabProp => String(tabProp.key) === String(this.state.defaultActiveKey)
     );
-    //Index of current element
+    //Dashboard of current element
     this.currentIndex = this.tabsProperties.indexOf(this.currentElementBound);
 
     this.handlePageSwap();
@@ -80,11 +80,7 @@ export default class Tabs extends Component {
 
   //Static method for tab panes
   static TabPane({ tab }) {
-    return (
-     <div>
-       {tab}
-     </div>
-    );
+    return <div>{tab}</div>;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {

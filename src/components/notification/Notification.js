@@ -10,7 +10,7 @@ import { question } from "react-icons-kit/metrize/question";
 import ReactDOM from "react-dom";
 
 import "./Notification.css";
-import {addClass, removeClass, randomIDGenerator} from "../../utils/helper";
+import { addClass, removeClass, randomIDGenerator } from "../../utils/helper";
 
 export const getIconType = propType => {
   let icon;

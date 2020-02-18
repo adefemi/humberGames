@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainLayout from "./components/mainLayout/mainLayout";
 import PropertyListing from "./pages/propertyListing/propertyListing";
-const HomeIndex = lazy(() => import("./pages/homepage"));
+const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 

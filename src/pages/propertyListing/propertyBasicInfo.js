@@ -1,5 +1,4 @@
 import React from "react";
-import "./basicInfo.css";
 import { Radio } from "../../components/radio/Radio";
 import AppIcon from "../../components/icons/Icon";
 import Input from "../../components/input/Input";

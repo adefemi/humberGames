@@ -7,6 +7,7 @@ import commentIcon from "../../assets/images/comment.svg";
 import PropertyBasicInfo from "./propertyBasicInfo";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
+import PropertyTerm from "./propertyTerm";
 
 function PropertyListing(props) {
   const { dispatch } = useContext(store);
@@ -27,7 +28,7 @@ function PropertyListing(props) {
             </p>
           </div>
         </section>
-        <PropertyBasicInfo />
+        <PropertyTerm />
       </div>
       <div className="sub-zone">
         <div className="progress-tracker">
