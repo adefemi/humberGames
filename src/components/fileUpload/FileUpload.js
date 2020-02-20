@@ -5,7 +5,7 @@ import propTypes from "prop-types";
 import "./FileUpload.css";
 import emptyFile from "./assets/file-blank.png";
 import brokenFile from "./assets/file-broken.png";
-import { addClass, hasClass } from "../select/Select";
+import { addClass, hasClass } from "../../utils/helper";
 import { Icon } from "../icons";
 import { isDescendant } from "../../utils/helper";
 
@@ -312,7 +312,7 @@ export class FileUpload extends React.Component {
         id={this.id}
         style={this.props.style}
       >
-        {fileArray.map(file => file)}
+        {!this.props.dragger && fileArray.map(file => file)}
 
         {this.props.single && fileArray.length > 0 ? null : (
           <button
@@ -329,9 +329,11 @@ export class FileUpload extends React.Component {
             }}
             onDragOver={e => e.preventDefault()}
           >
-            <div>
-              <Icon name={"share"} type={"feather"} size={30} />
-            </div>
+            {!this.props.dragger && (
+              <div>
+                <Icon name={"share"} type={"feather"} size={30} />
+              </div>
+            )}
           </button>
         )}
 

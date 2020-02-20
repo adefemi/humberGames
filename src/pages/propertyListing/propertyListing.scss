@@ -114,7 +114,7 @@
   }
 }
 
-.basic-info-container, .term-info-container{
+.basic-info-container, .term-info-container, .description-container, .completionPage{
   margin-top: 30px;
 }
 
@@ -231,7 +231,7 @@
   }
 }
 
-.term-info-container{
+.term-info-container, .description-container{
   svg{
     margin-bottom: 4px;
   }
@@ -341,5 +341,50 @@
     right: 0;
     top: -20px;
     color: $secondary-color;
+  }
+}
+
+.dragger-content{
+  p{
+    font-size: 12px;
+    font-weight: 600;
+    color: darken(white, 50%);
+    span{
+      color: darken($blue-con, 50%);
+    }
+  }
+}
+
+.facility-con{
+  max-width: 500px;
+}
+
+.completionPage{
+  background-color: white;
+  padding: 40px;
+  border-radius: 20px;
+
+  p{
+    font-size: 12px;
+    font-weight: 600;
+    color: darken(white, 60%);
+
+
+  }
+  .btn{
+    margin-top: 30px;
+    border-radius: 30px;
+    padding: 8px 30px;
+    font-weight: 600;
+  }
+
+  .publishBtn{
+    padding: 12px 50px;
+    font-size: 14px;
+    background-color: darken($success-color, 20%);
+
+    &:hover, &:focus, &.active{
+      background-color: darken($success-color, 30%) !important;
+    }
   }
 }
