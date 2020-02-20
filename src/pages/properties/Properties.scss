@@ -1,0 +1,240 @@
+@import "../../styles/theme";
+
+.Properties {
+  .page-layout {
+    margin-top: 70px;
+
+    .badge-text {
+      &::after {
+        font-size: 12px;
+        background: #287DCB;
+        padding: 3px 15px;
+        border-radius: 18px;
+      }
+    }
+
+    .main-page {
+      max-width: calc(100% - 280px);
+      margin-right: 25px;
+
+      .rectangle {
+        width: 100%;
+        padding: 30px 50px;
+        box-sizing: border-box;
+        height: 105px;
+        background: #baffd6;
+        border-radius: 10px;
+        align-items: center;
+        margin-bottom: 70px;
+
+        img {
+          margin-right: 35px;
+          width: 120px;
+          height: 120px;
+        }
+
+        .rectangle-text {
+          .text-1 {
+            font-weight: 600;
+          }
+
+          .text-2 {
+            font-size: 14px;
+          }
+        }
+      }
+
+      .search-section {
+        &>.flex {
+
+          .select-input {
+            background-color: transparent;
+            outline: transparent;
+            border: none;
+            min-width: 147px;
+
+            &:hover,
+            &:focus {
+              border: none;
+              background-color: transparent;
+            }
+          }
+
+          .search-box {
+            max-width: 385px;
+            width: 100%;
+          }
+
+          .filter-box {
+            div:not(:last-child) {
+              margin-right: 25px;
+            }
+          }
+        }
+      }
+
+      .section-begin {
+        margin-top: 40px;
+      }
+
+      .property-section {
+        margin-top: 20px;
+        background-color: white;
+        padding: 20px 30px;
+        border: 1px solid #eeeeee;
+        border-radius: 4px;
+      }
+
+      /*
+  *Property container based styles
+  */
+
+      .PropertyContainer {
+        .property-container-header {
+          .property-details {
+            .home-icon {
+              color: $danger-color;
+              margin-right: 20px;
+            }
+
+            .property-name {
+              font-weight: 600;
+            }
+
+            .address {
+              color: $color-text-light;
+            }
+          }
+
+          .property-options {
+            button {
+              background-color: transparent;
+
+              svg {
+                margin-right: 5px;
+                position: relative;
+                top: -2px;
+              }
+
+              &.btn-add-unit {
+                color: $primary-color;
+                font-weight: 600;
+                margin-right: 10px;
+              }
+
+              &.btn-select-unit {
+                color: $color-text-light;
+                font-weight: 600;
+              }
+            }
+          }
+        }
+
+        .property-management {
+          padding-left: 15px;
+
+          button {
+            background-color: transparent;
+            font-weight: 600;
+
+            svg {
+              margin-right: 5px;
+              position: relative;
+              top: -2px;
+            }
+
+            &.btn-edit {
+              color: $primary-color;
+              margin-right: 10px;
+            }
+
+            &.btn-delete {
+              color: $danger-color;
+            }
+          }
+        }
+
+        .view-all {
+          font-weight: 600;
+        }
+      }
+
+      .PropertyCard {
+        .card-main {
+          max-width: 320px;
+          margin: 25px 0;
+          height: 140px;
+
+          .property-image {
+            width: 120px;
+            background-image: url("https://via.placeholder.com/200");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-right: 10px;
+          }
+
+          .property-description {
+            padding: 10px 0;
+
+            .property-type {
+              font-size: 13px;
+            }
+
+            .property-status {
+              color: $danger-color;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+
+    .right-nav {
+      width: 280px;
+
+      .section-header {
+        font-weight: 600;
+      }
+
+      .section-header {
+        margin-bottom: 15px;
+      }
+
+      .SummaryCard {
+        margin-bottom: 12px;
+
+        .card-main {
+
+          .card-content {
+            align-items: center;
+            display: flex;
+            padding: 0 15px;
+
+            .summary-flex {
+              &>span {
+                align-self: center;
+                position: relative;
+                top: 2px;
+              }
+
+              &>strong {
+                padding: 0 10px;
+                align-self: center;
+              }
+            }
+
+            .card-stat-text {
+              flex-grow: 1;
+              padding: 40px 10px;
+
+              border-right: 1px solid #DAE3EA;
+              text-align: center;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+}
