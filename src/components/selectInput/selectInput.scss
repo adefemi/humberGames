@@ -1,0 +1,24 @@
+@import "../../styles/theme";
+
+.select-input-field{
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .select-input{
+    width: 100%;
+    min-width: 90px;
+    font-size: 12px !important;
+    flex: 1;
+    .input-field{
+      background-color: white;
+
+    }
+
+  }
+  .input-field{
+    border-radius: 0;
+    border: none;
+    flex: 3;
+  }
+}

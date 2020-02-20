@@ -1,0 +1,25 @@
+@import "../../styles/theme";
+
+.cke-main{
+  .ck.ck-toolbar{
+    border-bottom: 1px solid darken(white, 10%) !important;
+    border-color: darken(white, 10%);
+    padding: 10px 20px;
+    background-color: $white-color;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+  }
+
+  .ck.ck-content{
+    border-color: darken(white, 10%) !important;
+    border-top: none !important;
+    padding: 10px 20px;
+    min-height: 150px;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+
+    p{
+      font-size: 13px;
+    }
+  }
+}
