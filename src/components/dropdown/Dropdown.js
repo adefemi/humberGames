@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./Dropdown.css";
-import { hasClass, addClass, removeClass } from "../select/Select";
+import { hasClass, addClass, removeClass } from "../../utils/helper";
 import { hasSomeParentTheClass } from "../../utils/helper";
 import propTypes from "prop-types";
 

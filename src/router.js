@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainLayout from "./components/mainLayout/mainLayout";
 import PropertyListing from "./pages/propertyListing/propertyListing";
+import TenantInvite from "./pages/tenantInvite/TenantInvite";
 const HomeIndex = lazy(() => import("./pages/homepage"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
@@ -48,6 +49,16 @@ const RouterMain = props => {
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <PropertyListing {...props} />
+                  </Suspense>
+                )}
+              />
+
+              <Route
+                path="/tenant-invite"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <TenantInvite {...props} />
                   </Suspense>
                 )}
               />
