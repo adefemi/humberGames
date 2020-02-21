@@ -1,39 +1,67 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./propertyListing.css";
 import gardenIcon from "../../assets/images/garden.svg";
 import moneyIcon from "../../assets/images/money.svg";
 import homeIcon from "../../assets/images/house.svg";
 import commentIcon from "../../assets/images/comment.svg";
-import PropertyBasicInfo from "./propertyBasicInfo";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
+import CompletionPage from "./completionPage";
+import QuickLinksData from "./quickLinksData";
+import { InformationBanner, ListingSteps } from "./common";
+import qs from "query-string";
+import PropertyBasicInfo from "./propertyBasicInfo";
 import PropertyTerm from "./propertyTerm";
 import PropertyDescription from "./propertyDescription";
-import CompletionPage from "./completionPage";
-import Slider from "../../components/slider/slider";
-import QuickLinksData from "./quickLinksData";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 function PropertyListing(props) {
   const { dispatch } = useContext(store);
+  const [activePage, setActivePage] = useState(1);
+
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "New Property" });
+    AOS.init();
   }, []);
+
+  useEffect(() => {
+    let query = qs.parse(props.location.search);
+    if (query.activeStep) {
+      switch (query.activeStep.toString()) {
+        case "1":
+          setActivePage(1);
+          break;
+        case "2":
+          setActivePage(2);
+          break;
+        case "3":
+          setActivePage(3);
+          break;
+        case "4":
+          setActivePage(4);
+          break;
+        default:
+          setActivePage(1);
+      }
+    }
+  }, [props.location.search]);
+
   return (
     <div>
       <div className="propertyListingMain">
         <div className="main-zone">
-          <section className="heading-context">
-            <img src={gardenIcon} alt="garden" />
-            <div className="context">
-              <h3>Basic Information</h3>
-              <p>
-                Hooray!, we are ready to start listing. Ain’t you excited to
-                list your property? ... if you are lets do this, also, if you
-                are not ... lets still do this.
-              </p>
-            </div>
-          </section>
-          <CompletionPage />
+          <InformationBanner
+            icon={gardenIcon}
+            title="Basic Information"
+            content="Hooray!, we are ready to start listing. Ain’t you excited to
+            list your property? ... if you are lets do this, also, if you
+            are not ... lets still do this."
+          />
+          {activePage === 1 && <PropertyBasicInfo />}
+          {activePage === 2 && <PropertyTerm />}
+          {activePage === 3 && <PropertyDescription />}
+          {activePage === 4 && <CompletionPage />}
         </div>
         <div className="sub-zone">
           <div className="progress-tracker">
@@ -62,25 +90,15 @@ function PropertyListing(props) {
           </div>
         </div>
       </div>
-      <br />
-      <br />
-      <QuickLinksData />
+      {activePage === 4 && (
+        <>
+          <br />
+          <br />
+          <QuickLinksData />
+        </>
+      )}
     </div>
   );
 }
-
-const ListingSteps = ({ title, content, active, icon }) => {
-  return (
-    <div className={`tracker-item ${active ? "active" : ""}`}>
-      <div className="img-con">
-        <img src={icon} alt="title" />
-      </div>
-      <div className="context">
-        <h4>{title}</h4>
-        <p>{content}</p>
-      </div>
-    </div>
-  );
-};
 
 export default PropertyListing;

@@ -46,6 +46,18 @@ export const Select = props => {
   }, []);
 
   useEffect(() => {
+    if (props.triggerPosition) {
+      positionOptionDrop();
+      props.triggerReset();
+    }
+
+    if (props.selectTrigger) {
+      setActiveOption("");
+      props.selectTriggerReset();
+    }
+  }, [props.triggerPosition, props.selectTrigger]);
+
+  useEffect(() => {
     const selectDrop = document.getElementById(activeID);
     const ul = selectDrop.getElementsByTagName("ul")[0];
     if (!ul) {
@@ -129,6 +141,7 @@ export const Select = props => {
 
   const handleClicks = () => {
     const input = document.getElementById(selectId);
+
     document.body.onclick = e => {
       if (
         hasClass(e.target, "select-li") ||
@@ -148,6 +161,9 @@ export const Select = props => {
         removeClass(selectDrop, "open");
       }
     };
+    if (props.onBlur) {
+      props.onBlur();
+    }
   };
 
   const closeAllSelect = id => {
@@ -182,17 +198,27 @@ export const Select = props => {
     <Input
       id={selectId}
       type="text"
-      className="select-input"
+      style={props.style}
+      className={`select-input ${props.className ? props.className : ""}`}
       value={activeOption}
       onBlur={_ => {
         if (!selectedOption) {
           setActiveOption("");
           setTimeout(() => setOptionList(defaultOptionList), 500);
         }
+        if (props.onBlur) {
+          props.onBlur();
+        }
       }}
       onChange={onChange}
       placeholder={props.placeholder}
-      iconRight={<AppIcon name="ic_arrow_drop_down" type="md" />}
+      iconRight={
+        props.icon ? (
+          props.icon
+        ) : (
+          <AppIcon name="ic_arrow_drop_down" type="md" />
+        )
+      }
     />
   );
 };

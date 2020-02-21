@@ -23,6 +23,7 @@ function SelectInput(props) {
           optionList={props.optionList}
           activeOption={props.defaultOption}
           selectChange={selectChange}
+          {...props}
         />
       )}
       {props.isCurrency ? (
@@ -45,17 +46,26 @@ function SelectInput(props) {
           optionList={props.optionList}
           activeOption={props.defaultOption}
           selectChange={selectChange}
+          {...props}
         />
       )}
     </div>
   );
 }
 
-const SelectComp = ({ activeOption, selectChange, optionList, name }) => (
+const SelectComp = ({
+  activeOption,
+  selectChange,
+  optionList,
+  name,
+  minWidth
+}) => (
   <Select
     defaultOption={activeOption}
     onChange={e => selectChange(e.target.value)}
     name={name}
+    style={{ minWidth: minWidth }}
+    className="select-comp"
     optionList={optionList}
   />
 );
@@ -67,6 +77,7 @@ SelectInput.propTypes = {
   placeholder: proptype.string,
   onChange: proptype.func,
   onChangeSelect: proptype.func,
+  minWidth: proptype.number,
   value: proptype.any,
   name: proptype.string,
   selectPosition: proptype.oneOf(["left", "right"]),

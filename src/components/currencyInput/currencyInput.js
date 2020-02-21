@@ -13,24 +13,28 @@ function CurrencyInput(props) {
     if (props.defaultCurrencyOption) {
       setActiveCurrency(props.defaultCurrencyOption.value);
     }
+  }, []);
+
+  useEffect(() => {
     if (props.value) {
       onChangeCurrency({ target: { value: props.value } });
     }
-  }, []);
+  }, [props.value]);
 
   const onChangeCurrency = ({ target: { value } }) => {
     let newValue;
     newValue = value.replace(/,/g, "");
+    newValue = numberWithCommas(newValue);
     if (props.onChange) {
       props.onChange({
         target: {
           name: props.name,
           value: newValue,
+          rawValue: newValue.replace(/,/g, ""),
           currency: activeCurrency
         }
       });
     }
-    newValue = numberWithCommas(newValue);
     setValue(newValue);
   };
 
@@ -46,7 +50,12 @@ function CurrencyInput(props) {
           { title: "GBP", value: "GBP" }
         ]}
       />
-      <Input placeholder="0.00" value={value} onChange={onChangeCurrency} />
+      <Input
+        placeholder="0.00"
+        value={value}
+        onChange={onChangeCurrency}
+        {...props}
+      />
     </div>
   );
 }
