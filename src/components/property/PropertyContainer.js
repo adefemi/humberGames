@@ -3,7 +3,7 @@ import AppIcon from "../icons/Icon";
 import Badge from "../badge/Badge";
 import { Button } from "../button/Button";
 import PropertyCard from "./PropertyCard";
-import { Carousel } from "../carousel/carousel";
+import Slider from "../slider/slider";
 function PropertyContainer(props) {
   const { name, units, address } = props;
   return (
@@ -37,10 +37,12 @@ function PropertyContainer(props) {
       </div>
       <div className="property-container-body">
         <div className="property-cards">
-          <Carousel>
+          <Slider className="flex property-slider">
             <PropertyCard />
             <PropertyCard />
-          </Carousel>
+            <PropertyCard />
+            <PropertyCard />
+          </Slider>
         </div>
       </div>
       <div className="flex justify-between property-container-footer">

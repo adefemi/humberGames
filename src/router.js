@@ -4,7 +4,7 @@ import MainLayout from "./components/mainLayout/mainLayout";
 import PropertyListing from "./pages/propertyListing/propertyListing";
 import Properties from "./pages/properties/Properties";
 import Application from "./pages/application/Application";
-const HomeIndex = lazy(() => import("./pages/homepage"));
+const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 

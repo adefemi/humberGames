@@ -28,9 +28,9 @@ $border-light: rgba(0, 0, 0, 0.2);
 // Primary Colors
 $primary-color: #5B68A4;
 $secondary-color: #FF6363;
-$success-color: #49B26D;
+$success-color: #3dd89a;
 $danger-color: rgb(255, 77, 45);
-$warning-color: rgb(151, 122, 94);
+$warning-color: rgb(227, 191, 99);
 
 // Dark Primary Colors
 $primary-color-dark: darken($primary-color, 10%);
@@ -48,5 +48,10 @@ $warning-color-light: lighten($warning-color, 10%);
 
 // new colors
 $yellow-con: #FFEA9F;
+$yellow-light: #F0F3F5;
 $green-con: #A1FEE2;
-$blue-con: #CAF6FF
+$blue-con: #CAF6FF;
+$blue2-con: #D7DEFF;
+$blue3-con: #425CB9;
+$purple-con: #7B43A7;
+$purple2-con: #8E8EAE;

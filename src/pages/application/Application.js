@@ -3,18 +3,42 @@ import { setPageTitleAction } from "../../stateManagement/actions";
 import { store } from "../../stateManagement/store";
 import file from "../../assets/file.svg";
 import Input from "../../components/input/Input";
-
+import _ from "lodash";
 import "./Application.css";
 import { Select } from "../../components/select/Select";
 import PropertyContainer from "../../components/property/PropertyContainer";
 import SummaryCard from "../../components/property/SummaryCard";
+import Skeleton from "react-loading-skeleton";
 import ApplicationCard from "../../components/application/ApplicationCard";
+import { APPLICATIONS_URL } from "../../utils/urls";
+import { useState } from "react";
+import { axiosHandler } from "../../utils/axiosHandler";
 
 function Application() {
+  const [applications, setApplications] = useState({});
+  const [loaders, setLoaders] = useState({});
   const { dispatch } = useContext(store);
   useEffect(() => {
+    getApplications();
     dispatch({ type: setPageTitleAction, payload: "Application" });
   }, []);
+  const toggleLoaderState = key => {
+    setLoaders({ ...loaders, [key]: !loaders.key });
+  };
+  const getApplications = async () => {
+    try {
+      let applications = await axiosHandler("GET", APPLICATIONS_URL);
+      setApplications(applications.data.results.results);
+      toggleLoaderState("applications");
+    } catch (e) {
+      console.log("error here");
+    }
+  };
+
+  const getApplicationCards = applications =>
+    applications.map(application => (
+      <ApplicationCard application={application} />
+    ));
   return (
     <div className="Application">
       <div className="main-page">
@@ -57,10 +81,17 @@ function Application() {
           </div>
         </section>
         <section className="application-cards">
-          <ApplicationCard />
-          <ApplicationCard />
-          <ApplicationCard />
-          <ApplicationCard />
+          {!loaders.applications
+            ? Array(8)
+                .fill(null)
+                .map((v, i) => (
+                  <div key={i} className={"flex column w-100"}>
+                    <Skeleton height={70} />
+                    <Skeleton height={200} />
+                    <Skeleton height={70} />
+                  </div>
+                ))
+            : getApplicationCards(applications)}
         </section>
       </div>
     </div>

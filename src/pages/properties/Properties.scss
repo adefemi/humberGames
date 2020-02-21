@@ -7,7 +7,7 @@
     .badge-text {
       &::after {
         font-size: 12px;
-        background: #287DCB;
+        background: #287dcb;
         padding: 3px 15px;
         border-radius: 18px;
       }
@@ -21,7 +21,7 @@
         width: 100%;
         padding: 30px 50px;
         box-sizing: border-box;
-        height: 105px;
+        height: 120px;
         background: #baffd6;
         border-radius: 10px;
         align-items: center;
@@ -45,8 +45,7 @@
       }
 
       .search-section {
-        &>.flex {
-
+        & > .flex {
           .select-input {
             background-color: transparent;
             outline: transparent;
@@ -159,14 +158,29 @@
         }
       }
 
+      .property-slider {
+        margin-top: 20px;
+        display: flex;
+        width: 100%;
+        max-width: 1240px;
+        overflow-x: auto;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+
       .PropertyCard {
+        width: 400px;
+        margin-right: 15px;
+
         .card-main {
-          max-width: 320px;
+          height: 155px;
+          width: 346px;
           margin: 25px 0;
-          height: 140px;
 
           .property-image {
-            width: 120px;
+            width: 145px;
             background-image: url("https://via.placeholder.com/200");
             background-position: center;
             background-repeat: no-repeat;
@@ -205,20 +219,19 @@
         margin-bottom: 12px;
 
         .card-main {
-
           .card-content {
             align-items: center;
             display: flex;
             padding: 0 15px;
 
             .summary-flex {
-              &>span {
+              & > span {
                 align-self: center;
                 position: relative;
                 top: 2px;
               }
 
-              &>strong {
+              & > strong {
                 padding: 0 10px;
                 align-self: center;
               }
@@ -228,7 +241,7 @@
               flex-grow: 1;
               padding: 40px 10px;
 
-              border-right: 1px solid #DAE3EA;
+              border-right: 1px solid #dae3ea;
               text-align: center;
               font-weight: bold;
             }
