@@ -1,0 +1,140 @@
+@import "../../styles/theme";
+
+.Application {
+  .danger-color {
+    color: $danger-color;
+  }
+
+  .search-section {
+    &>.flex {
+      .search-box {
+        max-width: 385px;
+        width: 100%;
+      }
+
+      .select-input {
+        background-color: transparent;
+        outline: transparent;
+        border: none;
+
+        &:hover,
+        &:focus {
+          border: none;
+          background-color: transparent;
+        }
+      }
+
+      .filter-box {
+        div:not(:last-child) {
+          margin-right: 25px;
+        }
+      }
+    }
+  }
+
+  .rectangle {
+    width: 100%;
+    padding: 30px 50px;
+    box-sizing: border-box;
+    height: 120px;
+    background: #ffea9f;
+    border-radius: 10px;
+    align-items: center;
+    margin-bottom: 70px;
+
+    img {
+      margin-right: 35px;
+      width: 120px;
+      height: 120px;
+    }
+
+    .rectangle-text {
+      .text-1 {
+        font-weight: 600;
+        color: #7e6a22;
+      }
+
+      .text-2 {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .application-cards {
+    margin-top: 40px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+    .card-heading {
+      padding: 10px 10px 3px 10px;
+    }
+
+    .card-main {
+      max-width: 350px;
+      min-height: 300px;
+
+      .unit-description {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+        color: $color-text-light;
+      }
+
+      .property-image {
+        height: 180px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: red;
+
+        button {
+          border: 2px solid white;
+          border-radius: 4px;
+          background-color: transparent;
+        }
+      }
+
+      .status-of-app {
+        button {
+          border-radius: 38px;
+          cursor: default;
+          text-transform: uppercase;
+          height: 30px;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0 15px;
+        }
+      }
+
+      .card-footer {
+        padding: 13px 0px;
+
+        .time-of-app {
+          color: $color-text-light;
+
+          i {
+            margin-right: 10px;
+          }
+        }
+
+        .footer-top {
+          padding: 0 10px 12px 10px;
+        }
+
+        .booking-detail {
+          border-top: 1px solid #EFEFEF;
+          padding: 12px 10px 10px 10px;
+
+          .book-viewing {
+            a {
+              color: #4285F4 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}

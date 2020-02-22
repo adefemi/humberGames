@@ -1,0 +1,37 @@
+@import "../../styles/theme";
+
+.transactionTable{
+  table{
+    display: block;
+  }
+  width: 100%;
+  thead{
+    background-color: darken(white, 10%);
+    width: 100%;
+    display: block;
+    vertical-align: unset;
+
+  }
+  tbody{
+    width: 100%;
+    display: block;
+    vertical-align: unset;
+
+   tr{
+     &:nth-child(even){
+       background-color: darken(white, 5%);
+     }
+   }
+  }
+  tr{
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+  th, td{
+    flex: 1;
+    font-size: 13px;
+    text-align: center;
+  }
+
+}

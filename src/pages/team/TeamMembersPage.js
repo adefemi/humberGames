@@ -16,13 +16,29 @@ import { Modal } from "../../components/modal/Modal";
 // import { DropDown } from "../../components/dropdown/Dropdown";
 // import { Select } from "../../components/select/Select";
 import ConfirmMember from "./components/ConfirmMember";
+import { axiosHandler } from "../../utils/axiosHandler";
+import { TEAMS_URL } from "../../utils/urls";
+import Skeleton from "react-loading-skeleton";
 
 const TeamMembersPage = () => {
   const [modalState, setModalState] = useState(false);
+  const [team, setTeam] = useState({});
+  const [loaders, setLoaders] = useState({});
   const { dispatch } = useContext(store);
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Teams" });
+    getTeam();
   }, []);
+
+  const toggleLoaders = (key, value) => {
+    setLoaders({ ...loaders, [key]: value });
+  };
+
+  const getTeam = async () => {
+    toggleLoaders("pageLoad", true);
+    const team = await axiosHandler("GET", TEAMS_URL);
+    toggleLoaders("pageLoad", false);
+  };
 
   const onAcceptClick = () => {
     console.log("Accepted");
@@ -45,47 +61,53 @@ const TeamMembersPage = () => {
         </div>
       </div>
       <div className="flex team-members-container">
-        <div className="team-members">
-          <div className="team-members-header">
-            <span>
-              <b>The Elites</b>
-              <AppIcon className="edit" name="edit" type="fa" />
-            </span>
-            <Button className="add-member">
-              <AppIcon className="userO" name="userO" type="fa" />
-              <span>Add Member</span>
-            </Button>
+        {/* {!loaders.pageLoad ? (
+          <Skeleton height={200} />
+        ) : ( */}
+        <>
+          <div className="team-members">
+            <div className="team-members-header">
+              <span>
+                <b>The Elites</b>
+                <AppIcon className="edit" name="edit" type="fa" />
+              </span>
+              <Button className="add-member">
+                <AppIcon className="userO" name="userO" type="fa" />
+                <span>Add Member</span>
+              </Button>
+            </div>
+            <div className="team-members-card grid-card-container">
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+              <Card className="single-card grid-card">
+                <MembershipCard />
+              </Card>
+            </div>
           </div>
-          <div className="team-members-card grid-card-container">
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-          </div>
-        </div>
+        </>
+        {/* )} */}
         <div className="team-requests">
           <h3>Requests from Agents</h3>
           <div className="team-request-content">
@@ -108,7 +130,7 @@ const TeamMembersPage = () => {
           </div>
         </div>
       </div>
-      <Paginator />
+      {/* <Paginator /> */}
       <Modal
         className="confirm-member"
         type="success"

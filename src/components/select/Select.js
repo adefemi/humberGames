@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import proptype from "prop-types";
 
 import "./Select.css";
 import Input from "../input/Input";
@@ -85,23 +85,25 @@ export const Select = props => {
   };
 
   const positionOptionDrop = _ => {
-    let el = document.getElementById(activeID.toString());
-    let inputField = document.getElementById(selectId.toString());
-    const inputBounds = inputField.getBoundingClientRect();
-    el.style.left = `${inputBounds.x}px`;
-    el.style.width = `${inputBounds.width}px`;
-    const dropBounds = el.getBoundingClientRect();
-    const mainDocBounds = document
-      .getElementById("mainBar")
-      .getBoundingClientRect();
-    if (dropBounds.top + dropBounds.height > mainDocBounds.height - 50) {
-      el.style.top = `${inputBounds.y -
-        dropBounds.height -
-        inputBounds.height / 2 +
-        10}px`;
-    } else {
-      el.style.top = `${inputBounds.y + inputBounds.height / 2 + 25}px`;
-    }
+    try {
+      let el = document.getElementById(activeID.toString());
+      let inputField = document.getElementById(selectId.toString());
+      const inputBounds = inputField.getBoundingClientRect();
+      el.style.left = `${inputBounds.x}px`;
+      el.style.width = `${inputBounds.width}px`;
+      const dropBounds = el.getBoundingClientRect();
+      const mainDocBounds = document
+        .getElementById("mainBar")
+        .getBoundingClientRect();
+      if (dropBounds.top + dropBounds.height > mainDocBounds.height - 50) {
+        el.style.top = `${inputBounds.y -
+          dropBounds.height -
+          inputBounds.height / 2 +
+          10}px`;
+      } else {
+        el.style.top = `${inputBounds.y + inputBounds.height / 2 + 25}px`;
+      }
+    } catch (e) {}
   };
 
   const handleSelection = _ => {
@@ -193,4 +195,12 @@ export const Select = props => {
       iconRight={<AppIcon name="ic_arrow_drop_down" type="md" />}
     />
   );
+};
+
+Select.propTypes = {
+  defaultOption: proptype.objectOf(proptype.any),
+  optionList: proptype.arrayOf(proptype.objectOf(proptype.any)),
+  placeholder: proptype.string,
+  onChange: proptype.func,
+  name: proptype.string
 };

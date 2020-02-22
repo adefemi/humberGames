@@ -105,6 +105,7 @@ export const getActiveAddress = (
 };
 
 export function numberWithCommas(n, separator = ",") {
+  if (n === "" || n === null) return;
   let num = n + "";
 
   // Test for and get any decimals (the later operations won't support them)
