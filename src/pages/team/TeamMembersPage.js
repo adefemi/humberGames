@@ -12,9 +12,6 @@ import { Paginator } from "../../components/paginator/paginator";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
 import { Modal } from "../../components/modal/Modal";
-// import bgImg2 from "../../assets/images/lahore-18h.png";
-// import { DropDown } from "../../components/dropdown/Dropdown";
-// import { Select } from "../../components/select/Select";
 import ConfirmMember from "./components/ConfirmMember";
 import { axiosHandler } from "../../utils/axiosHandler";
 import { TEAMS_URL } from "../../utils/urls";
@@ -130,7 +127,7 @@ const TeamMembersPage = () => {
           </div>
         </div>
       </div>
-      {/* <Paginator /> */}
+      <Paginator />
       <Modal
         className="confirm-member"
         type="success"
