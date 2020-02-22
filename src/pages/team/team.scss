@@ -146,9 +146,28 @@ h3 {
 
 .rectangle {
   width: 100%;
-  height: 115px;
+  height: 105px;
   background: #c7ffee;
   border-radius: 10px;
+  // position: relative;
+  display: flex;
+  justify-content: unset;
+}
+
+.text-1 {
+  color: #28a47e;
+  font-weight: 600;
+  font-size: 21px;
+  margin-bottom: 0px;
+}
+
+.text-2 {
+  color: #000000;
+  font-size: 14px;
+}
+.team-members-svg {
+  margin-left: 20px;
+  margin-right: 40px;
 }
 
 .team-members-container {
@@ -289,6 +308,10 @@ h3 {
   color: rgb(221, 112, 112);
 }
 
+.pagination-main {
+  margin-bottom: 4%;
+}
+
 //#-------------Team Requests-------------------#
 
 .team-requests {
@@ -387,6 +410,14 @@ h3 {
   padding-left: 10px;
 }
 
+.load-more {
+  color: #5b68a4;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  justify-content: unset;
+  max-width: 100px;
+}
 // #---------------------------TeamMembersPage-----------------------------------------#
 
 @media screen and (max-width: 1674px) {
@@ -633,4 +664,77 @@ h3 {
     justify-content: center;
     grid-template-columns: repeat(1, auto);
   }
+}
+
+//#------------------------ConfirmMemberModal-----------------------------------#
+.close-button {
+  color: red;
+}
+
+.inner {
+  border-radius: 10px;
+  background-color: white;
+  width: 500px !important;
+}
+
+.contents {
+  position: relative;
+}
+
+.contents > p:first-child {
+  position: absolute;
+  top: 0;
+  margin-top: 0;
+  padding-top: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.confirm-member-details {
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.confirm-member-details .request-picture {
+  margin-right: 20px;
+}
+
+.confirm-member-details > p {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.membership {
+  flex-direction: column;
+}
+
+.membership > p {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 2px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.confirm-member-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.confirm-member-buttons > button {
+  border-radius: 20px;
+  width: 100px;
+  padding: 5px 2px;
+}
+
+.confirm-member-buttons .btn.primary.cancel {
+  margin-right: 10px;
+  border: 1px solid #ff6363;
+  background: unset;
+  color: #ff6363;
+}
+
+.confirm-member-buttons .btn.primary.complete {
+  background: #13dea1;
 }
