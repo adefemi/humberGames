@@ -1,21 +1,35 @@
 import React, { useState } from "react";
-import bgImg2 from "../../../assets/images/lahore-18h.png";
+import moment from "moment";
+import noImage from "../../../assets/images/no-image.jpg";
 import { Button } from "../../../components/button/Button";
-import { Modal } from "../../../components/modal/Modal";
-import { Select } from "../../../components/select/Select";
+import _ from "lodash";
+// import { Modal } from "../../../components/modal/Modal";
+// import { Select } from "../../../components/select/Select";
 
-const RequestCard = props => {
+// import ConfirmMember from "./ConfirmMember";
+
+const RequestCard = ({ request, onAcceptClick }) => {
   return (
     <>
       <div
         className="request-picture"
-        style={{ background: `url(${bgImg2})` }}
+        style={{
+          background: `url(${_.get(
+            request,
+            "user.user_profile.profile_picture.file",
+            noImage
+          )})`
+        }}
       ></div>
-      <p className="request-time">Requested: 10 mins ago</p>
-      <p className="agent-name">Lara Dutta</p>
-      <p className="agent-properties">Properties: 45</p>
+      <p className="request-time">
+        Requested: {moment(request.created_at).fromNow()}
+      </p>
+      <p className="agent-name">{`${request.user.first_name} ${request.user.last_name}`}</p>
+      <p className="agent-properties">
+        Properties: {request.user.meta.total_properties}
+      </p>
       <div className="accept-decline">
-        <Button onClick={props.onAcceptClick} className="accept">
+        <Button onClick={() => onAcceptClick(request)} className="accept">
           Accept
         </Button>
         <Button onClick={() => console.log("Denied")} className="decline">

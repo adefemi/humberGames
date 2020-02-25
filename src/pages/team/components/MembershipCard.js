@@ -1,18 +1,25 @@
 import React from "react";
 import AppIcon from "../../../components/icons/Icon";
-import bgImg from "../../../assets/images/horticulturists.png";
+import noImage from "../../../assets/images/no-image.jpg";
+import _ from "lodash";
 
-export const MembershipCard = () => {
+export const MembershipCard = ({ team }) => {
   return (
     <>
       <div className="member-status"></div>
       <div
         className="card-picture"
-        style={{ background: `url(${bgImg})` }}
+        style={{
+          background: `url(${_.get(
+            team,
+            "user.user_profile.profile_picture.file",
+            noImage
+          )})`
+        }}
       ></div>
       <div className="card-picture-details">
-        <p>Josh Spencer</p>
-        <small>Manager</small>
+        <p>{`${team.user.first_name} ${team.user.last_name}`}</p>
+        <small>{team.role}</small>
         <span>
           <AppIcon className="edit" name="edit" type="fa" />
           <small>Edit</small>
@@ -21,11 +28,11 @@ export const MembershipCard = () => {
       <div className="extra-details">
         <div>
           <p>Properties</p>
-          <p>1342</p>
+          <p>{team.user.meta.total_properties}</p>
         </div>
         <div>
           <p>Deals Completed</p>
-          <p>12</p>
+          <p>{team.user.meta.total_deals}</p>
         </div>
       </div>
       <div className="line"></div>

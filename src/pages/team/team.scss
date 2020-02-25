@@ -184,13 +184,36 @@ h3 {
 .team-members-header {
   display: flex;
   justify-content: space-between;
-  flex-grow: 1;
+  // flex-grow: 1;
   align-items: center;
   margin-bottom: 50px;
 }
 
 .team-members-header span b {
   padding-right: 20px;
+}
+
+.input-control .input-container-cover .input-field {
+  border: none;
+}
+
+.input-container-cover .input-field.team-name {
+  background-color: unset;
+  min-width: 100px;
+}
+
+.team-name-container {
+  display: flex;
+  align-items: center;
+}
+
+.input-field.team-name input {
+  background-color: #f5f5fb;
+  padding: 0;
+}
+
+.input-field.team-name input[value] {
+  font-weight: bold;
 }
 
 // #----------------Team Members--------------------#
@@ -306,6 +329,8 @@ h3 {
 
 .edit {
   color: rgb(221, 112, 112);
+  // margin-left: 10px;
+  cursor: pointer;
 }
 
 .pagination-main {
