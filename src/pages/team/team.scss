@@ -317,7 +317,11 @@ h3 {
   color: #05a575;
 }
 
-.line {
+.extra-details div:first-child {
+  text-align: center;
+}
+
+.divider {
   position: absolute;
   width: 0px;
   height: 78px;

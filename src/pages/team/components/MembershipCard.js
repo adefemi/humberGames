@@ -35,7 +35,7 @@ export const MembershipCard = ({ team }) => {
           <p>{team.user.meta.total_deals}</p>
         </div>
       </div>
-      <div className="line"></div>
+      <div className="divider" />
     </>
   );
 };
