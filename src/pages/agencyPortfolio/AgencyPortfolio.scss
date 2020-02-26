@@ -1,0 +1,94 @@
+.rectangle {
+  width: 100%;
+  height: 120px;
+  background: rgba(162, 255, 255, 0.27);
+  border-radius: 10px;
+  align-items: center;
+}
+
+.agency-svg {
+  width: 100px;
+  margin-right: 20px;
+}
+
+.agency-header-container p:first-child {
+  color: #017c8f;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.agency-header-container p:last-child {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.agent-container {
+  margin-top: 50px;
+  gap: 30px;
+  grid-template-columns: 3fr 1fr !important;
+}
+
+.rectangle-1 {
+  width: 100%;
+  height: 400px;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.agent-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-image {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.agent-name {
+  font-size: 20px;
+  color: #5b5b5b;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.agent-email {
+  margin: 0;
+  font-size: 14px;
+  color: #9e9e9e;
+}
+
+.branch {
+  border: 1px solid #efefef;
+  box-sizing: border-box;
+  border-radius: 32px;
+  padding: 5px 25px;
+  font-size: 10px;
+  color: #9e9e9e;
+  font-weight: bold;
+}
+
+.agent-property-details {
+  gap: 20px;
+  text-align: center;
+}
+
+.agent-actions {
+  padding-left: 10px;
+  //   padding-top: 30px;
+}
+
+.divider {
+  width: 100%;
+  border: 1px solid #fafafa;
+  //   height: 5px;
+}
+// .rectangle-2 {
+//   width: 100%;
+//   height: 300px;
+//   background-color: white;
+// }
