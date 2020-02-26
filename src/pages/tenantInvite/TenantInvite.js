@@ -21,7 +21,7 @@ const TenantInvite = () => {
   };
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Tenant Invite" });
-  });
+  }, []);
   return (
     <div>
       <div className="rectangle flex">
@@ -77,11 +77,12 @@ const TenantInvite = () => {
         </div>
       </div>
       <Modal
-        // className="invite-tenant-modal"
+        className="invite-tenant-modal"
         visible={modalState}
-        type="default"
+        // type="default"
+        onClose={() => setModalState(false)}
       >
-        <NewTenantModal />
+        <NewTenantModal modalState={modalState} setModalState={setModalState} />
       </Modal>
     </div>
   );

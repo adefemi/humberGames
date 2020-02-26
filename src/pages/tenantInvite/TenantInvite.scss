@@ -154,7 +154,7 @@
 .inner {
   border-radius: 10px;
   background-color: white;
-  width: 500px !important;
+  // width: 1000px !important;
 }
 
 .close-button {
@@ -172,13 +172,90 @@
   top: 0;
   margin-top: 0;
   padding-top: 5px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
+}
+
+.modal-bubble-fixed {
+  max-width: 800px;
 }
 
 .modal-rectangle {
   width: 100%;
   height: 52px;
+  margin-top: 30px;
   background: rgba(33, 173, 241, 0.22);
   border-radius: 10px;
+  display: flex;
+}
+
+.modal-rectangle p {
+  font-size: 14px;
+}
+
+.info-svg {
+  margin: 0 10px;
+}
+
+.tenant-emails {
+  margin-top: 50px;
+  font-weight: 600;
+}
+
+.tenant-emails-rectangle {
+  // width: 616px;
+  height: 100px;
+  border: 2px solid #e9e8e8;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-bottom: 50px;
+}
+
+.property-info {
+  font-weight: 600;
+}
+
+.agreement-file p {
+  margin-bottom: 0;
+}
+
+.payment-info p {
+  margin-bottom: 0;
+}
+
+.agreement-info small {
+  font-size: 10px;
+}
+
+.agreement-info {
+  gap: 20px;
+}
+
+.property-info-details {
+  margin-bottom: 50px;
+  gap: 20px;
+}
+
+.check {
+  color: #4bd37b;
+  margin-left: 5px;
+}
+
+.modal-root-fixed.invite-tenant-modal .modal-bubble-fixed {
+  max-width: 800px;
+}
+
+.tenant-modal-buttons {
+  justify-content: flex-end;
+  margin-top: 50px;
+}
+
+.close-window {
+  background: #ff6363 !important;
+  border-radius: 50px;
+}
+
+.create-invite {
+  border-radius: 50px;
+  margin-left: 10px;
 }
