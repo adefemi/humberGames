@@ -3,12 +3,8 @@ import moment from "moment";
 import noImage from "../../../assets/images/no-image.jpg";
 import { Button } from "../../../components/button/Button";
 import _ from "lodash";
-// import { Modal } from "../../../components/modal/Modal";
-// import { Select } from "../../../components/select/Select";
 
-// import ConfirmMember from "./ConfirmMember";
-
-const RequestCard = ({ request, onAcceptClick }) => {
+const RequestCard = ({ request, onAcceptClick, onDeclineClick }) => {
   return (
     <>
       <div
@@ -32,7 +28,7 @@ const RequestCard = ({ request, onAcceptClick }) => {
         <Button onClick={() => onAcceptClick(request)} className="accept">
           Accept
         </Button>
-        <Button onClick={() => console.log("Denied")} className="decline">
+        <Button onClick={() => onDeclineClick(request)} className="decline">
           Decline
         </Button>
       </div>

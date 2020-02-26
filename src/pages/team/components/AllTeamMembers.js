@@ -11,7 +11,7 @@ import AppIcon from "../../../components/icons/Icon";
 import { Button } from "../../../components/button/Button";
 import { testToken } from "../TeamCreatePage";
 
-const AllTeamMembers = props => {
+const AllTeamMembers = () => {
   const [teams, setTeams] = useState([]);
   const [teamLoader, setTeamLoader] = useState(true);
   const [teamName, setTeamName] = useState("");

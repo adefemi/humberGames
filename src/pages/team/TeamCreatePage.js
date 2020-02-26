@@ -11,7 +11,7 @@ import { Notification } from "../../components/notification/Notification";
 import { useHistory } from "react-router-dom";
 
 export const testToken =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgzMDU0NzQ3LCJqdGkiOiI3NjgzYWQwMjE3NjM0MTU0YjQ5OWQ5NzA2MGJhMTYwYyIsInVzZXJfaWQiOjQzfQ.V0ZgY-XTWIXqIbAOMNqKwFHOpxhTdBz1JLKPWtEqXZI";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTc0NTk3LCJqdGkiOiI5NTFkYzc0NzUyMWQ0MjlkOTdjZDYxODQ2MDZlMTI0ZiIsInVzZXJfaWQiOjE0fQ.CriTSUiFt7S69jThmEPKD0lZbUz40lX9J10C4_jQFMs";
 
 const TeamCreatePage = props => {
   let history = useHistory();

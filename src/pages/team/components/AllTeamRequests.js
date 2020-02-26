@@ -11,11 +11,13 @@ import noImage from "../../../assets/images/no-image.jpg";
 import loadMore from "../../../assets/loadMore.svg";
 import { Button } from "../../../components/button/Button";
 import _ from "lodash";
+import { testToken } from "../TeamCreatePage";
 const AllTeamRequests = () => {
-  const [modalState, setModalState] = useState(false);
+  const [acceptModalState, setAcceptModalState] = useState(false);
   const [teamRequests, setTeamRequests] = useState([]);
   const [requestLoader, setRequestLoader] = useState(true);
   const [request, setRequest] = useState({});
+  const [role, setRole] = useState("team_member");
   useEffect(() => {
     getRequests();
   }, []);
@@ -35,16 +37,62 @@ const AllTeamRequests = () => {
       });
   };
 
+  const onCompleteClick = () => {
+    console.log("Complete clicked");
+    axiosHandler(
+      "PATCH",
+      TEAM_REQUEST_URL + `/${_.get(request, "id")}`,
+      testToken,
+      {
+        request_status: "accepted",
+        role: role
+      }
+    )
+      .then(() => {
+        setAcceptModalState(false);
+      })
+      .catch(err => {
+        Notification.bubble({
+          type: "error",
+          content: "Unable to accept agent's request"
+        });
+      });
+  };
+
   const onAcceptClick = request => {
     setRequest(request);
-    setModalState(true);
+    setAcceptModalState(true);
+  };
+
+  const onDeclineClick = request => {
+    setRequest(request);
+    Modal.confirm({
+      title: "Decline Request",
+      content: "Do you really want to decline this request?",
+      onOK: () => {
+        axiosHandler(
+          "DELETE",
+          TEAM_REQUEST_URL + `/${_.get(request, "id")}`,
+          testToken
+        )
+          .then(() => {
+            getRequests();
+          })
+          .catch(err => {
+            Notification.bubble({
+              type: "error",
+              content: "unable to delete request"
+            });
+          });
+      }
+    });
   };
 
   const noContent = () => {
     if (teamRequests.length === 0) {
       return (
         <div>
-          <h4>Error. No requests at the moment</h4>
+          <h4>No requests at the moment</h4>
         </div>
       );
     } else {
@@ -53,6 +101,7 @@ const AllTeamRequests = () => {
           <RequestCard
             request={request}
             onAcceptClick={request => onAcceptClick(request)}
+            onDeclineClick={request => onDeclineClick(request)}
           />
         </Card>
       ));
@@ -69,8 +118,8 @@ const AllTeamRequests = () => {
       <Modal
         className="confirm-member"
         type="success"
-        onClose={() => {}}
-        visible={modalState}
+        onClose={() => setAcceptModalState(false)}
+        visible={acceptModalState}
       >
         <p>Confirm Member</p>
         <div className="confirm-member-details flex">
@@ -93,18 +142,18 @@ const AllTeamRequests = () => {
               placeholder="assign a position"
               optionList={[
                 { title: "manager", value: "manager" },
-                { title: "member", value: "member" }
+                { title: "member", value: "team_member" }
               ]}
-              defaultOptionList={["team", "admin"]}
+              onChange={e => setRole(e.target.value)}
               name="position"
             />
           </div>
         </div>
         <div className="confirm-member-buttons">
-          <Button onClick={() => setModalState(false)} className="cancel">
+          <Button onClick={() => setAcceptModalState(false)} className="cancel">
             Cancel
           </Button>
-          <Button onClick={() => console.log("completed")} className="complete">
+          <Button onClick={onCompleteClick} className="complete">
             Complete
           </Button>
         </div>

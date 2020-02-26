@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import "./team.css";
-import AppIcon from "../../components/icons/Icon";
 import "./team.css";
 import teamMembers from "../../assets/teamMembers.svg";
 import { store } from "../../stateManagement/store";
