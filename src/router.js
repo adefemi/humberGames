@@ -7,6 +7,9 @@ import Application from "./pages/application/Application";
 const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
+const AgencyPortfolio = lazy(() =>
+  import("./pages/agencyPortfolio/AgencyPortfolio")
+);
 
 const RouterMain = props => {
   return (
@@ -43,7 +46,15 @@ const RouterMain = props => {
                   </Suspense>
                 )}
               />
-
+              <Route
+                path="/agencies"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <AgencyPortfolio {...props} />
+                  </Suspense>
+                )}
+              />
               <Route
                 path="/add-property"
                 exact
