@@ -7,7 +7,6 @@ import ReactDOM from "react-dom";
 import "./Modal.css";
 import { randomIDGenerator, addClass } from "../../utils/helper";
 import { getIconType } from "../notification/Notification";
-// import { addClass } from "../select/Select";
 import { Button } from "../button/Button";
 
 const modalTypes = Object.freeze({
