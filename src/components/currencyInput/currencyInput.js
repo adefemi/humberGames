@@ -30,7 +30,7 @@ function CurrencyInput(props) {
         target: {
           name: props.name,
           value: newValue,
-          rawValue: newValue.replace(/,/g, ""),
+          rawValue: !newValue ? "" : newValue.replace(/,/g, ""),
           currency: activeCurrency
         }
       });
@@ -40,21 +40,25 @@ function CurrencyInput(props) {
 
   return (
     <div className="currency-input-field">
-      <Select
-        defaultOption={{ title: activeCurrency, value: activeCurrency }}
-        onChange={e => setActiveCurrency(e.target.value)}
-        name="currency"
-        optionList={[
-          { title: "NGN", value: "NGN" },
-          { title: "USD", value: "USD" },
-          { title: "GBP", value: "GBP" }
-        ]}
-      />
+      {!props.hideCurrency && (
+        <Select
+          defaultOption={{ title: activeCurrency, value: activeCurrency }}
+          onChange={e => setActiveCurrency(e.target.value)}
+          name="currency"
+          optionList={[
+            { title: "NGN", value: "NGN" },
+            { title: "USD", value: "USD" },
+            { title: "GBP", value: "GBP" }
+          ]}
+        />
+      )}
       <Input
         placeholder="0.00"
         value={value}
         onChange={onChangeCurrency}
-        {...props}
+        disabled={props.disabled}
+        onBlur={props.onBlur}
+        type={props.type}
       />
     </div>
   );
@@ -63,7 +67,12 @@ function CurrencyInput(props) {
 CurrencyInput.propTypes = {
   value: proptype.number,
   onChange: proptype.func,
-  defaultCurrencyOption: proptype.objectOf(proptype.any)
+  defaultCurrencyOption: proptype.objectOf(proptype.any),
+  hideCurrency: proptype.bool
+};
+
+CurrencyInput.defaultProps = {
+  hideCurrency: false
 };
 
 export default CurrencyInput;

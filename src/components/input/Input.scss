@@ -72,12 +72,6 @@
     }
   }
 
-  .input-field.disabled:hover,
-  .input-field.disabled:focus {
-    border-color: rgba(0, 0, 0, 0.1) !important;
-    box-shadow: none !important;
-  }
-
   input {
     display: block;
     width: 100%;
@@ -125,6 +119,19 @@
     position: absolute;
     right: 0;
     color: darken(white, 40%);
+  }
+
+  .input-field.disabled:hover,
+  .input-field.disabled:focus {
+    border-color: transparent !important;
+    box-shadow: none !important;
+
+  }
+
+  .input-field.disabled{
+    input{
+      color: darken(white, 40%) !important;
+    }
   }
 }
 

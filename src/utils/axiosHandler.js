@@ -9,7 +9,7 @@ export const axiosHandler = (method = "", url = "", token = "", data = {}) => {
     let axiosProps = { method: methodType, url, data };
 
     if (token) {
-      axiosProps.headers = { Authorization: `Token ${token}` };
+      axiosProps.headers = { Authorization: `Bearer ${token}` };
     }
     return Axios(axiosProps);
   } else {

@@ -7,19 +7,43 @@ import proptype from "prop-types";
 import CurrencyInput from "../currencyInput/currencyInput";
 
 function SelectInput(props) {
-  const [value, setValue] = useState("");
+  const [inputValue, setValue] = useState("");
+  const [currencyData, setCurrencyData] = useState(null);
+  const [selectValue, setSelectValue] = useState(props.defaultOption.value);
 
-  useEffect(() => {}, []);
+  const selectChange = e => {
+    setSelectValue(e.target.value);
+  };
 
-  const selectChange = e => {};
+  useEffect(() => {
+    props.onChange([
+      {
+        target: props.isCurrency
+          ? currencyData
+          : {
+              name: props.name,
+              value: inputValue
+            }
+      },
+      { target: { name: props.selectName, value: selectValue } }
+    ]);
+  }, [inputValue, selectValue]);
 
-  const onChange = e => {};
+  useEffect(() => {
+    if (props.value !== inputValue) {
+      setValue(props.value);
+    }
+  }, [props.value]);
+
+  const onChange = e => {
+    setValue(e.target.value);
+  };
 
   return (
     <div className="select-input-field">
       {props.selectPosition === "left" && (
         <SelectComp
-          name={props.name}
+          name={props.selectName}
           optionList={props.optionList}
           activeOption={props.defaultOption}
           selectChange={selectChange}
@@ -28,21 +52,28 @@ function SelectInput(props) {
       )}
       {props.isCurrency ? (
         <CurrencyInput
-          onChange={onChange}
-          value={value}
+          onChange={e => {
+            setCurrencyData(e.target);
+            onChange(e);
+          }}
+          value={inputValue}
+          hideCurrency={props.hideCurrency}
+          name={props.name}
           defaultCurrencyOption={props.defaultCurrencyOption}
         />
       ) : (
         <Input
           placeholder={props.placeholder}
-          value={value}
+          value={inputValue}
+          name={props.name}
+          type={props.type}
           onChange={onChange}
         />
       )}
 
       {props.selectPosition === "right" && (
         <SelectComp
-          name={props.name}
+          name={props.selectName}
           optionList={props.optionList}
           activeOption={props.defaultOption}
           selectChange={selectChange}
@@ -62,7 +93,7 @@ const SelectComp = ({
 }) => (
   <Select
     defaultOption={activeOption}
-    onChange={e => selectChange(e.target.value)}
+    onChange={selectChange}
     name={name}
     style={{ minWidth: minWidth }}
     className="select-comp"
@@ -80,13 +111,16 @@ SelectInput.propTypes = {
   minWidth: proptype.number,
   value: proptype.any,
   name: proptype.string,
+  selectName: proptype.string,
   selectPosition: proptype.oneOf(["left", "right"]),
-  isCurrency: proptype.bool
+  isCurrency: proptype.bool,
+  hideCurrency: proptype.bool
 };
 
 SelectInput.defaultProps = {
   selectPosition: "right",
-  isCurrency: true
+  isCurrency: true,
+  hideCurrency: false
 };
 
 export default SelectInput;
