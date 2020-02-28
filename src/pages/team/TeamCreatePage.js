@@ -5,15 +5,38 @@ import Register from "../../assets/Register.svg";
 import { Button } from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import "./team.css";
+import { axiosHandler } from "../../utils/axiosHandler";
+import { TEAMS_URL } from "../../utils/urls";
+import { Notification } from "../../components/notification/Notification";
+import { useHistory } from "react-router-dom";
+
+export const testToken =
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTc0NTk3LCJqdGkiOiI5NTFkYzc0NzUyMWQ0MjlkOTdjZDYxODQ2MDZlMTI0ZiIsInVzZXJfaWQiOjE0fQ.CriTSUiFt7S69jThmEPKD0lZbUz40lX9J10C4_jQFMs";
 
 const TeamCreatePage = props => {
-  const [text, setText] = useState("");
+  let history = useHistory();
+  const [teamName, setTeamName] = useState("");
   const [getStartedPage, setGetStartedPage] = useState(true);
 
   const onFormSubmit = e => {
     e.preventDefault();
-    console.log(text);
-    setText("");
+    axiosHandler("POST", TEAMS_URL, testToken, { name: teamName })
+      .then(() => {
+        setTeamName(teamName);
+        history.push({
+          pathname: "/team/members",
+          state: { teamName: teamName }
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        Notification.bubble({
+          type: "error",
+          content: "Unable to create team"
+        });
+      });
+    console.log(teamName);
+    setTeamName("");
   };
 
   let content = getStartedPage ? (
@@ -29,9 +52,9 @@ const TeamCreatePage = props => {
           type="text"
           className="team-input"
           onChange={e => {
-            setText(e.target.value);
+            setTeamName(e.target.value);
           }}
-          value={text}
+          value={teamName}
           placeholder="Team Name (e.g. The Elites)"
           required
         />
@@ -54,6 +77,7 @@ const TeamCreatePage = props => {
       content={content}
       undraw={getStartedPage ? preRegister : Register}
       onFormSubmit={onFormSubmit}
+      teamName={teamName}
     />
   );
 };

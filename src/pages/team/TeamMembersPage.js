@@ -1,73 +1,50 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "./team.css";
-import { Button } from "../../components/button/Button";
-import AppIcon from "../../components/icons/Icon";
-import { Card } from "../../components/card/Card";
-import { MembershipCard } from "./components/MembershipCard";
 import "./team.css";
-import RequestCard from "./components/RequestCard";
+import teamMembers from "../../assets/teamMembers.svg";
+import { store } from "../../stateManagement/store";
+import { setPageTitleAction } from "../../stateManagement/actions";
+import AllTeamMembers from "./components/AllTeamMembers";
+import AllTeamRequests from "./components/AllTeamRequests";
+import { useLocation } from "react-router-dom";
 
-const TeamMembersPage = () => {
+const TeamMembersPage = props => {
+  const location = useLocation();
+  // const inputRef = useRef();
+  const { dispatch } = useContext(store);
+
+  useEffect(() => {
+    dispatch({ type: setPageTitleAction, payload: "Teams" });
+  }, []);
+
+  // const onEditClick = () => {
+  //   // console.log(inputRef);
+  //   // inputRef.current.focus();
+  //   setTeamName(teamName);
+  // };
+
   return (
     <div>
-      <div className="rectangle"></div>
-      <div className="flex team-members-container">
-        <div className="team-members">
-          <div className="team-members-header">
-            <span>
-              <b>The Elites</b>
-              <AppIcon className="edit" name="edit" type="fa" />
-            </span>
-            <Button className="add-member">
-              <AppIcon className="userO" name="userO" type="fa" />
-              <span>Add Member</span>
-            </Button>
-          </div>
-          <div className="team-members-card grid-card-container">
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-            <Card className="single-card grid-card">
-              <MembershipCard />
-            </Card>
-          </div>
+      <div className="rectangle flex">
+        <img
+          src={teamMembers}
+          alt="team-members-svg"
+          className="team-members-svg"
+        />
+        <div className="rectangle-text">
+          <p className="text-1">Manage your team</p>
+          <p className="text-2">
+            Here, you are in charge. Manage and your team and assign positions
+            of manager as you deem fit
+          </p>
         </div>
+      </div>
+      <div className="flex team-members-container">
+        <AllTeamMembers />
         <div className="team-requests">
           <h3>Requests from Agents</h3>
           <div className="team-request-content">
-            <Card className="single-request">
-              <RequestCard />
-            </Card>
-            <Card className="single-request">
-              <RequestCard />
-            </Card>
-            <Card className="single-request">
-              <RequestCard />
-            </Card>
-            <Card className="single-request">
-              <RequestCard />
-            </Card>
+            <AllTeamRequests />
           </div>
         </div>
       </div>

@@ -64,6 +64,7 @@ const RouterMain = props => {
                   </Suspense>
                 )}
               />
+
               <Route
                 path="/properties"
                 exact
