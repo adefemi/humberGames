@@ -75,6 +75,18 @@ const RouterMain = props => {
                 )}
               />
 
+<<<<<<< HEAD
+              <Route
+                path="/add-property/:uuid"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <PropertyListing {...props} continue />
+                  </Suspense>
+                )}
+              />
+=======
+>>>>>>> 23f558f4963cda780f152aa829aa253d54017818
               <Route
                 path="/properties"
                 exact

@@ -18,6 +18,7 @@ export const Button = props => {
       type={props.type}
       value={props.value}
       title={props.title}
+      onBlur={props.onBlur}
     >
       <span className={"content"}>
         {props.icon && <span className={"icon-left"}>{props.icon}</span>}
@@ -25,7 +26,7 @@ export const Button = props => {
       </span>
       {props.loading ? (
         <span className={`spinner ${props.color}`}>
-          <i className="loading"/>
+          <i className="loading" />
         </span>
       ) : null}
     </button>
