@@ -67,7 +67,7 @@ function Branch() {
         </div>
       </div>
       <section className="branch-cards">{renderBranches()}</section>
-      <Modal visible={true} onOk={() => null} onClose={() => null}></Modal>
+      <Modal visible={false} onOk={() => null} onClose={() => null}></Modal>
     </div>
   );
 }

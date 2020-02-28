@@ -31,7 +31,7 @@ function ProfileTemplate() {
         </div>
         <div className="main-content-wrapper">
           <div className="main-content">
-            <ImmigrationProfile />
+            <BasicProfile />
           </div>
         </div>
       </div>
