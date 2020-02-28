@@ -266,6 +266,7 @@ export const getFullPhone = (code = "", number = "") => {
   if (numSplit) {
     return `+${numSplit.join("-")}`;
   }
+};
 export const getArrayCount = ({ count = 5, start = 1, includePlus = true }) => {
   const arrayData = [];
   for (let i = start; i < count; i++) {
