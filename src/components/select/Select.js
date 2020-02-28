@@ -26,8 +26,8 @@ export const Select = props => {
     setOptionList(props.optionList);
     setDefaultOptionList(props.optionList);
     setName(props.name);
-    if (props.defaultOption && props.defaultOption.title) {
-      setSelection(props.defaultOption.title);
+    if (props.value) {
+      setActiveOption(props.value);
     }
   }, [props]);
 
@@ -39,11 +39,27 @@ export const Select = props => {
 
   useEffect(() => {
     createSetupOption();
+    if (props.defaultOption && props.defaultOption.title) {
+      setSelection(props.defaultOption.title);
+    }
+    setTimeout(() => positionOptionDrop(), 1000);
     document.getElementById("mainBar").addEventListener("scroll", () => {
       positionOptionDrop();
     });
     handleClicks();
   }, []);
+
+  useEffect(() => {
+    if (props.triggerPosition) {
+      positionOptionDrop();
+      props.triggerReset();
+    }
+
+    if (props.selectTrigger) {
+      setActiveOption("");
+      props.selectTriggerReset();
+    }
+  }, [props.triggerPosition, props.selectTrigger]);
 
   useEffect(() => {
     const selectDrop = document.getElementById(activeID);
@@ -53,7 +69,7 @@ export const Select = props => {
     }
     ul.innerHTML = "";
     appendSelections(ul, optionList);
-    positionOptionDrop();
+    setTimeout(() => positionOptionDrop(), 200);
   }, [optionList]);
 
   const createSetupOption = () => {
@@ -95,11 +111,12 @@ export const Select = props => {
       const mainDocBounds = document
         .getElementById("mainBar")
         .getBoundingClientRect();
-      if (dropBounds.top + dropBounds.height > mainDocBounds.height - 50) {
-        el.style.top = `${inputBounds.y -
-          dropBounds.height -
-          inputBounds.height / 2 +
-          10}px`;
+
+      let checkerX = dropBounds.height + dropBounds.top;
+
+      if (checkerX > mainDocBounds.height - 200) {
+        const newTop = inputBounds.y - 10 - dropBounds.height;
+        el.style.top = `${newTop}px`;
       } else {
         el.style.top = `${inputBounds.y + inputBounds.height / 2 + 25}px`;
       }
@@ -129,6 +146,7 @@ export const Select = props => {
 
   const handleClicks = () => {
     const input = document.getElementById(selectId);
+
     document.body.onclick = e => {
       if (
         hasClass(e.target, "select-li") ||
@@ -148,6 +166,9 @@ export const Select = props => {
         removeClass(selectDrop, "open");
       }
     };
+    if (props.onBlur) {
+      props.onBlur();
+    }
   };
 
   const closeAllSelect = id => {
@@ -166,6 +187,14 @@ export const Select = props => {
   };
 
   const onChange = e => {
+    if (props.onTypeChange) {
+      props.onTypeChange({
+        target: {
+          name: props.name,
+          value: e.target.value
+        }
+      });
+    }
     setActiveOption(e.target.value);
     setSelectedOption(null);
     const newList = defaultOptionList.filter(item =>
@@ -182,9 +211,16 @@ export const Select = props => {
     <Input
       id={selectId}
       type="text"
-      className="select-input"
+      style={props.style}
+      className={`select-input ${props.className ? props.className : ""}`}
       value={activeOption}
       onBlur={_ => {
+        if (props.onBlur) {
+          props.onBlur();
+        }
+        if (props.autoComplete) {
+          return;
+        }
         if (!selectedOption) {
           setActiveOption("");
           setTimeout(() => setOptionList(defaultOptionList), 500);
@@ -192,7 +228,17 @@ export const Select = props => {
       }}
       onChange={onChange}
       placeholder={props.placeholder}
-      iconRight={<AppIcon name="ic_arrow_drop_down" type="md" />}
+      required={props.required}
+      disabled={props.fetching}
+      iconRight={
+        props.autoComplete ? (
+          <></>
+        ) : props.icon ? (
+          props.icon
+        ) : (
+          <AppIcon name="ic_arrow_drop_down" type="md" />
+        )
+      }
     />
   );
 };
@@ -202,5 +248,14 @@ Select.propTypes = {
   optionList: proptype.arrayOf(proptype.objectOf(proptype.any)),
   placeholder: proptype.string,
   onChange: proptype.func,
-  name: proptype.string
+  name: proptype.string,
+  value: proptype.any,
+  autoComplete: proptype.bool,
+  fetching: proptype.bool,
+  onTypeChange: proptype.func
+};
+
+Select.defaultProps = {
+  autoComplete: false,
+  fetching: false
 };

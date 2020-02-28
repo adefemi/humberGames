@@ -10,33 +10,44 @@ import "./quickLink.css";
 function QuickLinksData(props) {
   return (
     <div className="quicklinks">
-      <div className="questions">Quick Links</div>
+      <div className="questions" data-aos="fade-up" data-aos-delay="200">
+        Quick Links
+      </div>
       <br />
       <Slider className="flex align-center">
-        <QuickLinkCard
-          color="green"
-          icon={applicationImg}
-          title="Edit Property"
-          link="/"
-        />
-        <QuickLinkCard
-          color="blue"
-          icon={fileEditImg}
-          title="Check Applications"
-          link="/"
-        />
-        <QuickLinkCard
-          color="purple"
-          icon={coinImg}
-          title="Collect Rent"
-          link="/"
-        />
-        <QuickLinkCard
-          color="greyBlue"
-          icon={inspectionImg}
-          title="Schedule Inspection"
-          link="/"
-        />
+        <div data-aos="fade-up" data-aos-delay="400">
+          <QuickLinkCard
+            color="green"
+            icon={applicationImg}
+            title="Edit Property"
+            link="/"
+          />
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="600">
+          <QuickLinkCard
+            color="blue"
+            icon={fileEditImg}
+            title="Check Applications"
+            link="/"
+          />
+        </div>
+        <div data-aos="fade-up" data-aos-delay="800">
+          <QuickLinkCard
+            color="purple"
+            icon={coinImg}
+            title="Collect Rent"
+            link="/"
+          />
+        </div>
+        <div data-aos="fade-up" data-aos-delay="1000">
+          <QuickLinkCard
+            color="greyBlue"
+            icon={inspectionImg}
+            title="Schedule Inspection"
+            link="/"
+          />
+        </div>
       </Slider>
       <br />
       <br />

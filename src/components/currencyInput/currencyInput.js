@@ -13,40 +13,53 @@ function CurrencyInput(props) {
     if (props.defaultCurrencyOption) {
       setActiveCurrency(props.defaultCurrencyOption.value);
     }
+  }, []);
+
+  useEffect(() => {
     if (props.value) {
       onChangeCurrency({ target: { value: props.value } });
     }
-  }, []);
+  }, [props.value]);
 
   const onChangeCurrency = ({ target: { value } }) => {
     let newValue;
     newValue = value.replace(/,/g, "");
+    newValue = numberWithCommas(newValue);
     if (props.onChange) {
       props.onChange({
         target: {
           name: props.name,
           value: newValue,
+          rawValue: !newValue ? "" : newValue.replace(/,/g, ""),
           currency: activeCurrency
         }
       });
     }
-    newValue = numberWithCommas(newValue);
     setValue(newValue);
   };
 
   return (
     <div className="currency-input-field">
-      <Select
-        defaultOption={{ title: activeCurrency, value: activeCurrency }}
-        onChange={e => setActiveCurrency(e.target.value)}
-        name="currency"
-        optionList={[
-          { title: "NGN", value: "NGN" },
-          { title: "USD", value: "USD" },
-          { title: "GBP", value: "GBP" }
-        ]}
+      {!props.hideCurrency && (
+        <Select
+          defaultOption={{ title: activeCurrency, value: activeCurrency }}
+          onChange={e => setActiveCurrency(e.target.value)}
+          name="currency"
+          optionList={[
+            { title: "NGN", value: "NGN" },
+            { title: "USD", value: "USD" },
+            { title: "GBP", value: "GBP" }
+          ]}
+        />
+      )}
+      <Input
+        placeholder="0.00"
+        value={value}
+        onChange={onChangeCurrency}
+        disabled={props.disabled}
+        onBlur={props.onBlur}
+        type={props.type}
       />
-      <Input placeholder="0.00" value={value} onChange={onChangeCurrency} />
     </div>
   );
 }
@@ -54,7 +67,12 @@ function CurrencyInput(props) {
 CurrencyInput.propTypes = {
   value: proptype.number,
   onChange: proptype.func,
-  defaultCurrencyOption: proptype.objectOf(proptype.any)
+  defaultCurrencyOption: proptype.objectOf(proptype.any),
+  hideCurrency: proptype.bool
+};
+
+CurrencyInput.defaultProps = {
+  hideCurrency: false
 };
 
 export default CurrencyInput;

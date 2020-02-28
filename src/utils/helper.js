@@ -55,7 +55,7 @@ export const getActivePosition = callback => {
 
 const addressFormatType = Object.freeze({ full: "full", single: "single" });
 
-const formatAddress = data => {
+export const formatAddress = data => {
   let activeIndex = 0;
   let maxData = data[0].address_components.length;
   data.map((item, i) => {
@@ -69,7 +69,7 @@ const formatAddress = data => {
   let addressSetup = {};
   for (let i in addressComp) {
     if (addressComp[parseInt(i, 10)].types.includes("route")) {
-      addressSetup.street = addressComp[parseInt(i, 10)].long_name;
+      addressSetup.address = addressComp[parseInt(i, 10)].long_name;
     } else if (
       addressComp[parseInt(i, 10)].types.includes("neighborhood") ||
       addressComp[parseInt(i, 10)].types.includes("administrative_area_level_2")
@@ -103,7 +103,7 @@ export const getActiveAddress = (
     geocoder.geocode({ latLng: latlng }, function(results, status) {
       if (status === window.google.maps.GeocoderStatus.OK) {
         if (format === addressFormatType.full) {
-          callback(results[0]["formatted_address"], status);
+          callback(results, status);
         } else {
           callback(formatAddress(results), status);
         }
@@ -266,4 +266,13 @@ export const getFullPhone = (code = "", number = "") => {
   if (numSplit) {
     return `+${numSplit.join("-")}`;
   }
+export const getArrayCount = ({ count = 5, start = 1, includePlus = true }) => {
+  const arrayData = [];
+  for (let i = start; i < count; i++) {
+    arrayData.push(i.toString());
+  }
+  if (includePlus) {
+    arrayData.push(count.toString() + "+");
+  }
+  return arrayData;
 };
