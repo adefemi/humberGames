@@ -1,0 +1,209 @@
+.rectangle {
+  width: 100%;
+  height: 120px;
+  background: rgba(162, 255, 255, 0.27);
+  border-radius: 10px;
+  align-items: center;
+}
+
+.agency-svg {
+  width: 100px;
+  margin-right: 20px;
+}
+
+.agency-header-container p:first-child {
+  color: #017c8f;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.agency-header-container p:last-child {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.agent-container {
+  margin: 3% auto;
+  gap: 30px;
+  grid-template-columns: 3fr 1fr !important;
+}
+
+.rectangle-1 {
+  max-width: 100%;
+  height: 400px;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.agent-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-image {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.agent-name {
+  font-size: 20px;
+  color: #5b5b5b;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.agent-email {
+  margin: 0;
+  font-size: 14px;
+  color: #9e9e9e;
+}
+
+.branch {
+  border: 1px solid #efefef;
+  box-sizing: border-box;
+  border-radius: 32px;
+  padding: 5px 25px;
+  font-size: 10px;
+  color: #9e9e9e;
+  font-weight: bold;
+}
+
+.agent-property-details {
+  gap: 20px;
+}
+
+.agent-property-details > div {
+  display: flex;
+  justify-content: center;
+}
+
+.agent-property-details > div > img {
+  width: 25px;
+  margin-right: 10px;
+}
+
+.agent-property-details > div > div > p:first-child {
+  margin: 0;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.agent-property-details > div > div > p:last-child {
+  font-size: 10px;
+  color: #9e9e9e;
+  margin: 0;
+}
+
+.agent-actions {
+  padding-left: 10px;
+}
+
+.agent-actions > p:first-child {
+  margin-top: 60px;
+  margin-bottom: 0px;
+  color: #5b5b5b;
+}
+
+.office {
+  margin-right: 10px;
+}
+
+.change-branch {
+  color: #5b68a4;
+  font-size: 12px;
+}
+
+.remove-agent {
+  color: #ff3e30;
+  font-size: 12px;
+}
+
+.divider {
+  padding-left: unset;
+  width: 100%;
+  border: 1px solid #fafafa;
+}
+
+.rectangle-2 {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+.rectangle-2-content {
+  padding: 3%;
+}
+
+.property-text {
+  color: #5b5b5b;
+  font-weight: 600;
+}
+
+.agent-buttons {
+  justify-content: flex-end;
+  margin-bottom: 2%;
+}
+
+.reassign {
+  border-radius: 6px;
+  margin-right: 1%;
+  padding: 9px 30px !important;
+}
+
+.delete {
+  background: #ff3e30 !important;
+  border-radius: 6px;
+  padding: 9px 30px !important;
+}
+
+.property-card {
+  gap: 15px;
+}
+
+.card-main {
+  box-shadow: unset;
+}
+
+.property-image {
+  height: 200px;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: cover !important;
+  margin-bottom: 5%;
+  border-radius: 10px;
+}
+
+.card-content {
+  position: relative;
+}
+
+.property-title {
+  color: #5b5b5b;
+  font-weight: 500;
+  font-size: 12px;
+  margin: 0;
+}
+
+.property-address {
+  color: #9e9e9e;
+  font-size: 10px;
+  margin: 0;
+}
+
+.checkbox {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: 5%;
+  top: 5%;
+  background: #ffffff;
+  border-radius: 3px;
+  cursor: pointer;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: cover !important;
+}

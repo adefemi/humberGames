@@ -14,3 +14,7 @@ export const UNIT_IMAGE_URL = BASE_URL + "unit-property/unit-image";
 export const UNIT_COMMISSION_URL = BASE_URL + "unit-property/unit-commission";
 export const GENERIC_FEE_URL = BASE_URL + "misc/fee";
 export const FILE_UPLOAD_URL = BASE_URL + "misc/file-upload";
+export const TEAMS_URL = BASE_URL + "user/team";
+export const TEAM_REQUEST_URL =
+  BASE_URL + "user/join-agency-request?request_status=pending";
+export const PROPERTY_URL = PROPERTY_CONTROLLER_URL;
