@@ -10,7 +10,7 @@ body {
   max-height: 100vh;
   overflow-y: hidden;
 
-  & > * {
+  &>* {
     // transition: .3s ease;
   }
 }
@@ -67,6 +67,11 @@ a {
     justify-content: center;
   }
 
+  &.justify-end {
+    justify-content: flex-end;
+  }
+
+
   &.justify-between {
     justify-content: space-between;
   }
@@ -79,7 +84,7 @@ a {
     justify-content: space-around;
   }
 
-  & > .flex-1 {
+  &>.flex-1 {
     flex-grow: 1;
   }
 }

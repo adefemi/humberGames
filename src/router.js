@@ -4,6 +4,8 @@ import MainLayout from "./components/mainLayout/mainLayout";
 import PropertyListing from "./pages/propertyListing/propertyListing";
 import Properties from "./pages/properties/Properties";
 import Application from "./pages/application/Application";
+import ProfileTemplate from "./pages/profile/ProfileTemplate";
+import Branch from "./pages/branch/Branch";
 const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
@@ -12,6 +14,15 @@ const RouterMain = props => {
   return (
     <BrowserRouter>
       <Switch>
+        <Route
+          path="/profile"
+          exact
+          component={props => (
+            <Suspense fallback={() => <h2>Loading...</h2>}>
+              <ProfileTemplate {...props} />
+            </Suspense>
+          )}
+        />
         <Route
           path="/"
           component={props => (
@@ -68,6 +79,15 @@ const RouterMain = props => {
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <Application {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/branch"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <Branch {...props} />
                   </Suspense>
                 )}
               />

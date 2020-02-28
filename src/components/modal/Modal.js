@@ -5,9 +5,8 @@ import { arrows_remove as arrowsRemove } from "react-icons-kit/linea/arrows_remo
 import ReactDOM from "react-dom";
 
 import "./Modal.css";
-import { randomIDGenerator } from "../../utils/helper";
+import { randomIDGenerator, addClass } from "../../utils/helper";
 import { getIconType } from "../notification/Notification";
-import { addClass } from "../select/Select";
 import { Button } from "../button/Button";
 
 const modalTypes = Object.freeze({

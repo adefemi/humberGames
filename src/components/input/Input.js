@@ -54,7 +54,7 @@ export const Input = props => {
               props.onChange(e);
             }}
             {...newProps}
-            value={props.value}
+            value={props.value === null ? "" : props.value}
             className={`${props.className} ${
               props.iconRight ? "iconRight" : ""
             } ${props.iconLeft ? "iconLeft" : ""}`}

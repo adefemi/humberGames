@@ -1,5 +1,9 @@
 import React, { createContext, useReducer } from "react";
 import { pageTitleReducer, stateData } from "./reducers/pageTitleReducer";
+import {
+  propertyPageData,
+  propertyPageReducer
+} from "./reducers/propertyPageReducer";
 
 const reduceReducers = (...reducers) => (prevState, value, ...args) =>
   reducers.reduce(
@@ -7,10 +11,11 @@ const reduceReducers = (...reducers) => (prevState, value, ...args) =>
     prevState
   );
 
-const combinedReducers = reduceReducers(pageTitleReducer);
+const combinedReducers = reduceReducers(pageTitleReducer, propertyPageReducer);
 
 const initialState = {
-  ...stateData
+  ...stateData,
+  ...propertyPageData
 };
 const store = createContext(initialState);
 const { Provider } = store;

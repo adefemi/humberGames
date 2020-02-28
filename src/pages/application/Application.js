@@ -13,32 +13,69 @@ import ApplicationCard from "../../components/application/ApplicationCard";
 import { APPLICATIONS_URL } from "../../utils/urls";
 import { useState } from "react";
 import { axiosHandler } from "../../utils/axiosHandler";
+import { Notification } from "../../components/notification/Notification";
 
 function Application() {
-  const [applications, setApplications] = useState({});
-  const [loaders, setLoaders] = useState({});
+  const [applications, setApplications] = useState([]);
+  const [formState, setFormState] = useState({});
+  const [loaders, setLoaders] = useState({
+    applications: true
+  });
   const { dispatch } = useContext(store);
   useEffect(() => {
     getApplications();
     dispatch({ type: setPageTitleAction, payload: "Application" });
   }, []);
-  const toggleLoaderState = key => {
-    setLoaders({ ...loaders, [key]: !loaders.key });
-  };
+
+  const toggleLoaderState = key =>
+    setLoaders({ ...loaders, [key]: !loaders[key] });
   const getApplications = async () => {
     try {
-      let applications = await axiosHandler("GET", APPLICATIONS_URL);
+      let applications = await axiosHandler(
+        "GET",
+        APPLICATIONS_URL,
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTcxNzY0LCJqdGkiOiIzZDk4MjYxNjQ1Mzg0ZTgzOWEzZThiZTY3NTIzMmYwNCIsInVzZXJfaWQiOjE0fQ.9QnPeWspGPIL-eytJ85r3MUkACKley2bIOB5Jwq8A20"
+      );
       setApplications(applications.data.results.results);
       toggleLoaderState("applications");
     } catch (e) {
-      console.log("error here");
+      Notification.bubble({
+        content: _.get(e, "response.data.results.error"),
+        type: "error"
+      });
     }
   };
 
   const getApplicationCards = applications =>
     applications.map(application => (
-      <ApplicationCard application={application} />
+      <ApplicationCard
+        onDelete={onDelete}
+        key={application.id}
+        application={application}
+      />
     ));
+
+  const onDelete = id => {
+    axiosHandler(
+      "DELETE",
+      `${APPLICATIONS_URL}/${id}`,
+
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTcxNzY0LCJqdGkiOiIzZDk4MjYxNjQ1Mzg0ZTgzOWEzZThiZTY3NTIzMmYwNCIsInVzZXJfaWQiOjE0fQ.9QnPeWspGPIL-eytJ85r3MUkACKley2bIOB5Jwq8A20"
+    ).then(res => {
+      Notification.bubble({
+        type: "success",
+        content: "Application deleted successfully"
+      });
+      let newApplications = applications.filter(
+        application => application.id !== id
+      );
+      setApplications(newApplications);
+    });
+  };
+  const handleSearch = e => {
+    setFormState({ [e.target.id]: e.target.value });
+  };
+
   return (
     <div className="Application">
       <div className="main-page">
@@ -60,6 +97,9 @@ function Application() {
                 placeholder={
                   "Search properties or unit (e.g adedeji estate, unit 5)"
                 }
+                value={formState.search}
+                id="search"
+                onChange={handleSearch}
               />
             </div>
             <div className="filter-box flex">
@@ -81,7 +121,7 @@ function Application() {
           </div>
         </section>
         <section className="application-cards">
-          {!loaders.applications
+          {loaders.applications
             ? Array(8)
                 .fill(null)
                 .map((v, i) => (
