@@ -1,16 +1,32 @@
-.form-group{
+@import "../../styles/theme";
+
+.form-group {
   margin-bottom: 20px;
-  span, small, label{
+
+  .flex {
+    display: flex;
+
+    .required-indicator {
+      color: $danger-color;
+      margin: 0 5px;
+    }
+  }
+
+  span,
+  small,
+  label {
     display: block;
   }
-  small{
+
+  small {
     font-size: 11px;
     font-weight: 600;
     color: darken(white, 40%);
     margin-bottom: 15px;
   }
 
-  span{
+
+  span {
     font-size: 13px;
     margin-bottom: 0;
     color: darken(white, 80%);

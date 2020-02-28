@@ -2,11 +2,15 @@ import React from "react";
 import { Card } from "../card/Card";
 import AppIcon from "../icons/Icon";
 import { Button } from "../button/Button";
+import { Modal } from "../modal/Modal";
 import _ from "lodash";
 import moment from "moment";
+import { axiosHandler } from "../../utils/axiosHandler";
+import { APPLICATIONS_URL } from "../../utils/urls";
 
 function ApplicationCard(props) {
   let {
+    id,
     unit: {
       title,
       description,
@@ -19,6 +23,15 @@ function ApplicationCard(props) {
     status,
     created_at
   } = props.application;
+  const deleteApplication = id => {
+    Modal.confirm({
+      title: "Delete Application",
+      content: "Are you sure you want to delete this application?",
+      onOK: () => {
+        props.onDelete(id);
+      }
+    });
+  };
   const cardHeading = (
     <div className="flex">
       <div className="property-address flex-1">
@@ -27,11 +40,11 @@ function ApplicationCard(props) {
         </strong>
         <div className="unit-description">{description}</div>
       </div>
-      <div className="delete-icon">
+      <div className="delete-icon" onClick={() => deleteApplication(id)}>
         <AppIcon
           name="ic_delete"
           className="danger-color"
-          size={24}
+          size={20}
           type="md"
         />
       </div>
@@ -46,12 +59,14 @@ function ApplicationCard(props) {
             backgroundImage: `url(${_.get(unit_images, "0.image.file")})`
           }}
         >
-          <Button>View Property</Button>
+          <div className="overlay">
+            <Button>View Property</Button>
+          </div>
         </div>
         <div className="card-footer">
           <div className="flex footer-top justify-between">
             <div className="time-of-app">
-              <AppIcon name="ic_access_time" type="md" size={20} />
+              <AppIcon name="ic_access_time" type="md" size={18} />
               applied {moment(created_at).fromNow()}
             </div>
             <div className="status-of-app">

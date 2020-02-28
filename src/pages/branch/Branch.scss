@@ -1,0 +1,159 @@
+@import "../../styles/theme";
+
+.Branch {
+    .text-right {
+        text-align: right;
+    }
+
+    .rectangle {
+        width: 100%;
+        padding: 30px 50px;
+        box-sizing: border-box;
+        height: 120px;
+        background: rgba(162, 255, 255, 0.27);
+        border-radius: 10px;
+        align-items: center;
+        margin: 50px 0;
+
+        img {
+            margin-right: 35px;
+            width: 120px;
+            height: 120px;
+            position: relative;
+            top: -35px;
+        }
+
+        .rectangle-text {
+            .text-1 {
+                font-weight: 600;
+                color: #017C8F;
+            }
+
+            .text-2 {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .add-branch {
+        button {
+            border-radius: 24px;
+        }
+    }
+
+    .branch-filter {
+        margin: 20px 0;
+
+        .input-container {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .select-container {
+            max-width: 150px;
+            width: 100%;
+
+            .input-control .input-field {
+                min-width: 0px;
+            }
+        }
+    }
+
+    .branch-cards {
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 10px;
+
+        .card-main {
+            min-height: 350px;
+            box-sizing: border-box;
+            padding: 5px 0;
+            height: 100%;
+
+            .card-heading {
+                padding: 5px 15px;
+            }
+
+            .top-body-section {
+                padding: 20px 15px;
+                border-bottom: 1px solid #f2f2f2;
+
+                img {
+                    position: relative;
+                    top: 3.2px;
+                    margin-right: 10px;
+                }
+
+                .agent-stats {
+                    font-size: 13px;
+
+                }
+            }
+
+            .branch-details {
+                .branch-location {
+                    color: $color-text-light;
+                    font-size: 13px;
+                }
+            }
+
+            .card-wrap {
+                height: calc(100% - 53px);
+            }
+
+            .main-card-body {
+                padding: 15px;
+
+                .bank-name {
+                    font-weight: 600;
+                }
+
+                .account-holder {
+                    color: $color-text-light;
+                }
+
+                .account-number {
+                    color: $primary-color;
+                    font-weight: 600;
+                }
+
+            }
+
+            .card-footer {
+                padding: 15px;
+
+                .agent-picture {
+                    background-color: gainsboro;
+                    width: 50px;
+                    background-image: url('https://i.picsum.photos/id/866/200/300.jpg');
+                    background-position: center;
+                    height: 50px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    margin-right: 20px;
+                }
+
+                .agent-details {
+                    .agent-email {
+                        color: $color-text-light;
+                    }
+
+                    .manager-badge {
+                        border: 2px solid $danger-color;
+                        display: inline-block;
+                        padding: 2px 10px;
+                        margin-top: 5px;
+                        font-size: 12px;
+                        color: $danger-color;
+                        border-radius: 12px;
+                    }
+                }
+
+            }
+        }
+
+
+
+    }
+}

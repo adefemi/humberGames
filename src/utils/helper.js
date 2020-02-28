@@ -1,6 +1,6 @@
 import moment from "moment";
 import countryControl from "country-state-city";
-
+import _ from "lodash";
 export const errorHandler = ({ graphQLErrors, networkError }) => {
   let messageString = "";
   if (graphQLErrors) {
@@ -27,6 +27,14 @@ export const randomIDGenerator = length => {
   }
 
   return text;
+};
+
+export const getCurrencyValue = termObj => {
+  return `${_.get(termObj, "currency_type", "NGN ")}${_.get(
+    termObj,
+    "amount",
+    "0.0"
+  )}`;
 };
 
 export const getActivePosition = callback => {
@@ -253,6 +261,11 @@ export const convertValue = (props, code) => {
   return newValue.join("");
 };
 
+export const getFullPhone = (code = "", number = "") => {
+  let numSplit = `${code}${number}`.match(/.{1,3}/g);
+  if (numSplit) {
+    return `+${numSplit.join("-")}`;
+  }
 export const getArrayCount = ({ count = 5, start = 1, includePlus = true }) => {
   const arrayData = [];
   for (let i = start; i < count; i++) {

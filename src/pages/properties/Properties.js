@@ -3,17 +3,84 @@ import { setPageTitleAction } from "../../stateManagement/actions";
 import { store } from "../../stateManagement/store";
 import houses from "../../assets/houses.svg";
 import Input from "../../components/input/Input";
-
-import "./Properties.css";
+import { axiosHandler } from "../../utils/axiosHandler";
 import { Select } from "../../components/select/Select";
 import PropertyContainer from "../../components/property/PropertyContainer";
 import SummaryCard from "../../components/property/SummaryCard";
-
+import Skeleton from "react-loading-skeleton";
+import { PROPERTIES_URL } from "../../utils/urls";
+import { useState } from "react";
+import { Modal } from "../../components/modal/Modal";
+import "./Properties.css";
+import { Notification } from "../../components/notification/Notification";
+import qs from "query-string";
+import _ from "lodash";
+import PropertyModal from "../../components/property/PropertyModal";
 function Properties() {
-  const { dispatch } = useContext(store);
+  const { dispatch, state } = useContext(store);
+  const [queryParams, setQueryParams] = useState({});
+  const [properties, setProperties] = useState([]);
+  const [modalState, setModalState] = useState(false);
+  const [formState, setFormState] = useState({
+    keyword: ""
+  });
+  const [propertiesLoading, setPropertiesLoading] = useState();
+
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Properties" });
+    console.log(state);
+    getProperties();
   }, []);
+  useEffect(() => {
+    let params = qs.stringify(queryParams);
+    getProperties(`${PROPERTIES_URL}?${params}`);
+  }, [queryParams]);
+
+  const getProperties = (pageRoute = PROPERTIES_URL) => {
+    setPropertiesLoading(true);
+    try {
+      axiosHandler("GET", pageRoute).then(res => {
+        setProperties(res.data.results);
+        setPropertiesLoading(false);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const onDelete = propertyId => {
+    Modal.confirm({
+      title: "Delete Property",
+      content:
+        "Are you sure you want to delete this propery along with all unit(s) attached to it?",
+      onOK: () => {
+        axiosHandler("DELETE", `${PROPERTIES_URL}/${propertyId}`)
+          .then(res => {
+            Notification.bubble({
+              type: "Success",
+              content: "Property sucessfully deleted"
+            });
+          })
+          .catch(err => {
+            Notification.bubble({
+              type: "error",
+              content: "Unable to delete property"
+            });
+          });
+      }
+    });
+  };
+  const setFormStateHandler = e => {
+    setFormState({ [e.target.id]: e.target.value });
+    addQueryString("keyword", e.target.value);
+  };
+
+  const addQueryString = (key, value) => {
+    let newQueryStrings = { ...queryParams, [key]: value };
+    setQueryParams(newQueryStrings);
+  };
+
+  const getQueryString = key => qs.parse(queryParams)[key];
+
   return (
     <div className="Properties">
       <div className="page-layout flex">
@@ -36,69 +103,75 @@ function Properties() {
                   placeholder={
                     "Search properties or unit (e.g adedeji estate, unit 5)"
                   }
+                  value={formState.search}
+                  id={"search"}
+                  onChange={setFormStateHandler}
                 />
               </div>
               <div className="filter-box flex">
                 <Select
-                  optionList={[
-                    { title: "Property type", value: "" },
-                    { title: "Hello", value: "World" }
-                  ]}
-                  defaultOption={{ title: "Property type" }}
+                  onChange={e => {
+                    addQueryString("unit_type", e.target.value);
+                  }}
+                  optionList={[{ title: "Apartment", value: "apartment" }]}
+                  placeholder={"Property Type"}
                 />
                 <Select
+                  placeholder="Status"
                   optionList={[
-                    { title: "Status", value: "" },
-                    { title: "Hello", value: "World" }
+                    { title: "Sold", value: "sold" },
+                    { title: "Rented", value: "rented" },
+                    { title: "Pending", value: "pending" },
+                    { title: "Published", value: "published" },
+                    { title: "Unpublished", value: "unpublished" }
                   ]}
+                  name={"status"}
+                  onChange={e => {
+                    addQueryString("status", e.target.value);
+                  }}
                   defaultOption={{ title: "Status" }}
                 />
                 <Select
+                  placeholder={"Sort by date"}
+                  onChange={e => {
+                    addQueryString("date", e.target.value);
+                  }}
                   optionList={[
-                    { title: "Sort by date", value: "" },
-                    { title: "Hello", value: "World" }
+                    { title: "DATE: Newest First", value: "desc" },
+                    { title: "DATE: Oldest First", value: "asc" }
                   ]}
-                  defaultOption={{ title: "Sort by date" }}
                 />
               </div>
             </div>
           </section>
-          <section className="property-section section-begin">
-            <PropertyContainer
-              name="Adedeji Estate"
-              address="No. 22 igoba street, ilase lagos"
-              units={22}
-            />
-          </section>
-          <section className="property-section">
-            <PropertyContainer
-              name="Adedeji Estate"
-              address="No. 22 igoba street, ilase lagos"
-              units={22}
-            />
-          </section>
-          <section className="property-section">
-            <PropertyContainer
-              name="Adedeji Estate"
-              address="No. 22 igoba street, ilase lagos"
-              units={22}
-            />
-          </section>
-          <section className="property-section">
-            <PropertyContainer
-              name="Adedeji Estate"
-              address="No. 22 igoba street, ilase lagos"
-              units={22}
-            />
-          </section>
+          {propertiesLoading ? (
+            <div>
+              <Skeleton height={240} />
+            </div>
+          ) : (
+            _.get(properties, "results", []).map(property => (
+              <section className="property-section section-begin">
+                <PropertyContainer
+                  toggleModal={() => setModalState(!modalState)}
+                  onDelete={onDelete}
+                  queryParams={queryParams}
+                  key={property.id}
+                  property={property}
+                />
+              </section>
+            ))
+          )}
         </div>
         <div className="right-nav">
-          <div className="section-header">Quick Summary</div>
-          <SummaryCard />
-          <SummaryCard />
-          <SummaryCard />
+          <>
+            <div className="section-header">Quick Summary</div>
+            <SummaryCard type={"Properties"} total={properties.count} />
+            <SummaryCard type={"Units"} />
+            <SummaryCard type={"Interests"} />
+          </>
         </div>
       </div>
+      <PropertyModal />
     </div>
   );
 }
