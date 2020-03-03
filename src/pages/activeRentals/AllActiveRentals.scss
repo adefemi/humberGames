@@ -140,3 +140,49 @@
   right: 2%;
   bottom: 10%;
 }
+
+//#------------Responsiveness for All Rentals Page-----------------------#
+@media screen and (max-width: 1024px) {
+  .active-rents.grid.grid-4 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .active-rents.grid.grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .active-rents.grid.grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+//#-----------Responsiveness for Single Rent Page------------------------#
+@media screen and (max-width: 768px) {
+  .facilities img {
+    width: 40px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .payment-lease-details {
+    font-size: 10px;
+  }
+  .facilities p {
+    display: none;
+  }
+  .landlord-img {
+    width: 50px;
+    height: 50px;
+  }
+  .landlord-details {
+    font-size: 12px;
+  }
+  .bubbles svg {
+    width: 30px;
+    height: 30px;
+  }
+}
