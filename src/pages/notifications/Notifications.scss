@@ -34,3 +34,33 @@
 .yesterday {
   margin-top: 5%;
 }
+
+//#-------------------------Responsiveness-------------------------------#
+@media screen and (max-width: 768px) {
+  .single-card {
+    font-size: 11px;
+    margin-right: 5px;
+  }
+  .notification-status {
+    width: 5px;
+    height: 5px;
+  }
+  .notification-image {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .single-card {
+    font-size: 10px;
+    height: 75px;
+  }
+  .today,
+  .yesterday {
+    font-size: 14px;
+  }
+  .notification-status {
+    display: none;
+  }
+}
