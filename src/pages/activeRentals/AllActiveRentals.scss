@@ -165,6 +165,15 @@
   .facilities img {
     width: 40px;
   }
+  .title-address > h2 {
+    font-size: 16px;
+  }
+  .flex > p {
+    font-size: 12px;
+  }
+  .property-details {
+    font-size: 12px;
+  }
 }
 
 @media screen and (max-width: 375px) {
@@ -184,5 +193,11 @@
   .bubbles svg {
     width: 30px;
     height: 30px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .property-details {
+    font-size: 16px;
   }
 }
