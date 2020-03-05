@@ -1,5 +1,5 @@
 .rectangle {
-  height: 120px;
+  // height: 120px;
   background: #fff7dc;
   border-radius: 10px;
   position: relative;
@@ -14,7 +14,6 @@
 }
 
 .transaction-header {
-  //   position: absolute;
   margin-left: 10%;
   flex-direction: column;
 }
@@ -37,8 +36,6 @@
 .earnings-card {
   height: 100px;
   padding: 0 5%;
-  //   justify-content: center;
-  //   max-width: 200px;
 }
 
 .earnings-svg {
@@ -107,4 +104,82 @@
   background-color: pink;
   border-radius: 50%;
   justify-content: center;
+}
+
+//#----------------------Responsiveness----------------------------#
+@media screen and (max-width: 1024px) {
+  .transaction-header {
+    margin-left: 18%;
+  }
+  .transactions-table {
+    font-size: 10px;
+  }
+  .transactions-table td {
+    padding: 5px 10px;
+  }
+  .transactions-row {
+    height: 80px;
+  }
+  .receipt {
+    width: 83px;
+    font-size: 8px !important;
+  }
+  .Dr-circle {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contract-svg {
+    width: 50px;
+    bottom: 12%;
+    margin-left: 5px;
+  }
+  .transaction-header {
+    margin-left: 13%;
+    font-size: 12px;
+  }
+  .earnings-container.grid.grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .transaction-header {
+    margin-left: 17%;
+  }
+  .transactions-table {
+    font-size: 9px;
+  }
+  .receipt {
+    width: unset;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .transaction-header {
+    margin-left: 20%;
+    font-size: 10px;
+  }
+  .contract-svg {
+    bottom: 0;
+  }
+  .earnings-container.grid.grid-3 {
+    grid-template-columns: 1fr;
+  }
+  .actual-earnings > p {
+    font-size: 12px;
+  }
+  .graph-container {
+    margin-top: 50px;
+    padding: 5%;
+  }
+  .graph {
+    font-size: 12px;
+    margin-top: 25%;
+  }
+  .transactions-container {
+    overflow: scroll;
+  }
 }
