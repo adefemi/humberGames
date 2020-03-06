@@ -54,24 +54,34 @@ const SingleRent = () => {
       <p>Facilities</p>
       <div className="facilities flex">
         <div>
-          <img src={plugSvg} alt="plug" className="plug" />
-          <p>Power supply</p>
+          <img src={plugSvg} alt="plug" className="plug image" />
+          <div className="text">
+            <p>Power supply</p>
+          </div>
         </div>
         <div>
-          <img src={tapSvg} alt="tap" className="tap" />
-          <p>Water</p>
+          <img src={tapSvg} alt="tap" className="tap image" />
+          <div className="text">
+            <p>Water</p>
+          </div>
         </div>
         <div>
-          <img src={trashSvg} alt="trash" className="trash" />
-          <p>Sanitation</p>
+          <img src={trashSvg} alt="trash" className="trash image" />
+          <div className="text">
+            <p>Sanitation</p>
+          </div>
         </div>
         <div>
-          <img src={balconySvg} alt="balcony" className="balcony" />
-          <p>Balcony</p>
+          <img src={balconySvg} alt="balcony" className="balcony image" />
+          <div className="text">
+            <p>Balcony</p>
+          </div>
         </div>
         <div>
-          <img src={padlockSvg} alt="padlock" className="padlock" />
-          <p>Security</p>
+          <img src={padlockSvg} alt="padlock" className="padlock image" />
+          <div className="text">
+            <p>Security</p>
+          </div>
         </div>
       </div>
       <div className="landlord-container">
