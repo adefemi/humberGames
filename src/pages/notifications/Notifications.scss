@@ -4,7 +4,7 @@
 
 .single-card {
   padding: 0 2%;
-  height: 100px;
+  // height: 100px;
 }
 
 .notification-status {
@@ -16,8 +16,8 @@
 
 .notification-image {
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   margin-left: 1%;
   margin-right: 3%;
 }
@@ -54,7 +54,7 @@
 @media screen and (max-width: 425px) {
   .single-card {
     font-size: 10px;
-    height: 75px;
+    // height: 75px;
   }
   .today,
   .yesterday {
