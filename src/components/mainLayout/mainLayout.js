@@ -1,16 +1,31 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./mainlayout.css";
 import { Button } from "../button/Button";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 import { Icon } from "../icons";
-import { addClass, hasClass, removeClass } from "../../utils/helper";
+import { addClass, getToken, hasClass, removeClass } from "../../utils/helper";
 import { store } from "../../stateManagement/store";
+import {
+  loginUrl,
+  secondaryColor,
+  USERDETAILS,
+  USERROLE,
+  USERTOKEN
+} from "../../utils/data";
+import { axiosHandler } from "../../utils/axiosHandler";
+import { GET_ACCESS_TOKEN, USER_ME, USER_ROLE } from "../../utils/urls";
+import { Spinner } from "../spinner/Spinner";
+import qs from "query-string";
+import { useCookies } from "react-cookie";
+import { setRoles, setUserDetails } from "../../stateManagement/actions";
 
 function MainLayout(props) {
+  const { dispatch } = useContext(store);
   const {
     state: { pageTitle }
   } = useContext(store);
+  const [loading, setLoading] = useState(false);
 
   const toggleSlider = () => {
     const el = document.getElementById("sideBar");
@@ -26,6 +41,64 @@ function MainLayout(props) {
   useEffect(() => {
     setTitle(pageTitle);
   }, [pageTitle]);
+
+  useEffect(() => {
+    // check token
+    let token = JSON.parse(localStorage.getItem(USERTOKEN));
+    // verify token
+    if (token) {
+      axiosHandler("get", USER_ME, token.access).then(
+        res => {
+          setLoading(false);
+          setUpUserCookie(res.data);
+        },
+        _ => {
+          handleRefresh("logout");
+        }
+      );
+    } else {
+      handleRefresh("logout");
+    }
+  }, [props]);
+
+  const setUpUserCookie = user_data => {
+    dispatch({ type: setUserDetails, payload: user_data });
+    axiosHandler("get", USER_ROLE).then(res => {
+      dispatch({ type: setRoles, payload: res.data.results });
+    });
+  };
+
+  const handleRefresh = status => {
+    const query = qs.parse(props.location.search);
+    if (query.refresh) {
+      axiosHandler("post", GET_ACCESS_TOKEN, null, {
+        refresh: query.refresh
+      }).then(
+        res => {
+          localStorage.setItem(
+            USERTOKEN,
+            JSON.stringify({ access: res.data.access, refresh: query.refresh })
+          );
+          let newQuery = delete query.refresh;
+          newQuery = qs.stringify(newQuery);
+          props.history.push(props.location.pathname + `?${newQuery}`);
+        },
+        _ => {
+          routeToLogin(status);
+        }
+      );
+    } else {
+      routeToLogin(status);
+    }
+  };
+
+  const routeToLogin = status => {
+    let logout = status === "logout" ? "&notactive=true" : "";
+    localStorage.clear();
+    // clear cookie
+    window.location.href =
+      loginUrl + `?redirect=${props.location.pathname}${logout}`;
+  };
 
   return (
     <div className="mainLayout">
@@ -56,10 +129,21 @@ function MainLayout(props) {
               <Link to="/add-property" className="navItem">
                 <Button>Post Property</Button>
               </Link>
-              <div className="navItem">user-profile</div>
+              <Link to="/profile" className="navItem">
+                <div className="navItem">user-profile</div>
+              </Link>
             </div>
           </div>
-          <div className="children">{props.children}</div>
+          <div className="children">
+            {loading ? (
+              <div>
+                <br />
+                <Spinner color={secondaryColor} size={15} />
+              </div>
+            ) : (
+              props.children
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -98,15 +182,21 @@ const SideBar = () => {
           icon={<Icon name="packageIcon" type="feather" />}
         />
         <SideLinks
-          link={"/transactions"}
-          title="Transactions"
-          icon={<Icon name="barChart" type="feather" />}
+          link={"/leases"}
+          title="Leases"
+          icon={<Icon name="checkSquare" type="feather" />}
         />
         <SideLinks
           link={"/inspections"}
           title="Inspections"
           icon={<Icon name="eye" type="feather" />}
         />
+        <SideLinks
+          link={"/transactions"}
+          title="Transactions"
+          icon={<Icon name="barChart" type="feather" />}
+        />
+
         <SideLinks
           link={"/notifications"}
           title="Notifications"

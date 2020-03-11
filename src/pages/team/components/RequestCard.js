@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
 import noImage from "../../../assets/images/no-image.jpg";
 import { Button } from "../../../components/button/Button";
@@ -16,7 +16,7 @@ const RequestCard = ({ request, onAcceptClick, onDeclineClick }) => {
             noImage
           )})`
         }}
-      ></div>
+      />
       <p className="request-time">
         Requested: {moment(request.created_at).fromNow()}
       </p>

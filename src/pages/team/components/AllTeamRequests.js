@@ -11,7 +11,8 @@ import noImage from "../../../assets/images/no-image.jpg";
 import loadMore from "../../../assets/loadMore.svg";
 import { Button } from "../../../components/button/Button";
 import _ from "lodash";
-import { testToken } from "../TeamCreatePage";
+import { getToken } from "../../../utils/helper";
+
 const AllTeamRequests = () => {
   const [acceptModalState, setAcceptModalState] = useState(false);
   const [teamRequests, setTeamRequests] = useState([]);
@@ -38,11 +39,10 @@ const AllTeamRequests = () => {
   };
 
   const onCompleteClick = () => {
-    console.log("Complete clicked");
     axiosHandler(
       "PATCH",
       TEAM_REQUEST_URL + `/${_.get(request, "id")}`,
-      testToken,
+      getToken(),
       {
         request_status: "accepted",
         role: role
@@ -73,7 +73,7 @@ const AllTeamRequests = () => {
         axiosHandler(
           "DELETE",
           TEAM_REQUEST_URL + `/${_.get(request, "id")}`,
-          testToken
+          getToken()
         )
           .then(() => {
             getRequests();
@@ -132,7 +132,7 @@ const AllTeamRequests = () => {
                 noImage
               )})`
             }}
-          ></div>
+          />
           <div className="membership flex">
             <p>{`${_.get(request, "user.first_name")} ${_.get(
               request,

@@ -1,6 +1,7 @@
 import moment from "moment";
 import countryControl from "country-state-city";
 import _ from "lodash";
+import { USERTOKEN } from "./data";
 export const errorHandler = ({ graphQLErrors, networkError }) => {
   let messageString = "";
   if (graphQLErrors) {
@@ -276,4 +277,12 @@ export const getArrayCount = ({ count = 5, start = 1, includePlus = true }) => {
     arrayData.push(count.toString() + "+");
   }
   return arrayData;
+};
+export const getToken = _ => {
+  let tokenObj = localStorage.getItem(USERTOKEN);
+  if (tokenObj) {
+    tokenObj = JSON.parse(tokenObj);
+    return tokenObj.access;
+  }
+  return null;
 };

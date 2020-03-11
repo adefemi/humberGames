@@ -6,14 +6,14 @@ import Input from "../../components/input/Input";
 import _ from "lodash";
 import "./Application.css";
 import { Select } from "../../components/select/Select";
-import PropertyContainer from "../../components/property/PropertyContainer";
-import SummaryCard from "../../components/property/SummaryCard";
 import Skeleton from "react-loading-skeleton";
 import ApplicationCard from "../../components/application/ApplicationCard";
 import { APPLICATIONS_URL } from "../../utils/urls";
 import { useState } from "react";
 import { axiosHandler } from "../../utils/axiosHandler";
 import { Notification } from "../../components/notification/Notification";
+import { getToken } from "../../utils/helper";
+import ApplicationCardAgency from "../../components/application/ApplicationCardAgency";
 
 function Application() {
   const [applications, setApplications] = useState([]);
@@ -34,7 +34,7 @@ function Application() {
       let applications = await axiosHandler(
         "GET",
         APPLICATIONS_URL,
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTcxNzY0LCJqdGkiOiIzZDk4MjYxNjQ1Mzg0ZTgzOWEzZThiZTY3NTIzMmYwNCIsInVzZXJfaWQiOjE0fQ.9QnPeWspGPIL-eytJ85r3MUkACKley2bIOB5Jwq8A20"
+        getToken()
       );
       setApplications(applications.data.results.results);
       toggleLoaderState("applications");
@@ -48,7 +48,7 @@ function Application() {
 
   const getApplicationCards = applications =>
     applications.map(application => (
-      <ApplicationCard
+      <ApplicationCardAgency
         onDelete={onDelete}
         key={application.id}
         application={application}
@@ -56,21 +56,18 @@ function Application() {
     ));
 
   const onDelete = id => {
-    axiosHandler(
-      "DELETE",
-      `${APPLICATIONS_URL}/${id}`,
-
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTcxNzY0LCJqdGkiOiIzZDk4MjYxNjQ1Mzg0ZTgzOWEzZThiZTY3NTIzMmYwNCIsInVzZXJfaWQiOjE0fQ.9QnPeWspGPIL-eytJ85r3MUkACKley2bIOB5Jwq8A20"
-    ).then(res => {
-      Notification.bubble({
-        type: "success",
-        content: "Application deleted successfully"
-      });
-      let newApplications = applications.filter(
-        application => application.id !== id
-      );
-      setApplications(newApplications);
-    });
+    axiosHandler("DELETE", `${APPLICATIONS_URL}/${id}`, getToken()).then(
+      res => {
+        Notification.bubble({
+          type: "success",
+          content: "Application deleted successfully"
+        });
+        let newApplications = applications.filter(
+          application => application.id !== id
+        );
+        setApplications(newApplications);
+      }
+    );
   };
   const handleSearch = e => {
     setFormState({ [e.target.id]: e.target.value });
@@ -122,7 +119,7 @@ function Application() {
         </section>
         <section className="application-cards">
           {loaders.applications
-            ? Array(8)
+            ? Array(3)
                 .fill(null)
                 .map((v, i) => (
                   <div key={i} className={"flex column w-100"}>

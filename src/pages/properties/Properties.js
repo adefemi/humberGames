@@ -16,6 +16,7 @@ import { Notification } from "../../components/notification/Notification";
 import qs from "query-string";
 import _ from "lodash";
 import PropertyModal from "../../components/property/PropertyModal";
+import { getToken } from "../../utils/helper";
 function Properties() {
   const { dispatch, state } = useContext(store);
   const [queryParams, setQueryParams] = useState({});
@@ -28,7 +29,7 @@ function Properties() {
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Properties" });
-    console.log(state);
+    // console.log(state);
     getProperties();
   }, []);
   useEffect(() => {
@@ -39,12 +40,12 @@ function Properties() {
   const getProperties = (pageRoute = PROPERTIES_URL) => {
     setPropertiesLoading(true);
     try {
-      axiosHandler("GET", pageRoute).then(res => {
+      axiosHandler("GET", pageRoute, getToken()).then(res => {
         setProperties(res.data.results);
         setPropertiesLoading(false);
       });
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
   const onDelete = propertyId => {
@@ -53,7 +54,7 @@ function Properties() {
       content:
         "Are you sure you want to delete this propery along with all unit(s) attached to it?",
       onOK: () => {
-        axiosHandler("DELETE", `${PROPERTIES_URL}/${propertyId}`)
+        axiosHandler("DELETE", `${PROPERTIES_URL}/${propertyId}`, getToken())
           .then(res => {
             Notification.bubble({
               type: "Success",
@@ -146,6 +147,10 @@ function Properties() {
           </section>
           {propertiesLoading ? (
             <div>
+              <br />
+              <Skeleton height={240} />
+              <br />
+              <br />
               <Skeleton height={240} />
             </div>
           ) : (

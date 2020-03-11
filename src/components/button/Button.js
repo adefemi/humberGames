@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import "./Button.css";
+import { Spinner } from "../spinner/Spinner";
 
 export const Button = props => {
   return (
@@ -24,11 +25,7 @@ export const Button = props => {
         {props.icon && <span className={"icon-left"}>{props.icon}</span>}
         {props.children}
       </span>
-      {props.loading ? (
-        <span className={`spinner ${props.color}`}>
-          <i className="loading" />
-        </span>
-      ) : null}
+      {props.loading ? <Spinner /> : null}
     </button>
   );
 };

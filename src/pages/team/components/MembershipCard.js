@@ -6,7 +6,7 @@ import _ from "lodash";
 export const MembershipCard = ({ team }) => {
   return (
     <>
-      <div className="member-status"></div>
+      <div className="member-status" />
       <div
         className="card-picture"
         style={{
@@ -16,7 +16,7 @@ export const MembershipCard = ({ team }) => {
             noImage
           )})`
         }}
-      ></div>
+      />
       <div className="card-picture-details">
         <p>{`${team.user.first_name} ${team.user.last_name}`}</p>
         <small>{team.role}</small>

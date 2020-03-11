@@ -7,7 +7,7 @@ import proptype from "prop-types";
 import CurrencyInput from "../currencyInput/currencyInput";
 
 function SelectInput(props) {
-  const [inputValue, setValue] = useState("");
+  const [inputValue, setValue] = useState(props.value || "");
   const [currencyData, setCurrencyData] = useState(null);
   const [selectValue, setSelectValue] = useState(props.defaultOption.value);
 
@@ -59,6 +59,7 @@ function SelectInput(props) {
           value={inputValue}
           hideCurrency={props.hideCurrency}
           name={props.name}
+          required={props.required}
           defaultCurrencyOption={props.defaultCurrencyOption}
         />
       ) : (
@@ -67,6 +68,7 @@ function SelectInput(props) {
           value={inputValue}
           name={props.name}
           type={props.type}
+          required={props.required}
           onChange={onChange}
         />
       )}
@@ -95,8 +97,8 @@ const SelectComp = ({
     defaultOption={activeOption}
     onChange={selectChange}
     name={name}
-    style={{ minWidth: minWidth }}
-    className="select-comp"
+    style={{ maxWidth: minWidth, minWidth: minWidth }}
+    className={`select-comp ${minWidth ? "extra" : ""}`}
     optionList={optionList}
   />
 );

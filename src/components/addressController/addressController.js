@@ -20,6 +20,12 @@ function AddressController(props) {
     }
   };
 
+  useEffect(() => {
+    if (props.addressData) {
+      setAddressData(props.addressData);
+    }
+  }, [props.addressData]);
+
   const onChangeAuto = e => {
     const activeAddress = fullAddress.filter(
       item => item.place_id === e.target.value
@@ -45,13 +51,18 @@ function AddressController(props) {
   useEffect(() => {
     geocodeByAddress(addressData.address)
       .then(results => getLatLng(results[0]))
-      .then(latLng => getActiveAddress(latLng.lat, latLng.lng, addressResolved))
-      .catch(error => console.error("Error", error));
+      .then(latLng =>
+        getActiveAddress(latLng.lat, latLng.lng, addressResolved)
+      );
   }, [addressData.address]);
 
   return (
     <div className="grid grid-2 grid-gap">
-      <div data-aos="fade-up" data-aos-delay="300" data-aos-anchor="snchor">
+      <div
+        data-aos={!props.disableAnim && "fade-up"}
+        data-aos-delay="300"
+        data-aos-anchor="snchor"
+      >
         <FormGroup
           label="Address"
           subLabel="Don’t worry, your address is safe with us."
@@ -68,7 +79,11 @@ function AddressController(props) {
           />
         </FormGroup>
       </div>
-      <div data-aos="fade-up" data-aos-delay="500" data-aos-anchor="snchor">
+      <div
+        data-aos={!props.disableAnim && "fade-up"}
+        data-aos-delay="500"
+        data-aos-anchor="snchor"
+      >
         <FormGroup
           label="City"
           subLabel="Not so certain of the word here! Your town can be a CITY too."
@@ -83,7 +98,11 @@ function AddressController(props) {
         </FormGroup>
       </div>
 
-      <div data-aos="fade-up" data-aos-delay="700" data-aos-anchor="snchor">
+      <div
+        data-aos={!props.disableAnim && "fade-up"}
+        data-aos-delay="700"
+        data-aos-anchor="snchor"
+      >
         <FormGroup
           label="State"
           subLabel="Your region or province can be a STATE too."
@@ -98,7 +117,11 @@ function AddressController(props) {
         </FormGroup>
       </div>
 
-      <div data-aos="fade-up" data-aos-delay="900" data-aos-anchor="snchor">
+      <div
+        data-aos={!props.disableAnim && "fade-up"}
+        data-aos-delay="900"
+        data-aos-anchor="snchor"
+      >
         <FormGroup
           label="Country"
           subLabel="We believe we all have a country. Just kidding."
@@ -113,6 +136,70 @@ function AddressController(props) {
         </FormGroup>
       </div>
     </div>
+  );
+}
+
+export function SingleAddress(props) {
+  const [addressData, setAddressData] = useState(props.value);
+  const [fullAddress, setFullAddress] = useState([]);
+  const [addressList, setAddressList] = useState([]);
+  const changeAddress = e => {
+    setAddressData(e.target.value);
+    if (props.onValueChange) {
+      props.onValueChange({
+        target: {
+          name: props.name,
+          value: e.target.value
+        }
+      });
+    }
+  };
+
+  const onChangeAuto = e => {
+    const activeAddress = fullAddress.filter(
+      item => item.place_id === e.target.value
+    );
+    setAddressData(activeAddress[0].formatted_address);
+
+    if (props.onValueChange) {
+      props.onValueChange({
+        target: {
+          name: props.name,
+          value: activeAddress[0].formatted_address
+        }
+      });
+    }
+  };
+
+  const addressResolved = e => {
+    setFullAddress(e);
+    let newList = e.map(item => {
+      return {
+        title: item.formatted_address,
+        value: item.place_id
+      };
+    });
+    setAddressList(newList);
+  };
+
+  useEffect(() => {
+    geocodeByAddress(addressData)
+      .then(results => getLatLng(results[0]))
+      .then(latLng =>
+        getActiveAddress(latLng.lat, latLng.lng, addressResolved)
+      );
+  }, [addressData]);
+  return (
+    <Select
+      placeholder="Eg. 21 folakemi street, lagos"
+      name={props.name || "kin_address"}
+      optionList={addressList}
+      value={addressData}
+      autoComplete
+      onChange={onChangeAuto}
+      required
+      onTypeChange={changeAddress}
+    />
   );
 }
 

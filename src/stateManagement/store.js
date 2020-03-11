@@ -4,6 +4,14 @@ import {
   propertyPageData,
   propertyPageReducer
 } from "./reducers/propertyPageReducer";
+import {
+  userRolesReducer,
+  rolesState,
+  userDetailReducer,
+  userDetailsState,
+  globalLoaderReducer,
+  globalLoaderState
+} from "./reducers/genericReducer";
 
 const reduceReducers = (...reducers) => (prevState, value, ...args) =>
   reducers.reduce(
@@ -11,11 +19,20 @@ const reduceReducers = (...reducers) => (prevState, value, ...args) =>
     prevState
   );
 
-const combinedReducers = reduceReducers(pageTitleReducer, propertyPageReducer);
+const combinedReducers = reduceReducers(
+  pageTitleReducer,
+  propertyPageReducer,
+  userDetailReducer,
+  userRolesReducer,
+  globalLoaderReducer
+);
 
 const initialState = {
   ...stateData,
-  ...propertyPageData
+  ...propertyPageData,
+  ...rolesState,
+  ...userDetailsState,
+  ...globalLoaderState
 };
 const store = createContext(initialState);
 const { Provider } = store;

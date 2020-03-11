@@ -9,9 +9,7 @@ import { axiosHandler } from "../../utils/axiosHandler";
 import { TEAMS_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import { useHistory } from "react-router-dom";
-
-export const testToken =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTc0NTk3LCJqdGkiOiI5NTFkYzc0NzUyMWQ0MjlkOTdjZDYxODQ2MDZlMTI0ZiIsInVzZXJfaWQiOjE0fQ.CriTSUiFt7S69jThmEPKD0lZbUz40lX9J10C4_jQFMs";
+import { getToken } from "../../utils/helper";
 
 const TeamCreatePage = props => {
   let history = useHistory();
@@ -20,7 +18,7 @@ const TeamCreatePage = props => {
 
   const onFormSubmit = e => {
     e.preventDefault();
-    axiosHandler("POST", TEAMS_URL, testToken, { name: teamName })
+    axiosHandler("POST", TEAMS_URL, getToken(), { name: teamName })
       .then(() => {
         setTeamName(teamName);
         history.push({
@@ -29,13 +27,11 @@ const TeamCreatePage = props => {
         });
       })
       .catch(err => {
-        console.log(err);
         Notification.bubble({
           type: "error",
           content: "Unable to create team"
         });
       });
-    console.log(teamName);
     setTeamName("");
   };
 

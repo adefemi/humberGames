@@ -64,7 +64,7 @@
     margin-top: 40px;
     display: grid;
     gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 
     .book-status {
       font-size: 13px;
@@ -80,7 +80,7 @@
     }
 
     .card-main {
-      max-width: 350px;
+      max-width: 400px;
       min-height: 300px;
 
       .unit-description {
@@ -89,6 +89,7 @@
         white-space: nowrap;
         font-size: 13px;
         color: $color-text-light;
+        max-width: 300px;
       }
 
       .property-address {

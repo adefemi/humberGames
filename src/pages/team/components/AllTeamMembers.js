@@ -5,11 +5,10 @@ import { Card } from "../../../components/card/Card";
 import { MembershipCard } from "./MembershipCard";
 import Skeleton from "react-loading-skeleton";
 import { TEAMS_URL } from "../../../utils/urls";
-import { Paginator } from "../../../components/paginator/paginator";
 import Input from "../../../components/input/Input";
 import AppIcon from "../../../components/icons/Icon";
 import { Button } from "../../../components/button/Button";
-import { testToken } from "../TeamCreatePage";
+import { getToken } from "../../../utils/helper";
 
 const AllTeamMembers = () => {
   const [teams, setTeams] = useState([]);
@@ -33,7 +32,7 @@ const AllTeamMembers = () => {
       axiosHandler(
         "PATCH",
         TEAMS_URL + `/${teams && teams[0] && teams[0].id}`,
-        testToken,
+        getToken(),
         { name: teamName, role: "manager" }
       )
         .then(() => {})

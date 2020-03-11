@@ -140,9 +140,13 @@ function FileUploadNew(props) {
     <div className={`file-constrain ${props.className ? props.className : ""}`}>
       <button
         className="file-upload-button"
-        onClick={() => ref.click()}
+        onClick={() => {
+          if (props.disabled) return;
+          ref.click();
+        }}
         onDrop={e => {
           e.preventDefault();
+          if (props.disabled) return;
           onChangeFile({
             target: {
               files: e.dataTransfer.files
@@ -150,7 +154,9 @@ function FileUploadNew(props) {
           });
         }}
         onDragOver={e => e.preventDefault()}
-      />
+      >
+        {props.children}
+      </button>
 
       <input
         onChange={onChangeFile}
@@ -176,6 +182,7 @@ FileUploadNew.defaultProps = {
 };
 
 FileUploadNew.propType = {
+  disabled: proptype.bool,
   multiple: proptype.bool,
   validImageTypesSrc: proptype.array,
   fileName: proptype.string,

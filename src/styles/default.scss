@@ -15,6 +15,17 @@ body {
   }
 }
 
+.pointer{
+  cursor: pointer;
+}
+
+.link{
+  color: $primary-color;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 a {
   color: $primary-color-dark !important;
   text-decoration: none !important;

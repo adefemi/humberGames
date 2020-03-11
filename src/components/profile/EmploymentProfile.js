@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Input from "../input/Input";
 import { Button } from "../button/Button";
 import { Checkbox } from "../checkbox/Checkbox";
@@ -7,48 +7,151 @@ import FormGroup from "../formGroup/formGroup";
 import { USER_EMPLOYMENT } from "../../utils/urls";
 import { axiosHandler } from "../../utils/axiosHandler";
 import EmploymentForm from "./EmploymentForm";
+import { Spinner } from "../spinner/Spinner";
+import { secondaryColor } from "../../utils/data";
+import { getToken } from "../../utils/helper";
+import { store } from "../../stateManagement/store";
+import { Notification } from "../notification/Notification";
 
 function EmploymentProfile() {
   const [loading, setLoading] = useState(true);
+  const [submit, setSubmit] = useState(false);
   const [employmentProfile, setEmploymentProfile] = useState([]);
+  const {
+    state: { userDetails }
+  } = useContext(store);
 
   useEffect(() => {
-    setLoading(true);
-    axiosHandler(
-      "GET",
-      `${USER_EMPLOYMENT}?user_id=14`,
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTY1Mzc5LCJqdGkiOiJmMmNhNGYwZmQwZDk0ZTYzODg4NjIxYmM0ZDgwNmQ4ZCIsInVzZXJfaWQiOjE1fQ.fRmTknnEfzVi_QQL3YepIhX4HtcI0kgA-9mDkRqcRdI"
-    ).then(res => {
-      setEmploymentProfile(res.data.results.results);
-      setLoading(false);
+    if (userDetails.user) {
+      axiosHandler(
+        "GET",
+        `${USER_EMPLOYMENT}?user_id=${userDetails.user.id}`,
+        getToken()
+      ).then(res => {
+        setEmploymentProfile(res.data.results.results);
+        setLoading(false);
+      });
+    }
+  }, [userDetails]);
+
+  const onChange = (ind, e) => {
+    let activeEmployement = employmentProfile.map((item, id) => {
+      let activeItem = item;
+      if (id === ind) {
+        try {
+          let data = {};
+          e.map(item => {
+            data[item.target.name] = item.target.value;
+            return null;
+          });
+          activeItem = {
+            ...activeItem,
+            ...data
+          };
+        } catch (v) {
+          activeItem = {
+            ...activeItem,
+            [e.target.name]: e.target.value
+          };
+        }
+      }
+      return activeItem;
     });
-  }, []);
+    setEmploymentProfile(activeEmployement);
+  };
+
+  const onRemove = id => {
+    setEmploymentProfile(employmentProfile.filter((_, ind) => ind !== id));
+  };
 
   const renderEmployment = () => {
     if (loading) {
-      return <h1>Loading..</h1>;
+      return <Spinner size={15} color={secondaryColor} />;
     } else {
       if (employmentProfile.length === 0) {
-        return <h1>No employment profile</h1>;
+        return (
+          <div className="no-profile-data">
+            <h3>You've not provided any employment information.</h3>
+            <p>Use the button below to add employment data</p>
+          </div>
+        );
       } else {
-        return employmentProfile.map(ep => (
-          <EmploymentForm key={ep.id} data={ep} />
+        return employmentProfile.map((ep, id) => (
+          <EmploymentForm
+            key={id}
+            data={ep}
+            id={id}
+            onRemove={e => onRemove(id)}
+            onChange={e => onChange(id, e)}
+          />
         ));
       }
     }
   };
+
+  const addMore = () => {
+    setEmploymentProfile([...employmentProfile, {}]);
+  };
+
+  const Submit = e => {
+    e.preventDefault();
+    setSubmit(true);
+    axiosHandler("post", USER_EMPLOYMENT, getToken(), employmentProfile).then(
+      res => {
+        Notification.bubble({
+          type: "success",
+          content: "Employment information saved successfully"
+        });
+        setSubmit(false);
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: "Ops, an error occurred"
+        });
+        setSubmit(false);
+      }
+    );
+  };
+
   return (
     <div className="EmploymentProfile">
       <div className="form-wrapper">
-        <form action="">
-          {renderEmployment()}
+        <form onSubmit={Submit}>
+          <div>{renderEmployment()}</div>
 
-          <div className="add-button flex justify-center">
-            <Button color="success">Add More</Button>
-          </div>
-          <div className="submit-button flex justify-end">
-            <Button color="success">Save Changes</Button>
-          </div>
+          {!loading && (
+            <>
+              <div
+                className={`flex align-center ${
+                  employmentProfile.length < 1
+                    ? "justify-center"
+                    : "justify-between"
+                }`}
+              >
+                <div className="add-button">
+                  <Button color="default" onClick={addMore}>
+                    Add{" "}
+                    {employmentProfile.length > 0 ? "More" : "Employment Info"}
+                  </Button>
+                </div>
+                {employmentProfile.length > 0 && (
+                  <div className="submit-button">
+                    <Button
+                      type="submit"
+                      color="success"
+                      loading={submit}
+                      disabled={submit}
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                )}
+              </div>
+              <br />
+              <br />
+            </>
+          )}
         </form>
       </div>
     </div>

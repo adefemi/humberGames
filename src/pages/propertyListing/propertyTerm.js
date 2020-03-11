@@ -21,12 +21,12 @@ import CalculateFee from "./calculateFee";
 import { axiosHandler } from "../../utils/axiosHandler";
 import {
   GENERIC_FEE_URL,
-  tempToken,
   UNIT_COMMISSION_URL,
   UNIT_CONTROLLER_URL,
   UNIT_TERM_URL
 } from "../../utils/urls";
 import { Spinner } from "../../components/spinner/Spinner";
+import { getToken } from "../../utils/helper";
 
 function PropertyTerm(props) {
   const getUnitId = () => {
@@ -48,7 +48,7 @@ function PropertyTerm(props) {
   });
 
   const getActiveUnit = () => {
-    axiosHandler("get", UNIT_CONTROLLER_URL + `/${unit_id}`, tempToken).then(
+    axiosHandler("get", UNIT_CONTROLLER_URL + `/${unit_id}`, getToken()).then(
       res => {
         setActiveUnit(res.data.results);
         console.log(res.data.results);
@@ -130,15 +130,19 @@ function PropertyTerm(props) {
       let newFeeData = formatChargesData(charges);
       setLoading(true);
       Promise.all([
-        axiosHandler("post", UNIT_TERM_URL, tempToken, newPropTerm),
-        axiosHandler("post", UNIT_COMMISSION_URL, tempToken, newCommissionData),
-        axiosHandler("post", GENERIC_FEE_URL, tempToken, newFeeData)
+        axiosHandler("post", UNIT_TERM_URL, getToken(), newPropTerm),
+        axiosHandler(
+          "post",
+          UNIT_COMMISSION_URL,
+          getToken(),
+          newCommissionData
+        ),
+        axiosHandler("post", GENERIC_FEE_URL, getToken(), newFeeData)
       ])
         .then(values => {
           props.history.push(props.location.pathname + "?stage=2");
         })
         .catch(err => {
-          console.log(err.response);
           Notification.bubble({
             type: "error",
             content: "Ops, an error occurred."

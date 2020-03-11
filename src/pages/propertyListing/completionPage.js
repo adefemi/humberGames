@@ -4,8 +4,9 @@ import { Modal } from "../../components/modal/Modal";
 import AppIcon from "../../components/icons/Icon";
 import { Spinner } from "../../components/spinner/Spinner";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { tempToken, UNIT_CONTROLLER_URL } from "../../utils/urls";
+import { UNIT_CONTROLLER_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
+import { getToken } from "../../utils/helper";
 
 function CompletionPage(props) {
   const getUnitId = () => {
@@ -24,7 +25,7 @@ function CompletionPage(props) {
   };
   const submit = () => {
     setPublishing(true);
-    axiosHandler("patch", UNIT_CONTROLLER_URL + `/${unit_id}`, tempToken, {
+    axiosHandler("patch", UNIT_CONTROLLER_URL + `/${unit_id}`, getToken(), {
       published: !(activeUnit && activeUnit.published)
     }).then(
       res => {
@@ -60,7 +61,7 @@ function CompletionPage(props) {
   }, []);
 
   const getActiveUnit = () => {
-    axiosHandler("get", UNIT_CONTROLLER_URL + `/${unit_id}`, tempToken).then(
+    axiosHandler("get", UNIT_CONTROLLER_URL + `/${unit_id}`, getToken()).then(
       res => {
         setActiveUnit(res.data.results);
         setFetching(false);

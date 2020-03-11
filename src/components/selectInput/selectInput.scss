@@ -22,6 +22,11 @@
       background-color: white;
     }
 
+    &.extra{
+      min-width: unset;
+    }
+
+
   }
   .input-field{
     border-radius: 0;

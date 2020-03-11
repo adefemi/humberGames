@@ -9,10 +9,10 @@ import FacilityDocument from "../../components/facilityDocument/facilityDocument
 import { Notification } from "../../components/notification/Notification";
 import AddressController from "../../components/addressController/addressController";
 import UnitTypeModel from "./unitTypeModel";
-import { getArrayCount } from "../../utils/helper";
+import { getArrayCount, getToken } from "../../utils/helper";
 import { Spinner } from "../../components/spinner/Spinner";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { PROPERTY_CONTROLLER_URL, tempToken } from "../../utils/urls";
+import { PROPERTY_CONTROLLER_URL } from "../../utils/urls";
 import SelectInput from "../../components/selectInput/selectInput";
 
 function PropertyBasicInfo(props) {
@@ -139,7 +139,7 @@ function PropertyBasicInfo(props) {
     }
     const newData = { ...propData, ...propertyAddress };
     setLoading(true);
-    axiosHandler("post", PROPERTY_CONTROLLER_URL, tempToken, newData).then(
+    axiosHandler("post", PROPERTY_CONTROLLER_URL, getToken(), newData).then(
       res => {
         props.history.push(
           `/add-property/${res.data.results.uuid +

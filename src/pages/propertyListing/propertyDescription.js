@@ -8,13 +8,12 @@ import ImageUpload from "./imageUpload";
 import { Notification } from "../../components/notification/Notification";
 import { axiosHandler } from "../../utils/axiosHandler";
 import {
-  PROPERTY_CONTROLLER_URL,
-  tempToken,
   UNIT_CONTROLLER_URL,
   UNIT_FACILITY_URL,
   UNIT_IMAGE_URL
 } from "../../utils/urls";
 import { Spinner } from "../../components/spinner/Spinner";
+import { getToken } from "../../utils/helper";
 
 function PropertyDescription(props) {
   const getUnitId = () => {
@@ -86,14 +85,14 @@ function PropertyDescription(props) {
     if (!validateSubmit()) return;
     setLoading(true);
     Promise.all([
-      axiosHandler("patch", UNIT_CONTROLLER_URL + `/${unit_id}`, tempToken, {
+      axiosHandler("patch", UNIT_CONTROLLER_URL + `/${unit_id}`, getToken(), {
         description
       }),
-      axiosHandler("post", UNIT_IMAGE_URL, tempToken, images),
+      axiosHandler("post", UNIT_IMAGE_URL, getToken(), images),
       axiosHandler(
         "post",
         UNIT_FACILITY_URL,
-        tempToken,
+        getToken(),
         formatFacility(facilities)
       )
     ])
