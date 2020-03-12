@@ -166,7 +166,7 @@ function Dashboard(_) {
   );
 }
 
-const ViewCard = ({ title, children }) => {
+export const ViewCard = ({ title, children }) => {
   return (
     <div className="views-card">
       <h4>{title}</h4>
