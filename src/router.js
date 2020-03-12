@@ -9,6 +9,9 @@ const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 const Branch = lazy(() => import("./pages/branch/Branch.js"));
 const Profile = lazy(() => import("./pages/profile/ProfileTemplate.js"));
+const TenantDashboard = lazy(() =>
+  import("./pages/tenantDashboard/TenantDashboard")
+);
 
 const RouterMain = props => {
   return (
@@ -42,6 +45,15 @@ const RouterMain = props => {
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <TeamMembersPage {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/dashboard/tenant"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <TenantDashboard {...props} />
                   </Suspense>
                 )}
               />

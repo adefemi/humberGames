@@ -1,0 +1,79 @@
+.header-container {
+  width: 70%;
+}
+
+.header-rectangle {
+  background: rgba(99, 255, 161, 0.16);
+  border-radius: 10px;
+  justify-content: space-between;
+  padding: 20px;
+  margin-right: 30px;
+  margin-bottom: 5%;
+}
+
+.header-texts > p {
+  font-weight: 600;
+}
+
+.header-texts > p:first-child {
+  color: #28a372;
+  font-weight: bold;
+}
+
+.header-texts > p:nth-child(2),
+.header-texts > p:nth-child(3) {
+  font-size: 14px;
+}
+
+.completion-level {
+  text-align: center;
+}
+
+.completion-level p:first-child {
+  color: #3dd89a;
+  font-weight: 500;
+}
+
+.completion-level p:last-child {
+  background: #3dd89a;
+  border-radius: 2px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 10px;
+  padding: 3px;
+}
+
+.activity-summary-container > p {
+  font-weight: bold;
+}
+
+.notifications-container {
+  width: 30%;
+}
+
+.notifications-container > h4 {
+  margin-top: 0;
+}
+
+.notifications-content {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e3e3e3;
+  box-sizing: border-box;
+  border-radius: 10px 10px 0 0;
+  padding: 20px 20px 0px 20px;
+  font-size: 14px;
+}
+
+.divider {
+  border: 1px solid #e1e1e1;
+}
+
+.show-more {
+  text-align: center;
+  background-color: #ebebeb;
+  margin: 0;
+  border-radius: 0 0 10px 10px;
+  padding: 5px 0;
+  font-size: 14px;
+}
