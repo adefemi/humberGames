@@ -1,0 +1,46 @@
+.graph-and-quick-links {
+  margin-bottom: 5%;
+}
+
+.agency-graph {
+  width: 70%;
+  height: 400px;
+  background: #ffffff;
+  border-radius: 10px;
+  margin-right: 30px;
+  text-align: center;
+}
+
+.quick-links-container {
+  width: 30%;
+}
+
+.quick-links-container > p {
+  margin-top: 0;
+  font-weight: bold;
+}
+
+.quick-links {
+  background: #ffffff;
+  border-radius: 4px;
+  max-width: 200px;
+  // max-height: 200px;
+  padding: 20px;
+}
+
+.quick-links a {
+  font-size: 12px;
+}
+
+.divider {
+  border: 1px solid #efefef;
+  margin: 10px 0;
+}
+
+.activity-summary-container > p {
+  font-weight: bold;
+}
+
+.quick-views-container {
+  margin: 5% 0;
+}

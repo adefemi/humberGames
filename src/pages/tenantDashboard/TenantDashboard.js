@@ -20,7 +20,7 @@ const TenantDashboard = () => {
   const { dispatch } = useContext(store);
 
   useEffect(() => {
-    dispatch({ title: setPageTitleAction, payload: "Dashboard" });
+    dispatch({ title: setPageTitleAction, payload: "Tenant Dashboard" });
   }, []);
   return (
     <div>
