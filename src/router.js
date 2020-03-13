@@ -9,6 +9,10 @@ const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 const Branch = lazy(() => import("./pages/branch/Branch.js"));
 const Profile = lazy(() => import("./pages/profile/ProfileTemplate.js"));
+const AgencyGetStarted = lazy(() =>
+  import("./pages/agencyCreation/AgencyGetStarted")
+);
+const AgencySetup = lazy(() => import("./pages/agencyCreation/AgencySetup"));
 
 const RouterMain = props => {
   return (
@@ -42,6 +46,24 @@ const RouterMain = props => {
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <TeamMembersPage {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/agency-get-started"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <AgencyGetStarted {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/agency-setup"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <AgencySetup {...props} />
                   </Suspense>
                 )}
               />
