@@ -57,7 +57,7 @@ const AgencyDashboard = () => {
           <div className="lease-summary">
             <ActivitySummaryCard
               image={shieldSvg}
-              mainContent={{ title: "Total Leases", count: 10 }}
+              mainContent={{ title: "Total Agreements", count: 10 }}
               subContent={{ title: "Awaiting Signature", count: 3 }}
               color="yellow"
             />
