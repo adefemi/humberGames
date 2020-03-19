@@ -4,11 +4,39 @@
 
 .agency-graph {
   width: 70%;
-  height: 400px;
   background: #ffffff;
   border-radius: 10px;
   margin-right: 30px;
-  text-align: center;
+
+  .acct-statements-container {
+    padding-left: 40px;
+    h6 {
+      margin: 10px 0;
+      margin-top: 20px;
+    }
+    .acct-statements {
+      div {
+        margin-right: 70px;
+        &.revenue > h5 {
+          color: #46a9fc;
+        }
+        &.expenses > h5 {
+          color: #ed4c5c;
+        }
+        &.profit > h5 {
+          color: #1e9450;
+        }
+        h5 {
+          margin: 0;
+        }
+        p {
+          margin: 0;
+          font-size: 9px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
 }
 
 .quick-links-container {
@@ -32,13 +60,19 @@
   font-size: 12px;
 }
 
-.divider {
+.ag-divider {
   border: 1px solid #efefef;
   margin: 10px 0;
 }
 
 .activity-summary-container > p {
   font-weight: bold;
+}
+
+.activity-summaries {
+  width: 100%;
+  max-width: 1200px;
+  overflow-x: auto;
 }
 
 .quick-views-container {

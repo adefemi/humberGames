@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.1.2",
     "aos": "^2.3.4",
     "axios": "^0.19.2",
+    "chart.js": "^2.9.3",
     "country-state-city": "^1.0.4",
     "lodash": "^4.17.15",
     "microseconds": "^0.2.0",

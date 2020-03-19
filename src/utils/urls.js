@@ -26,3 +26,5 @@ export const TEAMS_URL = BASE_URL + "user/team";
 export const TEAM_REQUEST_URL =
   BASE_URL + "user/join-agency-request?request_status=pending";
 export const PROPERTY_URL = PROPERTY_CONTROLLER_URL;
+export const DASHBOARD_URL = BASE_URL + "user/dashboard";
+export const AGENCY_TRANSACTION_URL = BASE_URL + "payment/agency_transactions";
