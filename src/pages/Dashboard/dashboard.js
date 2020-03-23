@@ -2,38 +2,42 @@ import React, { useContext, useEffect } from "react";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
 import { Button } from "../../components/button/Button";
+import { QuickActionCard } from "../../components/quickActionCard/quickActionCard";
+import Slider from "../../components/slider/slider";
+import { Link } from "react-router-dom";
+import GetActivitySummary from "../../components/dashboardAxiosCall/GetActivitySummary";
+import GetQuickView from "../../components/dashboardAxiosCall/GetQuickView";
+import Graph from "../../components/graph/Graph";
+import { graphOptions } from "./graphOptions";
+
 import homeImg from "../../assets/images/home.png";
 import graphImg from "../../assets/images/graph.png";
 import housesImg from "../../assets/images/houses.png";
 import inspectionImg from "../../assets/images/inspection.png";
 
-import keyImg from "../../assets/images/key-outlined.svg";
-import folderImg from "../../assets/images/file-folder.svg";
-import shieldImg from "../../assets/images/shield.svg";
-import documentImg from "../../assets/images/document.svg";
-
 import "./dashboard.css";
-import { QuickActionCard } from "../../components/quickActionCard/quickActionCard";
-import { ActivitySummaryCard } from "../../components/activeSummaryCard/activitySummaryCard";
-import PropertyDashboardCard from "../../components/propertyDashboardCard/propertyDashboardCard";
-import TenantDashboardCard from "../../components/tenantDashboardCard/tenantDashboardCard";
-import TransactionTable from "../../components/transactionTable/transactionTable";
-import Slider from "../../components/slider/slider";
-import { Link } from "react-router-dom";
-
-const keys = ["Reference", "Amount (₦)", "Tag"];
-const values = [
-  ["rr748jhdj93", "3,000.00", "Rental"],
-  ["rr748jhdj93", "3,000.00", "Rental"],
-  ["rr748jhdj93", "3,000.00", "Rental"],
-  ["rr748jhdj93", "3,000.00", "Rental"]
-];
 
 function Dashboard(_) {
   const { dispatch } = useContext(store);
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Dashboard" });
   }, []);
+  const xAxisLabels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
+  const yAxisData = [12, 19, 3, 5, 2, 3, 20, 7, 11, 8, 2, 10];
 
   return (
     <div className="dashboard-main">
@@ -66,7 +70,15 @@ function Dashboard(_) {
                 This is a quick overview on your properties have been doing
                 lately.
               </small>
-              <div className="graph-content"></div>
+              <div className="graph-content">
+                <Graph
+                  labels={xAxisLabels}
+                  options={graphOptions}
+                  datasets={[
+                    { label: "Test", data: yAxisData, lineTension: 0.3 }
+                  ]}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -101,63 +113,14 @@ function Dashboard(_) {
       <section className="dashboard-section">
         <h3>Activity Summary</h3>
         <Slider className="summary-list">
-          <ActivitySummaryCard
-            image={folderImg}
-            color="pink"
-            mainContent={{ title: "Total Landlords", count: 21 }}
-            subContent={{ title: "Total Properties", count: 102 }}
-          />
-          <ActivitySummaryCard
-            image={keyImg}
-            color="blue"
-            mainContent={{ title: "Active Rents", count: 10 }}
-            subContent={{ title: "Due Rents", count: 5 }}
-          />
-          <ActivitySummaryCard
-            image={documentImg}
-            color="green"
-            mainContent={{ title: "Total Applications", count: 100 }}
-            subContent={{ title: "Pending Applications", count: 50 }}
-          />
-          <ActivitySummaryCard
-            image={shieldImg}
-            color="yellow"
-            mainContent={{ title: "Total Leases", count: 21 }}
-            subContent={{ title: "Awaiting Signature", count: 102 }}
-          />
+          <GetActivitySummary userRole="agent" className="flex" />
         </Slider>
       </section>
 
       <section className="dashboard-section">
         <h3>Quick Views</h3>
         <Slider className="views-list">
-          <ViewCard title="Properties">
-            {[1, 2, 3, 4].map((_, key) => (
-              <PropertyDashboardCard
-                key={key}
-                title="Northern Foreshore Estate"
-                link="/"
-                cover="https://cdn.pixabay.com/photo/2014/07/10/17/18/large-home-389271_960_720.jpg"
-                description="Lekki view, Lagos"
-              />
-            ))}
-          </ViewCard>
-          <ViewCard title="Transactions">
-            <TransactionTable keys={keys} values={values} />
-          </ViewCard>
-          <ViewCard title="Tenants">
-            {[1, 2, 3, 4].map((_, key) => (
-              <TenantDashboardCard
-                key={key}
-                name="Adewale Samuel"
-                cover="https://cdn.pixabay.com/photo/2015/12/22/20/42/face-1104763_960_720.jpg"
-                expiry="Expiry, 01-jan-2010"
-                linkToProperty="/"
-                linkToTenant="/"
-                propertyName="Northern Foreshore Estate"
-              />
-            ))}
-          </ViewCard>
+          <GetQuickView userRole="agent" />
         </Slider>
       </section>
       <br />

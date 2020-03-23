@@ -13,14 +13,16 @@
   }
 }
 
-.payment-content .title {
-  color: #5b68a4;
-  margin: 0;
-  font-size: 12px;
+.payment-content {
+  .title {
+    color: #5b68a4;
+    margin: 0;
+    font-size: 12px;
+  }
 }
 
 .payment-content .due-date {
-  font-size: 8px;
+  font-size: 9px;
   color: #797979;
   margin: 2px 0;
 }
