@@ -7,6 +7,7 @@ import Application from "./pages/application/Application";
 import GlobalLoader from "./components/GlobalLoader/globalLoader";
 import Logout from "./components/logout/logout";
 
+const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard.js"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 const Branch = lazy(() => import("./pages/branch/Branch.js"));
@@ -339,7 +340,7 @@ const RouterMain = props => {
                     </Suspense>
                   )}
                 />
-              
+
                 <Route
                   path="/user/:uuid/immigration"
                   exact
@@ -368,7 +369,6 @@ const RouterMain = props => {
                     </Suspense>
                   )}
                 />
-              
               </MainLayout>
             )}
           />

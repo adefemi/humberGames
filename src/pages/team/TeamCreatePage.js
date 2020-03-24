@@ -9,10 +9,7 @@ import { axiosHandler, testToken } from "../../utils/axiosHandler";
 import { TEAMS_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import { useHistory } from "react-router-dom";
-<<<<<<< HEAD
 import { getToken } from "../../utils/helper";
-=======
->>>>>>> 5944c08f9d3c535d99f7db99c57b14f6c202102f
 
 const TeamCreatePage = props => {
   let history = useHistory();

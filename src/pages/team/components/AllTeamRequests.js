@@ -11,10 +11,7 @@ import noImage from "../../../assets/images/no-image.jpg";
 import loadMore from "../../../assets/loadMore.svg";
 import { Button } from "../../../components/button/Button";
 import _ from "lodash";
-<<<<<<< HEAD
 import { getToken } from "../../../utils/helper";
-=======
->>>>>>> 5944c08f9d3c535d99f7db99c57b14f6c202102f
 
 const AllTeamRequests = () => {
   const [acceptModalState, setAcceptModalState] = useState(false);
