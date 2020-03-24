@@ -31,10 +31,8 @@ export const randomIDGenerator = length => {
 };
 
 export const getCurrencyValue = termObj => {
-  return `${_.get(termObj, "currency_type", "NGN ")}${_.get(
-    termObj,
-    "amount",
-    "0.0"
+  return `${_.get(termObj, "currency_type", "NGN ")}${numberWithCommas(
+    _.get(termObj, "amount", "0.0")
   )}`;
 };
 
@@ -140,7 +138,7 @@ export function numberWithCommas(n, separator = ",") {
     .join("");
 
   // Put the decimals back and output the formatted number
-  return `${num}${decimals}`;
+  return `${num}${decimals.substring(0, 3)}`;
 }
 
 export function isDescendant(parent, child) {

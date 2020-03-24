@@ -24,7 +24,7 @@ import SelectInput from "../selectInput/selectInput";
 import { Notification } from "../notification/Notification";
 import { store } from "../../stateManagement/store";
 
-function BasicProfile() {
+function BasicProfile(props) {
   const [loading, setLoading] = useState(true);
   const [submit, setSubmit] = useState(false);
   const [newProfile, setNewProfile] = useState(false);
@@ -37,10 +37,10 @@ function BasicProfile() {
   } = useContext(store);
 
   useEffect(() => {
-    if (userDetails.user) {
+    if (userDetails.user || props.userId) {
       axiosHandler(
         "GET",
-        `${USER_PROFILE}/${userDetails.user.id}`,
+        `${USER_PROFILE}/${props.userId ? props.userId : userDetails.user.id}`,
         getToken()
       ).then(
         res => {
@@ -58,7 +58,7 @@ function BasicProfile() {
         }
       );
     }
-  }, [userDetails]);
+  }, [userDetails, props.userId]);
 
   const getCurrentLocation = () => {
     getActivePosition((loc, status) => {
@@ -313,6 +313,7 @@ function BasicProfile() {
                 data={userProfile}
                 profile={userProfileMain}
                 setMode={setMode}
+                {...props}
               />
             ) : (
               <div className="flex align-center justify-center column newProfile">
@@ -372,11 +373,13 @@ const UserViewDetails = props => {
         </div>
       </div>
       <br />
-      <div className="submit-button flex justify-center">
-        <Button onClick={() => props.setMode(1)} color="primary">
-          Edit Profile
-        </Button>
-      </div>
+      {!props.preview && (
+        <div className="submit-button flex justify-center">
+          <Button onClick={() => props.setMode(1)} color="primary">
+            Edit Profile
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

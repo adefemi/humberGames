@@ -25,6 +25,7 @@
       background-position: center;
       border-top-left-radius: 10px;
       box-sizing: border-box;
+      background-color: darken(white, 5%);
     }
     .content{
       padding: 10px 20px;
@@ -33,6 +34,20 @@
         font-weight: 600;
         text-transform: capitalize;
         font-size: 13px;
+        width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      h5{
+        margin: 2px 0;
+        font-size: 11px;
+        width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: darken(white, 70%);
       }
 
       small{
@@ -41,6 +56,10 @@
         font-weight: 600;
         max-width: 150px;
         color: darken(white, 50%);
+        width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       a{
@@ -71,7 +90,8 @@
 
     a{
       small{
-        color: $primary-color;
+        color: $primary-color-dark;
+        font-weight: bold;
       }
     }
   }

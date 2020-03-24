@@ -19,6 +19,7 @@ import { Spinner } from "../spinner/Spinner";
 import qs from "query-string";
 import { useCookies } from "react-cookie";
 import { setRoles, setUserDetails } from "../../stateManagement/actions";
+import ProfileNav from "../profileNav/profileNav";
 
 function MainLayout(props) {
   const { dispatch } = useContext(store);
@@ -51,6 +52,12 @@ function MainLayout(props) {
         res => {
           setLoading(false);
           setUpUserCookie(res.data);
+          const query = qs.parse(props.location.search);
+          if (query.refresh) {
+            delete query.refresh;
+            let newQuery = qs.stringify(query);
+            props.history.push(props.location.pathname + `?${newQuery}`);
+          }
         },
         _ => {
           handleRefresh("logout");
@@ -79,8 +86,8 @@ function MainLayout(props) {
             USERTOKEN,
             JSON.stringify({ access: res.data.access, refresh: query.refresh })
           );
-          let newQuery = delete query.refresh;
-          newQuery = qs.stringify(newQuery);
+          delete query.refresh;
+          let newQuery = qs.stringify(query);
           props.history.push(props.location.pathname + `?${newQuery}`);
         },
         _ => {
@@ -130,7 +137,9 @@ function MainLayout(props) {
                 <Button>Post Property</Button>
               </Link>
               <Link to="/profile" className="navItem">
-                <div className="navItem">user-profile</div>
+                <div className="navItem">
+                  <ProfileNav />
+                </div>
               </Link>
             </div>
           </div>
@@ -152,15 +161,26 @@ function MainLayout(props) {
 
 export default MainLayout;
 
-const SideLinks = ({ icon, title, link, active = false }) => (
+const SideLinks = ({ icon, title, link, active = false, logout }) => (
   <Link to={link}>
-    <div className={`sideLink ${active ? "active" : ""}`}>
+    <div
+      className={`sideLink ${active ? "active" : ""} ${logout ? "logout" : ""}`}
+    >
       <i className="icon-main">{icon}</i> {title}
     </div>
   </Link>
 );
 
 const SideBar = () => {
+  const [role, setRole] = useState("agency");
+  const {
+    state: { userDetails }
+  } = useContext(store);
+  useEffect(() => {
+    if (userDetails.role) {
+      setRole(userDetails.role.name);
+    }
+  }, [userDetails]);
   return (
     <div className="sideBar">
       <img src={logo} className="logo" alt="logo" />
@@ -171,21 +191,25 @@ const SideBar = () => {
           active
           icon={<Icon name="creditCard" type="feather" />}
         />
-        <SideLinks
-          link={"/properties"}
-          title="Properties"
-          icon={<Icon name="folder" type="feather" />}
-        />
+        {role.toLowerCase() !== "tenant" && (
+          <SideLinks
+            link={"/properties"}
+            title="Properties"
+            icon={<Icon name="folder" type="feather" />}
+          />
+        )}
         <SideLinks
           link={"/applications"}
           title="Applications"
           icon={<Icon name="packageIcon" type="feather" />}
         />
-        <SideLinks
-          link={"/leases"}
-          title="Leases"
-          icon={<Icon name="checkSquare" type="feather" />}
-        />
+        {role.toLowerCase() !== "tenant" && (
+          <SideLinks
+            link={"/leases"}
+            title="Leases"
+            icon={<Icon name="checkSquare" type="feather" />}
+          />
+        )}
         <SideLinks
           link={"/inspections"}
           title="Inspections"
@@ -202,10 +226,19 @@ const SideBar = () => {
           title="Notifications"
           icon={<Icon name="bell" type="feather" />}
         />
+        {(role.toLowerCase() === "agency" ||
+          role.toLowerCase() === "agent") && (
+          <SideLinks
+            link={"/agencies"}
+            title="Agencies"
+            icon={<Icon name="user" type="feather" />}
+          />
+        )}
         <SideLinks
-          link={"/agencies"}
-          title="Agencies"
-          icon={<Icon name="user" type="feather" />}
+          link={"/logout"}
+          logout
+          title="Logout"
+          icon={<Icon name="logOut" type="ionicons" />}
         />
       </div>
     </div>

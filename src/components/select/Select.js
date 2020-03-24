@@ -43,9 +43,10 @@ export const Select = props => {
       setSelection(props.defaultOption.title);
     }
     setTimeout(() => positionOptionDrop(), 1000);
-    document.getElementById("mainBar").addEventListener("scroll", () => {
-      positionOptionDrop();
-    });
+    document
+      .getElementById("mainBar")
+      .addEventListener("scroll", positionOptionDrop);
+    window.addEventListener("resize", positionOptionDrop);
     handleClicks();
   }, []);
 

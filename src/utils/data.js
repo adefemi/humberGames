@@ -13,11 +13,11 @@ export const secondaryColor = "#f18910";
 export const noImage = NoImage;
 
 export const durationSelector = [
-  { title: "Yearly", value: "yearly" },
-  { title: "Monthly", value: "monthly" },
-  { title: "Weekly", value: "weekly" },
-  { title: "Daily", value: "daily" },
-  { title: "One off", value: "one_off" }
+  { title: "yearly", value: "yearly" },
+  { title: "monthly", value: "monthly" },
+  { title: "weekly", value: "weekly" },
+  { title: "daily", value: "daily" },
+  { title: "one off", value: "one_off" }
 ];
 
 export const genderOptions = [
@@ -43,6 +43,15 @@ export const currencyOptions = [
   { title: "USD", value: "USD" },
   { title: "GBP", value: "GBP" }
 ];
+
+export const leaseSortOptions = [
+  { title: "All lease", value: "all" },
+  { title: "Active lease", value: "active" },
+  { title: "Pending lease", value: "pending" },
+  { title: "Annulled lease", value: "annulled" }
+];
+
+export const getNoImage = () => NoImage;
 
 export const maxPercent = 10;
 export const minPercent = 5;

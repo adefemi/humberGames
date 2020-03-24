@@ -12,9 +12,11 @@ function ResidenceForm(props) {
   let { data, onChange, onRemove } = props;
   return (
     <div className="profile-multi">
-      <div className="remove-form" onClick={onRemove}>
-        Remove
-      </div>
+      {!props.preview && (
+        <div className="remove-form" onClick={onRemove}>
+          Remove
+        </div>
+      )}
       <div className="form-row">
         <FormGroup label="Resident Address" required>
           <SingleAddress
@@ -56,7 +58,7 @@ function ResidenceForm(props) {
           {!data.is_active && (
             <FormGroup required label="End Date">
               <Input
-                value={data.start_date}
+                value={data.end_date}
                 name="end_date"
                 type="date"
                 onChange={onChange}
@@ -112,8 +114,7 @@ function ResidenceForm(props) {
                   }
                 })
               }
-              value={data.rent_amount}
-              name="rent_amount"
+              value={data.rent_amount || ""}
             />
           </FormGroup>
           <FormGroup label="Rent Rate" required>

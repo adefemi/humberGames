@@ -10,7 +10,9 @@ import {
   userDetailReducer,
   userDetailsState,
   globalLoaderReducer,
-  globalLoaderState
+  globalLoaderState,
+  reloadApplicationReducer,
+  reloadApplicationState
 } from "./reducers/genericReducer";
 
 const reduceReducers = (...reducers) => (prevState, value, ...args) =>
@@ -24,7 +26,8 @@ const combinedReducers = reduceReducers(
   propertyPageReducer,
   userDetailReducer,
   userRolesReducer,
-  globalLoaderReducer
+  globalLoaderReducer,
+  reloadApplicationReducer
 );
 
 const initialState = {
@@ -32,7 +35,8 @@ const initialState = {
   ...propertyPageData,
   ...rolesState,
   ...userDetailsState,
-  ...globalLoaderState
+  ...globalLoaderState,
+  ...reloadApplicationState
 };
 const store = createContext(initialState);
 const { Provider } = store;

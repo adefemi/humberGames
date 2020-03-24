@@ -1,5 +1,13 @@
 @import "../../styles/theme";
 
+.lease-list-card{
+  min-width: 1000px;
+
+
+}
+.landlord-con{
+  justify-content: flex-end;
+}
 .lease-list-card, .lease-grid-card{
   height: 130px;
   background-color: white;
@@ -8,6 +16,7 @@
   border: 1px solid darken(white, 10%);
   overflow: hidden;
   box-sizing: border-box;
+
 
   .img-con{
     width: 130px;
@@ -28,10 +37,11 @@
         color: darken(white, 70%);
       }
       small{
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 600;
         color: darken(white, 50%);
         display: block;
+        max-width: 200px;
       }
     }
     .bottom{
@@ -108,6 +118,9 @@
       border-left: 1px dashed darken(white, 20%);
     }
     .controls{
+      a{
+        display: block;
+      }
       button{
         border-radius: 20px;
         font-size: 11px;
@@ -118,10 +131,15 @@
         padding: 5px 20px !important;
         height: 30px;
         border-width: 1px;
+        width: 100%;
 
-        &:last-child{
+        &.last{
           color: $secondary-color;
           border-color: $secondary-color;
+        }
+
+        &:focus, &:active{
+          color: white;
         }
       }
     }
@@ -223,6 +241,7 @@
       button{
         border-radius: 6px;
         font-size: 9px;
+        width: unset;
       }
     }
   }

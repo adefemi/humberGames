@@ -1,8 +1,15 @@
 const BASE_URL = "https://rd3.clubly.io/";
+export const PUBLIC_URL = "https://rfrontend.clubly.io/";
 export const tempToken =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgzMTQ3NDcxLCJqdGkiOiIwMDIzMTQ1YTAwYzg0ZmJlYTU1MTliOWQ1YTk3MmExMyIsInVzZXJfaWQiOjI2fQ.71qqT0gXmTprO0WYbO2H28AR9lHI23Izz8461m6hAPU";
 export const APPLICATIONS_URL = BASE_URL + "property-application/application";
 export const PROPERTIES_URL = BASE_URL + "unit-property/property";
+export const LEASE_URL = BASE_URL + "property-lease/leases";
+export const LEASE_TEMPLATE_URL = BASE_URL + "property-lease/templates";
+export const LEASE_GENERATE_URL = BASE_URL + "property-lease/lease-interface";
+export const LEASE_SIGNATURE_URL = BASE_URL + "property-lease/signatures";
+export const LEASE_DECLARATION_URL =
+  BASE_URL + "property-lease/lease-declaration";
 export const UNITS_URL = BASE_URL + "unit-property/unit";
 export const BRANCH_URL = BASE_URL + "user/branch";
 export const USER_PROFILE = BASE_URL + "user/list";
@@ -26,9 +33,11 @@ export const UNIT_IMAGE_URL = BASE_URL + "unit-property/unit-image";
 export const UNIT_COMMISSION_URL = BASE_URL + "unit-property/unit-commission";
 export const GENERIC_FEE_URL = BASE_URL + "misc/fee";
 export const FILE_UPLOAD_URL = BASE_URL + "misc/file-upload";
+export const MISC_TEMPLATE_URL = BASE_URL + "misc/templates";
 export const TEAMS_URL = BASE_URL + "user/team";
 export const TEAM_REQUEST_URL =
   BASE_URL + "user/join-agency-request?request_status=pending";
 export const PROPERTY_URL = PROPERTY_CONTROLLER_URL;
 export const USER_ME = BASE_URL + "user/me";
 export const GET_ACCESS_TOKEN = BASE_URL + "gateway/refresh";
+export const LOGOUT = BASE_URL + "gateway/logout";

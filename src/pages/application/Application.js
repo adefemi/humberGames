@@ -1,9 +1,11 @@
 import React, { useEffect, useContext } from "react";
-import { setPageTitleAction } from "../../stateManagement/actions";
+import {
+  reloadApplication,
+  setPageTitleAction
+} from "../../stateManagement/actions";
 import { store } from "../../stateManagement/store";
 import file from "../../assets/file.svg";
 import Input from "../../components/input/Input";
-import _ from "lodash";
 import "./Application.css";
 import { Select } from "../../components/select/Select";
 import Skeleton from "react-loading-skeleton";
@@ -18,42 +20,63 @@ import ApplicationCardAgency from "../../components/application/ApplicationCardA
 function Application() {
   const [applications, setApplications] = useState([]);
   const [formState, setFormState] = useState({});
-  const [loaders, setLoaders] = useState({
-    applications: true
-  });
-  const { dispatch } = useContext(store);
+  const [fetching, setFetching] = useState(true);
+  const [userRole, setRole] = useState(null);
+
+  const {
+    dispatch,
+    state: { userDetails, reloadApplicationStatus }
+  } = useContext(store);
   useEffect(() => {
+    dispatch({ type: setPageTitleAction, payload: "Applications" });
     getApplications();
-    dispatch({ type: setPageTitleAction, payload: "Application" });
   }, []);
 
-  const toggleLoaderState = key =>
-    setLoaders({ ...loaders, [key]: !loaders[key] });
-  const getApplications = async () => {
-    try {
-      let applications = await axiosHandler(
-        "GET",
-        APPLICATIONS_URL,
-        getToken()
-      );
-      setApplications(applications.data.results.results);
-      toggleLoaderState("applications");
-    } catch (e) {
-      Notification.bubble({
-        content: _.get(e, "response.data.results.error"),
-        type: "error"
-      });
+  useEffect(() => {
+    if (reloadApplicationStatus) {
+      if (!fetching) setFetching(true);
+      dispatch({ type: reloadApplication, payload: false });
+      getApplications();
     }
+  }, [reloadApplicationStatus]);
+
+  useEffect(() => {
+    if (userDetails.role) {
+      setRole(userDetails.role.name);
+    }
+  }, [userDetails]);
+
+  const getApplications = () => {
+    axiosHandler("GET", APPLICATIONS_URL, getToken()).then(res => {
+      setApplications(res.data.results.results);
+      setFetching(false);
+    });
   };
 
   const getApplicationCards = applications =>
-    applications.map(application => (
-      <ApplicationCardAgency
-        onDelete={onDelete}
-        key={application.id}
-        application={application}
-      />
-    ));
+    applications.map(application => {
+      let appCard;
+      // eslint-disable-next-line array-callback-return
+      if (application.status === "rejected") return;
+      if (userRole === "tenant") {
+        appCard = (
+          <ApplicationCard
+            onDelete={onDelete}
+            key={application.id}
+            application={application}
+          />
+        );
+      } else {
+        appCard = (
+          <ApplicationCardAgency
+            onDelete={onDelete}
+            key={application.id}
+            application={application}
+          />
+        );
+      }
+      return appCard;
+    });
 
   const onDelete = id => {
     axiosHandler("DELETE", `${APPLICATIONS_URL}/${id}`, getToken()).then(
@@ -79,11 +102,10 @@ function Application() {
         <div className="rectangle flex">
           <img src={file} alt="tenant-invite-svg" />
           <div className="rectangle-text">
-            <p className="text-1">Manage Your Properties</p>
+            <p className="text-1">Manage Your Application</p>
             <p className="text-2">
-              You can always adjust your properties as you see fit, however, in
-              some cases where your property has engaged in some activities,
-              updating such property might proof some what hard.
+              You can always check your applications and interact with them as
+              needed
             </p>
           </div>
         </div>
@@ -99,7 +121,7 @@ function Application() {
                 onChange={handleSearch}
               />
             </div>
-            <div className="filter-box flex">
+            <div className="filter-box flex ">
               <Select
                 optionList={[
                   { title: "Status", value: "" },
@@ -118,18 +140,18 @@ function Application() {
           </div>
         </section>
         <section className="application-cards">
-          {loaders.applications
+          {fetching || !userRole
             ? Array(3)
                 .fill(null)
                 .map((v, i) => (
                   <div key={i} className={"flex column w-100"}>
-                    <Skeleton height={70} />
-                    <Skeleton height={200} />
-                    <Skeleton height={70} />
+                    <Skeleton height={300} />
                   </div>
                 ))
             : getApplicationCards(applications)}
         </section>
+        <br />
+        <br />
       </div>
     </div>
   );

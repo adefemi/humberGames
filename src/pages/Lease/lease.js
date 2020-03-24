@@ -2,43 +2,38 @@ import React, { useContext, useEffect, useState } from "react";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
 import leaseBadge from "../../assets/pngs/lease_badge.png";
+import Skeleton from "react-loading-skeleton";
 
 import "./lease.css";
 import AppIcon from "../../components/icons/Icon";
-import { Select } from "../../components/select/Select";
 import Input from "../../components/input/Input";
-import { Tabs } from "../../components/tabs/tabs";
-import { getArrayCount } from "../../utils/helper";
+import { getArrayCount, getToken } from "../../utils/helper";
 import LeaseListCard from "../../components/leaseCards/leaseListCard";
 import LeaseGridCard from "../../components/leaseCards/leaseGridCard";
+import { Select } from "../../components/select/Select";
+import { leaseSortOptions } from "../../utils/data";
+import { axiosHandler } from "../../utils/axiosHandler";
+import { LEASE_URL } from "../../utils/urls";
 
 function Lease(props) {
   const { dispatch } = useContext(store);
-  const temCounter = getArrayCount({ count: 15 });
-  const [viewType, setViewType] = useState(0);
+  const temCounter = getArrayCount({ count: 2 });
+  const [leases, setLeases] = useState([]);
+  const [fetching, setFetching] = useState(true);
+  const [viewType, setViewType] = useState(1); // 0 for list and 1 for grid
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Leases" });
+    fetchLease();
   }, []);
 
-  const tabHeadings = [
-    <div>Active Lease (10)</div>,
-    <div>Pending Lease (0)</div>,
-    <div>Annulled Lease (0)</div>,
-    <div>Expired Lease (0)</div>
-  ];
-
-  const tabBodies = [
-    <div className={`${viewType === 0 ? "" : "lease-grid"}`}>
-      {temCounter.map((item, id) =>
-        viewType === 0 ? <LeaseListCard key={id} /> : <LeaseGridCard key={id} />
-      )}
-      <br />
-    </div>,
-    <div />,
-    <div />,
-    <div />
-  ];
+  const fetchLease = () => {
+    if (!fetching) setFetching(true);
+    axiosHandler("get", LEASE_URL, getToken()).then(res => {
+      setLeases(res.data.results);
+      setFetching(false);
+    });
+  };
 
   return (
     <div>
@@ -56,7 +51,14 @@ function Lease(props) {
       <br />
       <br />
       <div className="flex align-center justify-between">
-        <div />
+        <div>
+          <div className="lease-search-box">
+            <Input
+              placeholder="Search properties"
+              iconRight={<AppIcon name="search" type="feather" />}
+            />
+          </div>
+        </div>
         <div className="flex align-center props">
           <div className="align-prop">
             <AppIcon
@@ -72,32 +74,52 @@ function Lease(props) {
               className={`${viewType === 0 ? "active" : ""}`}
             />
           </div>
-          <div className=" flex align-center sort-con">
-            <div className="label">Sort by</div>
-            <Select
-              defaultOption={{ title: "Newest", value: "newest" }}
-              optionList={[
-                { title: "Newest", value: "newest" },
-                { title: "Oldest", value: "oldest" },
-                { title: "Expensive", value: "expensive" },
-                { title: "Low budget", value: "low_budget" }
-              ]}
-            />
-          </div>
-
-          <div className="search-box">
-            <Input
-              placeholder="Search properties"
-              iconRight={<AppIcon name="search" type="feather" />}
-            />
-          </div>
+          &nbsp;
+          <Select
+            className="lease-search-box"
+            defaultOption={{ title: "All lease", value: "all" }}
+            optionList={leaseSortOptions}
+          />
         </div>
       </div>
 
       <br />
-      <div className="lease-content">
-        <Tabs heading={tabHeadings} body={tabBodies} />
-      </div>
+      <br />
+      {fetching && (
+        <div className="lease-content">
+          <div className={`${viewType === 0 ? "" : "lease-grid"}`}>
+            {temCounter.map((item, id) =>
+              viewType === 0 ? (
+                <>
+                  <Skeleton height={150} />
+                  <br />
+                  <br />
+                </>
+              ) : (
+                <Skeleton height={300} />
+              )
+            )}
+            <br />
+          </div>
+        </div>
+      )}
+      {!fetching && (
+        <div className="lease-content">
+          <div className={`${viewType === 0 ? "lease-list" : "lease-grid"}`}>
+            {leases.results.map((item, id) =>
+              viewType === 0 ? (
+                <LeaseListCard key={id} lease={item} />
+              ) : (
+                <LeaseGridCard key={id} lease={item} />
+              )
+            )}
+            <br />
+          </div>
+        </div>
+      )}
+
+      <br />
+      <br />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import PropertyListing from "./pages/propertyListing/propertyListing";
 import Properties from "./pages/properties/Properties";
 import Application from "./pages/application/Application";
 import GlobalLoader from "./components/GlobalLoader/globalLoader";
+import Logout from "./components/logout/logout";
 
 const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage"));
@@ -24,6 +25,7 @@ const RouterMain = props => {
       <GlobalLoader />
       <BrowserRouter>
         <Switch>
+          <Route path="/logout" exact component={Logout} />
           <Route
             path="/"
             component={props => (
@@ -56,11 +58,29 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
+                  path="/leases/view/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <LeaseDefinition {...props} view />
+                    </Suspense>
+                  )}
+                />
+                <Route
                   path="/leases/:uuid"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <LeaseDefinition {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/create-lease/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <LeaseDefinition {...props} create />
                     </Suspense>
                   )}
                 />
@@ -108,6 +128,15 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <Application {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/applications/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Application {...props} get />
                     </Suspense>
                   )}
                 />
@@ -171,6 +200,55 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <Profile {...props} active={5} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/user/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Profile {...props} active={0} preview />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/user/:uuid/basic"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Profile {...props} active={1} preview />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/user/:uuid/employment"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Profile {...props} active={2} preview />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/user/:uuid/immigration"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Profile {...props} active={3} preview />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/user/:uuid/resident"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Profile {...props} active={4} preview />
                     </Suspense>
                   )}
                 />

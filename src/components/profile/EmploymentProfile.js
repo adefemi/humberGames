@@ -13,7 +13,7 @@ import { getToken } from "../../utils/helper";
 import { store } from "../../stateManagement/store";
 import { Notification } from "../notification/Notification";
 
-function EmploymentProfile() {
+function EmploymentProfile(props) {
   const [loading, setLoading] = useState(true);
   const [submit, setSubmit] = useState(false);
   const [employmentProfile, setEmploymentProfile] = useState([]);
@@ -22,17 +22,19 @@ function EmploymentProfile() {
   } = useContext(store);
 
   useEffect(() => {
-    if (userDetails.user) {
+    if (userDetails.user || props.userId) {
       axiosHandler(
         "GET",
-        `${USER_EMPLOYMENT}?user_id=${userDetails.user.id}`,
+        `${USER_EMPLOYMENT}?user_id=${
+          props.userId ? props.userId : userDetails.user.id
+        }`,
         getToken()
       ).then(res => {
         setEmploymentProfile(res.data.results.results);
         setLoading(false);
       });
     }
-  }, [userDetails]);
+  }, [userDetails, props.userId]);
 
   const onChange = (ind, e) => {
     let activeEmployement = employmentProfile.map((item, id) => {
@@ -72,7 +74,9 @@ function EmploymentProfile() {
         return (
           <div className="no-profile-data">
             <h3>You've not provided any employment information.</h3>
-            <p>Use the button below to add employment data</p>
+            {!props.preview && (
+              <p>Use the button below to add employment data</p>
+            )}
           </div>
         );
       } else {
@@ -81,6 +85,7 @@ function EmploymentProfile() {
             key={id}
             data={ep}
             id={id}
+            preview={props.preview}
             onRemove={e => onRemove(id)}
             onChange={e => onChange(id, e)}
           />
@@ -120,7 +125,7 @@ function EmploymentProfile() {
         <form onSubmit={Submit}>
           <div>{renderEmployment()}</div>
 
-          {!loading && (
+          {!loading && !props.preview && (
             <>
               <div
                 className={`flex align-center ${

@@ -8,7 +8,8 @@ import { Spinner } from "../spinner/Spinner";
 import { secondaryColor } from "../../utils/data";
 import { Notification } from "../notification/Notification";
 import ResidenceForm from "./ResidenceForm";
-function ResidenceProfile() {
+
+function ResidenceProfile(props) {
   const [loading, setLoading] = useState(true);
   const [submit, setSubmit] = useState(false);
   const [residenceProfile, setResidenceProfile] = useState([]);
@@ -18,17 +19,19 @@ function ResidenceProfile() {
   } = useContext(store);
 
   useEffect(() => {
-    if (userDetails.user) {
+    if (userDetails.user || props.userId) {
       axiosHandler(
         "GET",
-        `${USER_RESIDENCE}?user_id=${userDetails.user.id}`,
+        `${USER_RESIDENCE}?user_id=${
+          props.userId ? props.userId : userDetails.user.id
+        }`,
         getToken()
       ).then(res => {
         setResidenceProfile(res.data.results.results);
         setLoading(false);
       });
     }
-  }, [userDetails]);
+  }, [userDetails, props.userId]);
 
   const onChange = (ind, e) => {
     let activeResident = residenceProfile.map((item, id) => {
@@ -68,7 +71,7 @@ function ResidenceProfile() {
         return (
           <div className="no-profile-data">
             <h3>You've not provided any resident information.</h3>
-            <p>Use the button below to add resident data</p>
+            {!props.preview && <p>Use the button below to add resident data</p>}
           </div>
         );
       } else {
@@ -77,6 +80,7 @@ function ResidenceProfile() {
             key={id}
             data={ep}
             id={id}
+            preview={props.preview}
             onRemove={e => onRemove(id)}
             onChange={e => onChange(id, e)}
           />
@@ -115,7 +119,7 @@ function ResidenceProfile() {
         <form onSubmit={Submit}>
           <div>{renderResident()}</div>
 
-          {!loading && (
+          {!loading && !props.preview && (
             <>
               <div
                 className={`flex align-center ${

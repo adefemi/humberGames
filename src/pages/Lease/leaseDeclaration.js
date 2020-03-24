@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { numberWithCommas } from "../../utils/helper";
 
 function LeaseDeclaration(props) {
+  const [declaration] = useState(props.declaration);
+
+  if (!declaration) return <div />;
+
   return (
     <div className="lease-card declaration">
       <h3>Declaration</h3>
@@ -9,11 +14,25 @@ function LeaseDeclaration(props) {
         <h4>Now It Is Hereby Agreed as Follows</h4>
         <p>
           In consideration of the covenants, stipulations and charges
-          hereinafter reserved, Moni Olowo hereby let unto baji mania the
-          Demised Premises for a term of 2 years CERTAIN commencing from
-          20-9-2019 and ending 13-9-2021. The rent for the present term being
-          ₦10.00 yearly (Net of Taxes) having being paid before the execution of
-          this agreement (the receipt hereof the landlord hereby acknowledges).
+          hereinafter reserved,{" "}
+          <strong className="text-capitalized">{declaration.owner.name}</strong>{" "}
+          hereby let unto{" "}
+          <strong className="text-capitalized">
+            {declaration.tenant.name}
+          </strong>{" "}
+          the Demised Premises for a term of{" "}
+          <strong className="text-capitalized">
+            {declaration.tenure} {declaration.tenure_type}
+          </strong>{" "}
+          CERTAIN commencing from <strong>{declaration.start_date}</strong> and
+          ending <strong>{declaration.end_date}</strong>. The rent for the
+          present term being{" "}
+          <strong>
+            {declaration.currency_type}
+            {numberWithCommas(declaration.price)}
+          </strong>{" "}
+          yearly (Net of Taxes) having being paid before the execution of this
+          agreement (the receipt hereof the landlord hereby acknowledges).
         </p>
       </div>
 
@@ -22,13 +41,14 @@ function LeaseDeclaration(props) {
           <div
             className="img-con"
             style={{
-              backgroundImage: `url("${"https://cdn.pixabay.com/photo/2016/11/29/09/38/adult-1868750__340.jpg"}")`
+              backgroundImage: `url("${declaration.tenant.image &&
+                declaration.tenant.image.file}")`
             }}
           />
           <div className="content">
-            <h4>Baji mania</h4>
-            <p>baji@quickmail.com</p>
-            <p>+234 903 3030 4004</p>
+            <h4 className="text-capitalized">{declaration.tenant.name}</h4>
+            <p>{declaration.tenant.email}</p>
+            <p>{declaration.tenant.phone}</p>
             <div className="tag">Tenant</div>
           </div>
         </div>
@@ -36,15 +56,16 @@ function LeaseDeclaration(props) {
           <div />
           <div className="landlord-con">
             <div className="content">
-              <h4>Moni Olowo</h4>
-              <p>nopivusulo@mailsoul.com</p>
-              <p>+234 903 3030 4004</p>
+              <h4 className="text-capitalized">{declaration.owner.name}</h4>
+              <p>{declaration.owner.email}</p>
+              <p>{declaration.owner.phone}</p>
               <div className="tag">Landlord</div>
             </div>
             <div
               className="img-con"
               style={{
-                backgroundImage: `url("${"https://cdn.pixabay.com/photo/2016/03/09/09/40/woman-1245926__340.jpg"}")`
+                backgroundImage: `url("${declaration.owner.image &&
+                  declaration.owner.image.file}")`
               }}
             />
           </div>

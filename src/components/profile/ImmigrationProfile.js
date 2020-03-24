@@ -14,7 +14,7 @@ import { store } from "../../stateManagement/store";
 import EmploymentForm from "./EmploymentForm";
 import { Notification } from "../notification/Notification";
 
-function ImmigrationProfile() {
+function ImmigrationProfile(props) {
   const [loading, setLoading] = useState(true);
   const [submit, setSubmit] = useState(false);
   const [immigrationProfile, setImmigrationProfile] = useState([]);
@@ -23,17 +23,19 @@ function ImmigrationProfile() {
   } = useContext(store);
 
   useEffect(() => {
-    if (userDetails.user) {
+    if (userDetails.user || props.userId) {
       axiosHandler(
         "GET",
-        `${USER_IMMIGRATION}?user_id=${userDetails.user.id}`,
+        `${USER_IMMIGRATION}?user_id=${
+          props.userId ? props.userId : userDetails.user.id
+        }`,
         getToken()
       ).then(res => {
         setImmigrationProfile(res.data.results.results);
         setLoading(false);
       });
     }
-  }, [userDetails]);
+  }, [userDetails, props.userId]);
 
   const onChange = (ind, e) => {
     let activeImmigration = immigrationProfile.map((item, id) => {
@@ -98,7 +100,9 @@ function ImmigrationProfile() {
         return (
           <div className="no-profile-data">
             <h3>You've not provided any immigration information.</h3>
-            <p>Use the button below to add immigration data</p>
+            {!props.preview && (
+              <p>Use the button below to add immigration data</p>
+            )}
           </div>
         );
       } else {
@@ -109,6 +113,7 @@ function ImmigrationProfile() {
                 key={id}
                 data={immigrationData}
                 id={id}
+                preview={props.preview}
                 onRemove={e => onRemove(id)}
                 onChange={e => onChange(id, e)}
               />
@@ -124,7 +129,7 @@ function ImmigrationProfile() {
       <div className="form-wrapper">
         <form onSubmit={Submit}>
           <div>{renderImmigration()}</div>
-          {!loading && (
+          {!loading && !props.preview && (
             <>
               <div
                 className={`flex align-center ${

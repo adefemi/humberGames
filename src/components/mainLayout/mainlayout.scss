@@ -49,6 +49,10 @@ $sideBarWidth: 250px;
       &:hover {
         color: darken($white-color, 80%);
       }
+
+      &.logout{
+        color: $secondary-color;
+      }
     }
   }
 

@@ -15,9 +15,12 @@ function EmploymentForm(props) {
   let { data, onChange, onRemove } = props;
   return (
     <div className="profile-multi">
-      <div className="remove-form" onClick={onRemove}>
-        Remove
-      </div>
+      {!props.preview && (
+        <div className="remove-form" onClick={onRemove}>
+          Remove
+        </div>
+      )}
+
       <div className="grid grid-2">
         <FormGroup label="Job Title" required>
           <Input

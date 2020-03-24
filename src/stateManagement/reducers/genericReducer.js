@@ -1,10 +1,18 @@
-import { setGlobalLoader, setRoles, setUserDetails } from "../actions";
+import {
+  reloadApplication,
+  setGlobalLoader,
+  setRoles,
+  setUserDetails
+} from "../actions";
 
 export const userDetailsState = {
   userDetails: {}
 };
 export const rolesState = {
   roles: []
+};
+export const reloadApplicationState = {
+  reloadApplicationStatus: false
 };
 export const globalLoaderState = {
   globalLoader: {
@@ -29,6 +37,17 @@ export const userRolesReducer = (state, action) => {
     return {
       ...state,
       roles: action.payload
+    };
+  } else {
+    return state;
+  }
+};
+
+export const reloadApplicationReducer = (state, action) => {
+  if (action.type === reloadApplication) {
+    return {
+      ...state,
+      reloadApplicationStatus: action.payload
     };
   } else {
     return state;

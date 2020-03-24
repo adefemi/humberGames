@@ -207,7 +207,7 @@ function PropertyTerm(props) {
       if (parseFloat(agencyCommission.agency_fee) > maxPercent) {
         Notification.bubble({
           type: "error",
-          content: `You percentage is more than the allowed ${maxPercent}%`
+          content: `Your percentage is more than the allowed ${maxPercent}%`
         });
         status = false;
       } else if (parseFloat(agencyCommission.agency_fee) < minPercent) {

@@ -18,7 +18,6 @@ import {
   getActivePosition,
   getToken
 } from "../../utils/helper";
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { store } from "../../stateManagement/store";
 import { Spinner } from "../spinner/Spinner";
 import { Notification } from "../notification/Notification";
@@ -36,10 +35,10 @@ function BasicInfo(props) {
   } = useContext(store);
 
   useEffect(() => {
-    if (userDetails.user) {
+    if (userDetails.user || props.userId) {
       axiosHandler(
         "GET",
-        `${USER_BASIC}/${userDetails.user.id}`,
+        `${USER_BASIC}/${props.userId ? props.userId : userDetails.user.id}`,
         getToken()
       ).then(
         res => {
@@ -52,7 +51,7 @@ function BasicInfo(props) {
         }
       );
     }
-  }, [userDetails]);
+  }, [userDetails, props.userId]);
 
   const getCurrentLocation = () => {
     getActivePosition((loc, status) => {
@@ -139,10 +138,13 @@ function BasicInfo(props) {
   if (mode === 0 && newBasic) {
     return (
       <div className="flex align-center justify-center column newProfile">
-        We couldn't find any basic information associated with your account
+        We couldn't find any basic information associated with{" "}
+        {props.preview ? "this" : "your"} account
         <br />
         <br />
-        <Button onClick={() => setMode(1)}>Create Info</Button>
+        {!props.preview && (
+          <Button onClick={() => setMode(1)}>Create Info</Button>
+        )}
       </div>
     );
   }
@@ -256,7 +258,7 @@ function BasicInfo(props) {
           />
         )}
         <br />
-        {mode === 0 && (
+        {mode === 0 && !props.preview && (
           <div className="submit-button flex justify-center">
             <Button onClick={() => setMode(1)} color="primary">
               Edit Info
@@ -309,7 +311,7 @@ const BasicInfoView = props => {
         <SingleAddress
           name="kin_address"
           value={props.userBasicMain.kin_address || ""}
-          onChange={props.onValueChange}
+          onValueChange={props.onValueChange}
         />
       </FormGroup>
 

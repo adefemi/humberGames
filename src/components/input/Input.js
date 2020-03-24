@@ -5,7 +5,7 @@ import { getNewProps } from "../../utils/helper";
 
 const defaultPropList = {
   value: PropTypes.any,
-  type: PropTypes.oneOf(["text", "number", "password", "tel", "phone"]),
+  type: PropTypes.oneOf(["text", "number", "password", "tel", "phone", "date"]),
   onChange: PropTypes.func.isRequired,
   error: PropTypes.bool,
   errorText: PropTypes.string,

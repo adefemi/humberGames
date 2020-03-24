@@ -4,6 +4,7 @@ import fileDragImg from "../../assets/images/file-drag.svg";
 import FileUploadNew from "../fileUploadNew/fileUploadNew";
 import { FILE_UPLOAD_URL, tempToken } from "../../utils/urls";
 import proptype from "prop-types";
+import { getToken } from "../../utils/helper";
 
 function FileDragger(props) {
   return (
@@ -39,7 +40,7 @@ FileDragger.defaultProps = {
   method: "post",
   uploadUrl: FILE_UPLOAD_URL,
   deleteUrl: FILE_UPLOAD_URL,
-  token: tempToken,
+  token: getToken(),
   onChange: () => null,
   updateTrigger: () => null
 };

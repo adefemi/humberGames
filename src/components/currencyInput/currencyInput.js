@@ -19,11 +19,12 @@ function CurrencyInput(props) {
     if (props.value) {
       onChangeCurrency({ target: { value: props.value } });
     }
-  }, [props.value]);
+  }, [props.value, activeCurrency]);
 
   const onChangeCurrency = ({ target: { value } }) => {
     let newValue;
-    newValue = value.replace(/,/g, "");
+
+    newValue = value.toString().replace(/,/g, "");
     newValue = numberWithCommas(newValue);
     if (props.onChange) {
       props.onChange({

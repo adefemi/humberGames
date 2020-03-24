@@ -17,6 +17,7 @@ import qs from "query-string";
 import _ from "lodash";
 import PropertyModal from "../../components/property/PropertyModal";
 import { getToken } from "../../utils/helper";
+import Affixed from "../../components/Affixed/affixed";
 function Properties() {
   const { dispatch, state } = useContext(store);
   const [queryParams, setQueryParams] = useState({});
@@ -168,12 +169,14 @@ function Properties() {
           )}
         </div>
         <div className="right-nav">
-          <>
-            <div className="section-header">Quick Summary</div>
-            <SummaryCard type={"Properties"} total={properties.count} />
-            <SummaryCard type={"Units"} />
-            <SummaryCard type={"Interests"} />
-          </>
+          <Affixed offset={50}>
+            <>
+              <div className="section-header">Quick Summary</div>
+              <SummaryCard type={"Properties"} total={properties.count} />
+              <SummaryCard type={"Units"} />
+              <SummaryCard type={"Interests"} />
+            </>
+          </Affixed>
         </div>
       </div>
       <PropertyModal />

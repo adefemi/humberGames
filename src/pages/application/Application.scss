@@ -16,6 +16,8 @@
         background-color: transparent;
         outline: transparent;
         border: none;
+        min-width: 150px;
+        cursor: pointer;
 
         &:hover,
         &:focus {
@@ -34,18 +36,22 @@
 
   .rectangle {
     width: 100%;
-    padding: 30px 50px;
+    padding: 20px 50px;
     box-sizing: border-box;
     min-height: 120px;
     background: #ffea9f;
     border-radius: 10px;
     align-items: center;
     margin-bottom: 70px;
+    position: relative;
 
     img {
       margin-right: 35px;
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      top: -20px;
+      left: 50px;
     }
 
     .rectangle-text {
@@ -57,13 +63,18 @@
       .text-2 {
         font-size: 14px;
       }
+
+      p{
+        margin: 0;
+        margin-left: 150px;
+      }
     }
   }
 
   .application-cards {
     margin-top: 40px;
     display: grid;
-    gap: 10px;
+    gap: 2em;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 
     .book-status {
@@ -90,10 +101,19 @@
         font-size: 13px;
         color: $color-text-light;
         max-width: 300px;
+        margin-top: -10px;
+        margin-bottom: 10px;
       }
 
       .property-address {
         margin-right: 2px;
+        strong{
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: 200px;
+          display: block;
+        }
       }
 
       .property-image {
@@ -180,5 +200,23 @@
         }
       }
     }
+  }
+
+  .view-lease{
+    border: 2px solid $primary-color;
+    color: $primary-color-dark;
+    font-weight: bold;
+    padding: 5px 30px;
+  }
+}
+
+.view-lease-con{
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  button, a{
+    width: 100%;
   }
 }
