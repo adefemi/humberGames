@@ -5,13 +5,10 @@ import Register from "../../assets/Register.svg";
 import { Button } from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import "./team.css";
-import { axiosHandler } from "../../utils/axiosHandler";
+import { axiosHandler, testToken } from "../../utils/axiosHandler";
 import { TEAMS_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import { useHistory } from "react-router-dom";
-
-export const testToken =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgyOTc0NTk3LCJqdGkiOiI5NTFkYzc0NzUyMWQ0MjlkOTdjZDYxODQ2MDZlMTI0ZiIsInVzZXJfaWQiOjE0fQ.CriTSUiFt7S69jThmEPKD0lZbUz40lX9J10C4_jQFMs";
 
 const TeamCreatePage = props => {
   let history = useHistory();
