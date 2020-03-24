@@ -12,7 +12,7 @@ export const TextAreaField = props => {
         placeholder={props.placeholder}
         maxLength={props.maxlength}
         onChange={props.onChange}
-        style={({ ...props.style }, { resize: "none", height: "120px" })}
+        style={{ ...props.style, resize: "none", height: "120px" }}
         className={props.error ? "textarea-error" : ""}
         defaultValue={props.defaultValue}
         value={props.value}
