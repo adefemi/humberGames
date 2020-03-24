@@ -8,7 +8,6 @@ import GlobalLoader from "./components/GlobalLoader/globalLoader";
 import Logout from "./components/logout/logout";
 
 const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard"));
-<<<<<<< HEAD
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage"));
 const Branch = lazy(() => import("./pages/branch/Branch"));
@@ -233,58 +232,6 @@ const RouterMain = props => {
                     </Suspense>
                   )}
                 />
-=======
-const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
-const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
-const Branch = lazy(() => import("./pages/branch/Branch.js"));
-const Profile = lazy(() => import("./pages/profile/ProfileTemplate.js"));
-const BankAccount = lazy(() => import("./pages/bankAccount/BankAccount"));
-
-const RouterMain = props => {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route
-          path="/"
-          component={props => (
-            <MainLayout {...props}>
-              <Route
-                path="/"
-                exact
-                component={props => (
-                  <Suspense fallback={() => <h2>Loading...</h2>}>
-                    <HomeIndex {...props} />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/team"
-                exact
-                component={props => (
-                  <Suspense fallback={() => <h2>Loading...</h2>}>
-                    <TeamCreatePage {...props} />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/team/members"
-                exact
-                component={props => (
-                  <Suspense fallback={() => <h2>Loading...</h2>}>
-                    <TeamMembersPage {...props} />
-                  </Suspense>
-                )}
-              />
-              <Route
-                path="/bank-account"
-                exact
-                component={props => (
-                  <Suspense fallback={() => <h2>Loading...</h2>}>
-                    <BankAccount {...props} />
-                  </Suspense>
-                )}
-              />
->>>>>>> c2c9da1f0d972ff5f023d58389be0aeb6ee19dea
 
                 <Route
                   path="/user/:uuid/immigration"
