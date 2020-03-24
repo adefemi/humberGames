@@ -10,6 +10,7 @@ const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 const Branch = lazy(() => import("./pages/branch/Branch.js"));
 const Profile = lazy(() => import("./pages/profile/ProfileTemplate.js"));
 const Transactins = lazy(() => import("./pages/transactions/Transactions"));
+const BankAccount = lazy(() => import("./pages/bankAccount/BankAccount"));
 
 const RouterMain = props => {
   return (
@@ -52,6 +53,15 @@ const RouterMain = props => {
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <Transactins {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/bank-account"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <BankAccount {...props} />
                   </Suspense>
                 )}
               />
