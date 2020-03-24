@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Notification } from "../../../components/notification/Notification";
 import { TEAM_REQUEST_URL } from "../../../utils/urls";
-import { axiosHandler } from "../../../utils/axiosHandler";
+import { axiosHandler, testToken } from "../../../utils/axiosHandler";
 import Skeleton from "react-loading-skeleton";
 import { Card } from "../../../components/card/Card";
 import RequestCard from "./RequestCard";
@@ -11,7 +11,10 @@ import noImage from "../../../assets/images/no-image.jpg";
 import loadMore from "../../../assets/loadMore.svg";
 import { Button } from "../../../components/button/Button";
 import _ from "lodash";
+<<<<<<< HEAD
 import { getToken } from "../../../utils/helper";
+=======
+>>>>>>> 5944c08f9d3c535d99f7db99c57b14f6c202102f
 
 const AllTeamRequests = () => {
   const [acceptModalState, setAcceptModalState] = useState(false);

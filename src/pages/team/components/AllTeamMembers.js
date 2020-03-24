@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { axiosHandler } from "../../../utils/axiosHandler";
+import { axiosHandler, testToken } from "../../../utils/axiosHandler";
 import { Notification } from "../../../components/notification/Notification";
 import { Card } from "../../../components/card/Card";
 import { MembershipCard } from "./MembershipCard";
@@ -8,7 +8,10 @@ import { TEAMS_URL } from "../../../utils/urls";
 import Input from "../../../components/input/Input";
 import AppIcon from "../../../components/icons/Icon";
 import { Button } from "../../../components/button/Button";
+<<<<<<< HEAD
 import { getToken } from "../../../utils/helper";
+=======
+>>>>>>> 5944c08f9d3c535d99f7db99c57b14f6c202102f
 
 const AllTeamMembers = () => {
   const [teams, setTeams] = useState([]);

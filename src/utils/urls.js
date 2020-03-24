@@ -38,6 +38,11 @@ export const TEAMS_URL = BASE_URL + "user/team";
 export const TEAM_REQUEST_URL =
   BASE_URL + "user/join-agency-request?request_status=pending";
 export const PROPERTY_URL = PROPERTY_CONTROLLER_URL;
+<<<<<<< HEAD
 export const USER_ME = BASE_URL + "user/me";
 export const GET_ACCESS_TOKEN = BASE_URL + "gateway/refresh";
 export const LOGOUT = BASE_URL + "gateway/logout";
+=======
+export const DASHBOARD_URL = BASE_URL + "user/dashboard";
+export const AGENCY_TRANSACTION_URL = BASE_URL + "payment/agency_transactions";
+>>>>>>> 5944c08f9d3c535d99f7db99c57b14f6c202102f
