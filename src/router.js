@@ -9,6 +9,12 @@ const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 const Branch = lazy(() => import("./pages/branch/Branch.js"));
 const Profile = lazy(() => import("./pages/profile/ProfileTemplate.js"));
+const TenantDashboard = lazy(() =>
+  import("./pages/tenantDashboard/TenantDashboard")
+);
+const AgencyDashboard = lazy(() =>
+  import("./pages/agencyDashboard/AgencyDashboard")
+);
 const Transactins = lazy(() => import("./pages/transactions/Transactions"));
 const BankAccount = lazy(() => import("./pages/bankAccount/BankAccount"));
 
@@ -48,11 +54,29 @@ const RouterMain = props => {
                 )}
               />
               <Route
+                path="/dashboard/tenant"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <TenantDashboard {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
                 path="/transactions"
                 exact
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <Transactins {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/dashboard/agency"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <AgencyDashboard {...props} />
                   </Suspense>
                 )}
               />
