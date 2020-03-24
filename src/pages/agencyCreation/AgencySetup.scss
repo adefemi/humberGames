@@ -1,0 +1,134 @@
+@import "../../styles/theme";
+
+//#----------------------------Get Started Page-------------------------#
+.get-started-container {
+  justify-content: center;
+  margin-top: 200px;
+  //   align-items: center;
+
+  .get-started-texts {
+    max-width: 40%;
+    margin-right: 50px;
+
+    h3 {
+      color: $color-text;
+      font-weight: bold;
+    }
+
+    .get-started-button {
+      border-radius: 50px;
+      background-color: $danger-color-light;
+      padding: 0 50px;
+      margin-top: 8%;
+
+      span {
+        font-size: 16px;
+      }
+    }
+  }
+  .get-started-img {
+    width: 350px;
+    height: 250px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+//#---------------------- Agency Setup Page -----------------------------#
+.agency-setup-container {
+  padding: 50px;
+
+  .agency-setup-hints {
+    h2 {
+      color: $color-text;
+      margin: 0;
+    }
+    p {
+      font-size: 8px;
+      // font-weight: lighter;
+      color: $danger-color;
+      margin: 0;
+      line-height: 5px;
+    }
+  }
+}
+
+.agency-name-and-logo {
+  margin: 5% 0;
+  p {
+    font-size: 13px;
+    font-weight: bold;
+
+    span {
+      color: red;
+    }
+  }
+  .flex {
+    align-items: center;
+
+    .agency-name {
+      &.input-control {
+        flex: unset;
+        margin-right: 150px;
+      }
+      .input-container-cover {
+        width: unset;
+        .input-field {
+          width: 500px;
+        }
+      }
+    }
+
+    .agency-logo-container {
+      display: flex;
+      align-items: center;
+
+      .agency-logo {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+
+      p {
+        margin-left: 10px;
+        color: #5b68a4;
+        font-weight: 600;
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+.location-hint {
+  font-size: 13px;
+  font-weight: bold;
+
+  span {
+    font-size: 9px;
+    color: #5b68a4;
+  }
+}
+
+.agency-location {
+  gap: 20px;
+}
+
+.corporate-hint {
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 5%;
+}
+
+.corporate-details {
+  gap: 20px;
+}
+
+.create-agency {
+  margin: 5% 0;
+  padding: 20px 50px;
+  height: unset;
+}

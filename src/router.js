@@ -10,6 +10,18 @@ const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 const Branch = lazy(() => import("./pages/branch/Branch.js"));
 const Profile = lazy(() => import("./pages/profile/ProfileTemplate.js"));
 const Notifications = lazy(() => import("./pages/notifications/Notifications"));
+const AgencyGetStarted = lazy(() =>
+  import("./pages/agencyCreation/AgencyGetStarted")
+);
+const AgencySetup = lazy(() => import("./pages/agencyCreation/AgencySetup"));
+const TenantDashboard = lazy(() =>
+  import("./pages/tenantDashboard/TenantDashboard")
+);
+const AgencyDashboard = lazy(() =>
+  import("./pages/agencyDashboard/AgencyDashboard")
+);
+const Transactins = lazy(() => import("./pages/transactions/Transactions"));
+const BankAccount = lazy(() => import("./pages/bankAccount/BankAccount"));
 
 const RouterMain = props => {
   return (
@@ -52,6 +64,60 @@ const RouterMain = props => {
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <Notifications {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/agency-get-started"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <AgencyGetStarted {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/dashboard/tenant"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <TenantDashboard {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/agency-setup"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <AgencySetup {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/transactions"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <Transactins {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/dashboard/agency"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <AgencyDashboard {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/bank-account"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <BankAccount {...props} />
                   </Suspense>
                 )}
               />
