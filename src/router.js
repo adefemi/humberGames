@@ -15,6 +15,8 @@ const TenantDashboard = lazy(() =>
 const AgencyDashboard = lazy(() =>
   import("./pages/agencyDashboard/AgencyDashboard")
 );
+const Transactins = lazy(() => import("./pages/transactions/Transactions"));
+const BankAccount = lazy(() => import("./pages/bankAccount/BankAccount"));
 
 const RouterMain = props => {
   return (
@@ -61,11 +63,29 @@ const RouterMain = props => {
                 )}
               />
               <Route
+                path="/transactions"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <Transactins {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
                 path="/dashboard/agency"
                 exact
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <AgencyDashboard {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/bank-account"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <BankAccount {...props} />
                   </Suspense>
                 )}
               />
