@@ -1,0 +1,168 @@
+.graph-and-quick-links {
+  margin-bottom: 5%;
+}
+
+.agency-graph {
+  width: 70%;
+  background: #ffffff;
+  border-radius: 10px;
+  margin-right: 30px;
+
+  .acct-statements-container {
+    padding-left: 40px;
+    h6 {
+      margin: 10px 0;
+      margin-top: 20px;
+    }
+    .acct-statements {
+      div {
+        margin-right: 70px;
+        &.revenue > h5 {
+          color: #46a9fc;
+        }
+        &.expenses > h5 {
+          color: #ed4c5c;
+        }
+        &.profit > h5 {
+          color: #1e9450;
+        }
+        h5 {
+          margin: 0;
+        }
+        p {
+          margin: 0;
+          font-size: 9px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+.quick-links-container {
+  width: 30%;
+}
+
+.quick-links-container > p {
+  margin-top: 0;
+  font-weight: bold;
+}
+
+.quick-links {
+  background: #ffffff;
+  border-radius: 4px;
+  max-width: 200px;
+  // max-height: 200px;
+  padding: 20px;
+}
+
+.quick-links a {
+  font-size: 12px;
+}
+
+.ag-divider {
+  border: 1px solid #efefef;
+  margin: 10px 0;
+}
+
+.activity-summary-container > p {
+  font-weight: bold;
+}
+
+.activity-summaries {
+  width: 100%;
+  max-width: 1200px;
+  overflow-x: auto;
+}
+
+.quick-views-container {
+  margin: 5% 0;
+}
+
+@media screen and (max-width: 1440px) {
+  .views-card {
+    min-width: unset;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .graph-and-quick-links {
+    flex-direction: column-reverse;
+    .agency-graph {
+      margin-right: unset;
+      width: 100%;
+    }
+    .quick-links-container {
+      margin-bottom: 30px;
+      width: unset;
+      .quick-links {
+        display: flex;
+        max-width: unset;
+        justify-content: center;
+        align-items: center;
+
+        .divider {
+          border-width: 3px;
+        }
+        a {
+          padding: 0 10px;
+        }
+      }
+    }
+  }
+
+  .activity-summary-container {
+    .lease-summary {
+      display: none;
+    }
+    .activity-summary-card {
+      min-width: unset;
+      max-width: 200px;
+      max-height: 150px;
+
+      .content-segment {
+        h4,
+        p {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  .quick-views-container {
+    .quick-views {
+      .views-card {
+        min-width: calc(400px - 15px);
+        &:nth-last-of-type(2),
+        &:nth-last-of-type(3) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .graph-and-quick-links {
+    .quick-links-container {
+      .quick-links {
+        a {
+          &:nth-of-type(4) {
+            display: none;
+          }
+          &:last-child {
+            display: none;
+          }
+        }
+        div {
+          &:nth-of-type(4) {
+            display: none;
+          }
+          &:nth-of-type(5) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
