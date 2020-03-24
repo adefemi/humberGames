@@ -9,6 +9,11 @@ const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 const Branch = lazy(() => import("./pages/branch/Branch.js"));
 const Profile = lazy(() => import("./pages/profile/ProfileTemplate.js"));
+const Agency = lazy(() => import("./pages/agencyPortfolio/AgencyPortfolio"));
+const SingleRental = lazy(() => import("./pages/activeRentals/SingleRent"));
+const ActiveRents = lazy(() =>
+  import("./pages/activeRentals/AllActiveRentals")
+);
 const Notifications = lazy(() => import("./pages/notifications/Notifications"));
 const AgencyGetStarted = lazy(() =>
   import("./pages/agencyCreation/AgencyGetStarted")
@@ -59,6 +64,15 @@ const RouterMain = props => {
                 )}
               />
               <Route
+                path="/agencies"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <Agency {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
                 path="/notifications"
                 exact
                 component={props => (
@@ -68,11 +82,29 @@ const RouterMain = props => {
                 )}
               />
               <Route
+                path="/active-rentals"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <ActiveRents {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
                 path="/agency-get-started"
                 exact
                 component={props => (
                   <Suspense fallback={() => <h2>Loading...</h2>}>
                     <AgencyGetStarted {...props} />
+                  </Suspense>
+                )}
+              />
+              <Route
+                path="/active-rentals/single"
+                exact
+                component={props => (
+                  <Suspense fallback={() => <h2>Loading...</h2>}>
+                    <SingleRental {...props} />
                   </Suspense>
                 )}
               />
