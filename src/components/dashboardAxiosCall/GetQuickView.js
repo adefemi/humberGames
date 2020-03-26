@@ -120,10 +120,7 @@ export default function GetQuickView({ userRole }) {
       return rt.map(transaction => (
         <TransactionTable
           key={["blah", "blah"]}
-          values={[
-            ["a", 1],
-            ["b", 2]
-          ]}
+          values={[["a", 1], ["b", 2]]}
         />
       ));
     }

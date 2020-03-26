@@ -1,4 +1,4 @@
-const BASE_URL = "https://rd3.clubly.io/";
+const BASE_URL = "https://rd3.rentright.co/";
 export const PUBLIC_URL = "https://rfrontend.clubly.io/";
 export const tempToken =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgzMTQ3NDcxLCJqdGkiOiIwMDIzMTQ1YTAwYzg0ZmJlYTU1MTliOWQ1YTk3MmExMyIsInVzZXJfaWQiOjI2fQ.71qqT0gXmTprO0WYbO2H28AR9lHI23Izz8461m6hAPU";

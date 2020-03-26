@@ -4,15 +4,9 @@ import { Button } from "../button/Button";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 import { Icon } from "../icons";
-import { addClass, getToken, hasClass, removeClass } from "../../utils/helper";
+import { addClass, hasClass, removeClass } from "../../utils/helper";
 import { store } from "../../stateManagement/store";
-import {
-  loginUrl,
-  secondaryColor,
-  USERDETAILS,
-  USERROLE,
-  USERTOKEN
-} from "../../utils/data";
+import { loginUrl, secondaryColor, USERTOKEN } from "../../utils/data";
 import { axiosHandler } from "../../utils/axiosHandler";
 import { GET_ACCESS_TOKEN, USER_ME, USER_ROLE } from "../../utils/urls";
 import { Spinner } from "../spinner/Spinner";
