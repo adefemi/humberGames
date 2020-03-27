@@ -132,6 +132,35 @@ $sideBarWidth: 250px;
     }
   }
 
+  .role-switcher{
+    margin-left: 50px;
+
+    .dropdown-content{
+      padding: 0 20px;
+      background-color: $secondary-color;
+      color: white;
+      text-transform: uppercase;
+      font-weight: bold;
+      border-radius: 20px;
+      position: relative;
+
+      &:after{
+        content: ">";
+        position: absolute;
+        right: 5px;
+      }
+    }
+  }
+
+  .notifier{
+    margin-right: 40px;
+    svg{
+      width: 20px;
+      height: 20px;
+      color: darken(white, 40%);
+    }
+  }
+
   @media screen and (max-width: 600px) {
     .mobile.closed {
       .sideBar {

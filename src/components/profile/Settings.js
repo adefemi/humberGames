@@ -10,6 +10,22 @@ import { getToken } from "../../utils/helper";
 import { Notification } from "../notification/Notification";
 
 function Settings(props) {
+  return (
+    <div className="settings-main">
+      <div className="heading">Settings</div>
+      <div className="settings-con">
+        <div className="settings-viewer">
+          <div className="label">Active Role</div>
+          <RoleSwitcher />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Settings;
+
+export const RoleSwitcher = props => {
   const [activeRole, setActiveRole] = useState("");
   const [fetching, setFetching] = useState(true);
   const [rolesData, setRoles] = useState([]);
@@ -66,24 +82,14 @@ function Settings(props) {
     return <Spinner size={15} color={secondaryColor} />;
   }
   return (
-    <div className="settings-main">
-      <div className="heading">Settings</div>
-      <div className="settings-con">
-        <div className="settings-viewer">
-          <div className="label">Active Role</div>
-          <div className="context">
-            {activeRole}
-            <DropDown
-              children={<small>Switch</small>}
-              static
-              onChange={onChangeRole}
-              options={rolesData}
-            />
-          </div>
-        </div>
-      </div>
+    <div className="context">
+      {!props.hideTitle && activeRole}
+      <DropDown
+        children={<small>{props.hideTitle ? activeRole : "Switch"}</small>}
+        static
+        onChange={onChangeRole}
+        options={rolesData}
+      />
     </div>
   );
-}
-
-export default Settings;
+};

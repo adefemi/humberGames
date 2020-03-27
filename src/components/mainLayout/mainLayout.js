@@ -14,6 +14,9 @@ import qs from "query-string";
 import { useCookies } from "react-cookie";
 import { setRoles, setUserDetails } from "../../stateManagement/actions";
 import ProfileNav from "../profileNav/profileNav";
+import { RoleSwitcher } from "../profile/Settings";
+import AppIcon from "../icons/Icon";
+import NotificationDrop from "../notificationDrop/notificationDrop";
 
 function MainLayout(props) {
   const { dispatch } = useContext(store);
@@ -127,6 +130,9 @@ function MainLayout(props) {
               <div className="pageTitle desktop">{title}</div>
             </div>
             <div className="navRight">
+              <div className="notifier">
+                <NotificationDrop />
+              </div>
               <Link to="/add-property" className="navItem">
                 <Button>Post Property</Button>
               </Link>
@@ -135,6 +141,9 @@ function MainLayout(props) {
                   <ProfileNav />
                 </div>
               </Link>
+              <div className="role-switcher">
+                <RoleSwitcher hideTitle />
+              </div>
             </div>
           </div>
           <div className="children">

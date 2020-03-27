@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import AppIcon from "../icons/Icon";
-import Badge from "../badge/Badge";
+import Badge from "../Badge/badge";
 import { Button } from "../button/Button";
 import PropertyCard from "./PropertyCard";
 import Slider from "../slider/slider";

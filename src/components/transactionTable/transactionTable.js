@@ -2,6 +2,9 @@ import React from "react";
 import "./transactionTable.css";
 
 function TransactionTable({ keys, values }) {
+  if (!keys || !values) {
+    return <div />;
+  }
   return (
     <div className="transactionTable">
       <table>
