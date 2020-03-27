@@ -1,0 +1,29 @@
+@import "../../styles/theme";
+
+$color-main : #BFFFCD;
+
+.lease-charge-main{
+  .heading-context{
+    margin-top: 20px;
+    background-color: $color-main;
+    img{
+      width: 110px;
+      height: 110px;
+      margin-bottom: 10px;
+    }
+
+    p{
+      max-width: 800px;
+    }
+
+    h3{
+      color: darken($color-main, 60%);
+    }
+  }
+
+  .charge-grid{
+    display: grid;
+    grid-template-columns: 6fr 2fr;
+    grid-gap: 2em;
+  }
+}

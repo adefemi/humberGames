@@ -6,7 +6,7 @@
   }
   width: 100%;
   thead{
-    background-color: darken(white, 10%);
+    background-color: darken(white, 5%);
     width: 100%;
     display: block;
     vertical-align: unset;
@@ -18,20 +18,23 @@
     vertical-align: unset;
 
    tr{
-     &:nth-child(even){
-       background-color: darken(white, 5%);
+    border-bottom: 1px solid darken(white, 3%);
+
+     &:last-child{
+       border-bottom: none;
      }
    }
   }
   tr{
-    height: 50px;
+    height: 40px;
     display: flex;
     align-items: center;
   }
   th, td{
     flex: 1;
-    font-size: 13px;
-    text-align: center;
+    font-size: 12px;
+    text-align: left;
+    padding-left: 20px;
   }
 
 }
