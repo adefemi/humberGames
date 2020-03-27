@@ -1,6 +1,7 @@
 import {
   reloadApplication,
   setGlobalLoader,
+  setOrderSummary,
   setRoles,
   setUserDetails
 } from "../actions";
@@ -13,6 +14,12 @@ export const rolesState = {
 };
 export const reloadApplicationState = {
   reloadApplicationStatus: false
+};
+export const orderSummaryState = {
+  orderSummaryMain: {
+    status: false,
+    data: null
+  }
 };
 export const globalLoaderState = {
   globalLoader: {
@@ -59,6 +66,17 @@ export const globalLoaderReducer = (state, action) => {
     return {
       ...state,
       globalLoader: action.payload
+    };
+  } else {
+    return state;
+  }
+};
+
+export const orderSummaryReducer = (state, action) => {
+  if (action.type === setOrderSummary) {
+    return {
+      ...state,
+      orderSummaryMain: action.payload
     };
   } else {
     return state;

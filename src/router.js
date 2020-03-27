@@ -6,6 +6,7 @@ import Properties from "./pages/properties/Properties";
 import Application from "./pages/application/Application";
 import GlobalLoader from "./components/GlobalLoader/globalLoader";
 import Logout from "./components/logout/logout";
+import OrderSummary from "./components/orderSummary/orderSummary";
 
 const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard.js"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
@@ -36,11 +37,13 @@ const Portfolio = lazy(() =>
 const TenantInvite = lazy(() => import("./pages/tenantInvite/TenantInvite"));
 const LeaseMain = lazy(() => import("./pages/Lease/lease"));
 const LeaseDefinition = lazy(() => import("./pages/Lease/leaseDefinition"));
+const LeaseCharge = lazy(() => import("./pages/leaseCharge/leaseCharge"));
 
 const RouterMain = props => {
   return (
     <>
       <GlobalLoader />
+      <OrderSummary />
       <BrowserRouter>
         <Switch>
           <Route path="/logout" exact component={Logout} />
@@ -117,6 +120,15 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <TenantDashboard {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/lease-charges"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <LeaseCharge {...props} />
                     </Suspense>
                   )}
                 />

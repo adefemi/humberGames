@@ -1,5 +1,6 @@
 import React from "react";
 import "./transactionTable.css";
+import proptype from "prop-types";
 
 function TransactionTable({ keys, values }) {
   return (
@@ -25,5 +26,10 @@ function TransactionTable({ keys, values }) {
     </div>
   );
 }
+
+TransactionTable.propType = {
+  keys: proptype.array,
+  values: proptype.arrayOf(proptype.array)
+};
 
 export default TransactionTable;
