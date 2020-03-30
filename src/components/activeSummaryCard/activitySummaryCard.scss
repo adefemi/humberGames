@@ -1,6 +1,6 @@
 @import "../../styles/theme";
 
-.activity-summary-card{
+.activity-summary-card {
   display: flex;
   background-color: darken(white, 10%);
   border-radius: 20px;
@@ -10,7 +10,7 @@
   min-width: 300px;
   align-items: center;
 
-  .img-con{
+  .img-con {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,55 +20,56 @@
     margin-right: 20px;
     border-radius: 10px;
 
-    img{
+    img {
       width: 40px;
     }
   }
 
-  h4, p{
+  h4,
+  p {
     margin: 0;
     color: white;
   }
 
-  h4{
+  h4 {
     font-size: 14px;
   }
-  p{
+  p {
     font-size: 16px;
     font-weight: bold;
   }
 
-  .divider{
+  .divider {
     margin: 10px 0;
-    height: 1px;
+    // height: 3px;
     background-color: white;
     width: 100%;
   }
 
-  &.pink{
+  &.pink {
     background-color: lighten($secondary-color, 5%);
-    .img-con{
+    .img-con {
       background-color: lighten($secondary-color, 10%);
     }
   }
 
-  &.blue{
+  &.blue {
     background-color: lighten($primary-color, 5%);
-    .img-con{
+    .img-con {
       background-color: lighten($primary-color, 10%);
     }
   }
 
-  &.green{
+  &.green {
     background-color: darken($success-color, 15%);
-    .img-con{
+    .img-con {
       background-color: darken($success-color, 10%);
     }
   }
 
-  &.yellow{
+  &.yellow {
     background-color: darken($warning-color, 15%);
-    .img-con{
+    .img-con {
       background-color: darken($warning-color, 10%);
     }
   }

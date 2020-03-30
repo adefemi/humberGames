@@ -43,3 +43,5 @@ export const GET_ACCESS_TOKEN = BASE_URL + "gateway/refresh";
 export const LOGOUT = BASE_URL + "gateway/logout";
 export const DASHBOARD_URL = BASE_URL + "user/dashboard";
 export const AGENCY_TRANSACTION_URL = BASE_URL + "payment/agency_transactions";
+export const AGENCY_URL = BASE_URL + "user/agency";
+export const PROFILE_STATUS_URL = BASE_URL + "user/profile-status";

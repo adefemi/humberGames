@@ -11,6 +11,7 @@ import shieldSvg from "../../assets/images/shield.svg";
 import officeSvg from "../../assets/svg/office.svg";
 import keySvg from "../../assets/images/key-outlined.svg";
 import fileSvg from "../../assets/images/file-folder.svg";
+import { getToken } from "../../utils/helper";
 
 export default function GetActivitySummary({ className, userRole }) {
   const [activitySummary, setActivitySummary] = useState({});
@@ -21,7 +22,7 @@ export default function GetActivitySummary({ className, userRole }) {
   }, []);
 
   const getSummary = () => {
-    axiosHandler("GET", DASHBOARD_URL + `?user_role=${userRole}`, testToken)
+    axiosHandler("GET", DASHBOARD_URL + `?user_role=${userRole}`, getToken())
       .then(res => {
         setActivitySummary(res.data.summary);
         setSummaryLoader(false);
