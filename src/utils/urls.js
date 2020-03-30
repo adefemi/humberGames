@@ -8,6 +8,7 @@ export const LEASE_URL = BASE_URL + "property-lease/leases";
 export const LEASE_TEMPLATE_URL = BASE_URL + "property-lease/templates";
 export const LEASE_GENERATE_URL = BASE_URL + "property-lease/lease-interface";
 export const LEASE_SIGNATURE_URL = BASE_URL + "property-lease/signatures";
+export const LEASE_CHARGE_URL = BASE_URL + "property-lease/lease-charge";
 export const LEASE_DECLARATION_URL =
   BASE_URL + "property-lease/lease-declaration";
 export const UNITS_URL = BASE_URL + "unit-property/unit";
@@ -45,3 +46,8 @@ export const DASHBOARD_URL = BASE_URL + "user/dashboard";
 export const AGENCY_TRANSACTION_URL = BASE_URL + "payment/agency_transactions";
 export const AGENCY_URL = BASE_URL + "user/agency";
 export const PROFILE_STATUS_URL = BASE_URL + "user/profile-status";
+export const GENERATE_INVOICE_URL = BASE_URL + "payment/generate/";
+export const INITIATE_INVOICE_TRANSACTION_URL =
+  BASE_URL + "payment/invoice-transaction-initiation/";
+export const VERIFY_INVOICE_TRANSACTION_URL =
+  BASE_URL + "payment/invoice-transaction-verification/";

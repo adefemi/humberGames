@@ -179,12 +179,10 @@ export default function GetQuickView({ userRole }) {
       }
       return unpub.map(unit => (
         <PropertyDashboardCard
-          key={_.get(unit, "uuid")}
-          title={_.get(unit, "title").toLowerCase()}
+          key={_.get(unit, "uuid", "")}
+          title={_.get(unit, "title", "")}
           cover={_.get(unit, "unit_images[0].image.file", noImage)}
-          description={`${_.get(unit, "description")
-            .toLowerCase()
-            .substring(0, 20)}...`}
+          description={`${_.get(unit, "description", "")}`}
           link="/"
         />
       ));

@@ -51,6 +51,12 @@ export const leaseSortOptions = [
   { title: "Annulled lease", value: "annulled" }
 ];
 
+export const leaseChargeSortOptions = [
+  { title: "All Charge", value: "all" },
+  { title: "Paid Charge", value: "paid" },
+  { title: "Pending Charge", value: "pending" }
+];
+
 export const getNoImage = () => NoImage;
 
 export const maxPercent = 10;
