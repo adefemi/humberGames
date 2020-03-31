@@ -78,7 +78,7 @@ const Transactions = () => {
     trans.map(item => {
       newList.push([
         _.get(item, "transaction_type", ""),
-        _.get(item, "identifier_type", ""),
+        _.get(item, "remark", ""),
         _.get(item, "reference", ""),
         `${_.get(item, "currency_type")}${numberWithCommas(
           _.get(item, "amount")
