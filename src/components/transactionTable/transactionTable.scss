@@ -1,40 +1,40 @@
 @import "../../styles/theme";
 
-.transactionTable{
-  table{
+.transactionTable {
+  table {
     display: block;
+    background-color: white;
   }
   width: 100%;
-  thead{
+  thead {
     background-color: darken(white, 5%);
     width: 100%;
     display: block;
     vertical-align: unset;
-
   }
-  tbody{
+  tbody {
     width: 100%;
     display: block;
     vertical-align: unset;
 
-   tr{
-    border-bottom: 1px solid darken(white, 3%);
+    tr {
+      border-bottom: 1px solid darken(white, 3%);
 
-     &:last-child{
-       border-bottom: none;
-     }
-   }
+      &:last-child {
+        border-bottom: none;
+      }
+    }
   }
-  tr{
+  tr {
     height: 40px;
     display: flex;
     align-items: center;
   }
-  th, td{
+  th,
+  td {
     flex: 1;
     font-size: 12px;
     text-align: left;
     padding-left: 20px;
   }
-
 }
