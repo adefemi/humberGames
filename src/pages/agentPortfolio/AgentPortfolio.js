@@ -13,7 +13,7 @@ import agentUnitsSvg from "../../assets/agencyPortfolio/agentUnits.svg";
 import checkedSvg from "../../assets/agencyPortfolio/checked.svg";
 import bgImg from "../../assets/images/lahore-18h.png";
 import home from "../../assets/agencyPortfolio/house.jpg";
-import "./AgencyPortfolio.css";
+import "./AgentPortfolio.css";
 
 const AgencyPortfolio = () => {
   const { dispatch } = useContext(store);

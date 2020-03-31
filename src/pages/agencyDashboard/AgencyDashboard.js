@@ -8,8 +8,13 @@ import "./AgencyDashboard.css";
 import AgencyGraphRequest from "./AgencyGraphRequest";
 import GetActivitySummary from "../../components/dashboardAxiosCall/GetActivitySummary";
 import GetQuickView from "../../components/dashboardAxiosCall/GetQuickView";
+import { setPageTitleAction } from "../../stateManagement/actions";
 
 const AgencyDashboard = () => {
+  const { dispatch } = useContext(store);
+  useEffect(() => {
+    dispatch({ title: setPageTitleAction, payload: "Agency Dashboard" });
+  }, []);
   return (
     <div className="agency-dashboard">
       <div className="graph-and-quick-links flex">
@@ -17,17 +22,17 @@ const AgencyDashboard = () => {
         <div className="quick-links-container">
           <p>Quick Links</p>
           <div className="quick-links">
-            <Link to="/">Branches</Link>
+            <Link to="/branch">Branches</Link>
             <div className="ag-divider"></div>
-            <Link to="/">Teams</Link>
+            <Link to="/team">Teams</Link>
             <div className="ag-divider"></div>
             <Link to="/">Agents</Link>
             <div className="ag-divider"></div>
             <Link to="/">Customer Base</Link>
             <div className="ag-divider"></div>
-            <Link to="/">Transactions</Link>
+            <Link to="/transactions">Transactions</Link>
             <div className="ag-divider"></div>
-            <Link to="/">Bank Accounts</Link>
+            <Link to="/bank-account">Bank Accounts</Link>
           </div>
         </div>
       </div>

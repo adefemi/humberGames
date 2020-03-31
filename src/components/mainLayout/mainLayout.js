@@ -228,7 +228,7 @@ const SideBar = () => {
         {(role.toLowerCase() === "agency" ||
           role.toLowerCase() === "agent") && (
           <SideLinks
-            link={"/agencies"}
+            link={"/dashboard/agency"}
             title="Agencies"
             icon={<Icon name="suitcase" type="entypo" />}
           />
