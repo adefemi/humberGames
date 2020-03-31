@@ -8,13 +8,14 @@ import { Bar } from "react-chartjs-2";
 import Graph from "../../components/graph/Graph";
 import { agencyData, agencyGraphOptions } from "./agencyGraphOptions";
 import { Spinner } from "../../components/spinner/Spinner";
+import { getToken } from "../../utils/helper";
 
 export default function AgencyGraphRequest() {
   const [transactionData, setTransactionData] = useState({});
   const [transactionLoader, setTransactionLoader] = useState(true);
 
   const getTransaction = () => {
-    axiosHandler("GET", AGENCY_TRANSACTION_URL, testToken)
+    axiosHandler("GET", AGENCY_TRANSACTION_URL, getToken())
       .then(res => {
         setTransactionData(res.data);
         setTransactionLoader(false);
@@ -32,7 +33,6 @@ export default function AgencyGraphRequest() {
 
   const transactionContent = () => {
     let tc = transactionData.expenses_graph_data;
-    console.log(tc);
     if (tc) {
       if (tc.length === 0) {
         return <h4>No transactions data yet</h4>;

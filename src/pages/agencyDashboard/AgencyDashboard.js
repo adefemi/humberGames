@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { store } from "../../stateManagement/store";
-import { setPageTitleAction } from "../../stateManagement/actions";
 import Slider from "../../components/slider/slider";
 import { Link } from "react-router-dom";
 
@@ -11,11 +10,6 @@ import GetActivitySummary from "../../components/dashboardAxiosCall/GetActivityS
 import GetQuickView from "../../components/dashboardAxiosCall/GetQuickView";
 
 const AgencyDashboard = () => {
-  const { dispatch } = useContext(store);
-  useEffect(() => {
-    dispatch({ title: setPageTitleAction, payload: "Agency Dashboard" });
-  });
-
   return (
     <div className="agency-dashboard">
       <div className="graph-and-quick-links flex">

@@ -1,19 +1,52 @@
 import React, { useContext, useEffect, useState } from "react";
 import { store } from "../../stateManagement/store";
-import { setPageTitleAction } from "../../stateManagement/actions";
 import { Button } from "../../components/button/Button";
 import Slider from "../../components/slider/slider";
 import NotificationCard from "../../components/notificationDashboardCard/NotificationCard";
 import GetActivitySummary from "../../components/dashboardAxiosCall/GetActivitySummary";
 import GetQuickView from "../../components/dashboardAxiosCall/GetQuickView";
+import { PROFILE_STATUS_URL } from "../../utils/urls";
+import { getToken } from "../../utils/helper";
+import { Notification } from "../../components/notification/Notification";
+import { axiosHandler } from "../../utils/axiosHandler";
+import { Spinner } from "../../components/spinner/Spinner";
+import { Link } from "react-router-dom";
 
 import "./TenantDashboard.css";
 
 const TenantDashboard = () => {
-  const { dispatch } = useContext(store);
+  const [profileStat, setProfileStat] = useState("");
+  const [proifleLoader, setProfileLoader] = useState(true);
+  const {
+    state: { userDetails }
+  } = useContext(store);
+
+  const getProfileStats = () => {
+    if (userDetails.user) {
+      axiosHandler(
+        "GET",
+        PROFILE_STATUS_URL + `/${userDetails.user.id}`,
+        getToken()
+      )
+        .then(res => {
+          setProfileStat(res.data.status);
+          setProfileLoader(false);
+        })
+        .catch(err => {
+          Notification.bubble({
+            type: "error",
+            content: "Error loading profile status"
+          });
+          setProfileLoader(false);
+        });
+    }
+  };
+
+  const role = proifleLoader ? "" : userDetails.role.name;
+
   useEffect(() => {
-    dispatch({ title: setPageTitleAction, payload: "Tenant Dashboard" });
-  }, []);
+    getProfileStats();
+  }, [userDetails]);
 
   return (
     <div>
@@ -21,7 +54,11 @@ const TenantDashboard = () => {
         <div className="welcome-container">
           <div className="welcome-rectangle flex align-center">
             <div className="welcome-texts">
-              <p>Welcome back Lara!</p>
+              <p>
+                {proifleLoader
+                  ? ""
+                  : `Welcome back ${userDetails.user.first_name}`}
+              </p>
               <p>
                 Continue setting up your profile and explore how users are
                 checking them out.
@@ -31,8 +68,12 @@ const TenantDashboard = () => {
             <div className="profile-stat">
               <div className="stat-circle"></div>
               <div className="stat-info">
-                <div className="counter">80%</div>
-                <Button>Complete Profile</Button>
+                <div className="counter">
+                  {proifleLoader ? <Spinner /> : `${profileStat}%`}
+                </div>
+                <Link to="/profile">
+                  <Button>Complete Profile</Button>
+                </Link>
               </div>
             </div>
           </div>
