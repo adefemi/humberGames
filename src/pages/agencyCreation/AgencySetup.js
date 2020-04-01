@@ -54,7 +54,7 @@ const AgencySetup = () => {
     corporate_email: corporateEmail,
     rc_number: rcNum,
     phone_number: phoneNum,
-    corporate_logo: agencyLogoId
+    corporate_logo_id: agencyLogoId
   };
 
   const spin = showSpinner ? null : { display: "none" };

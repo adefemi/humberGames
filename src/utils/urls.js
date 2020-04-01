@@ -51,3 +51,4 @@ export const INITIATE_INVOICE_TRANSACTION_URL =
   BASE_URL + "payment/invoice-transaction-initiation/";
 export const VERIFY_INVOICE_TRANSACTION_URL =
   BASE_URL + "payment/invoice-transaction-verification/";
+export const NOTIFICATIONS_URL = BASE_URL + "user/notifications";
