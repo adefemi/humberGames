@@ -50,7 +50,7 @@ export default function AgencyGraphRequest() {
   return (
     <div className="agency-graph">
       <div className="acct-statements-container">
-        <h6>Financial Report</h6>
+        <p>Financial Report</p>
         <div className="acct-statements flex">
           {transactionLoader ? (
             <Spinner color="#000000" />

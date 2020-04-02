@@ -18,13 +18,7 @@ const ActiveRents = lazy(() =>
   import("./pages/activeRentals/AllActiveRentals")
 );
 const Notifications = lazy(() => import("./pages/notifications/Notifications"));
-const AgencyGetStarted = lazy(() =>
-  import("./pages/agencyCreation/AgencyGetStarted")
-);
 const AgencySetup = lazy(() => import("./pages/agencyCreation/AgencySetup"));
-const TenantDashboard = lazy(() =>
-  import("./pages/tenantDashboard/TenantDashboard")
-);
 const AgencyDashboard = lazy(() =>
   import("./pages/agencyDashboard/AgencyDashboard")
 );
@@ -96,29 +90,11 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
-                  path="/agency-get-started"
-                  exact
-                  component={props => (
-                    <Suspense fallback={() => <h2>Loading...</h2>}>
-                      <AgencyGetStarted {...props} />
-                    </Suspense>
-                  )}
-                />
-                <Route
                   path="/active-rentals/single"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <SingleRental {...props} />
-                    </Suspense>
-                  )}
-                />
-                <Route
-                  path="/dashboard/tenant"
-                  exact
-                  component={props => (
-                    <Suspense fallback={() => <h2>Loading...</h2>}>
-                      <TenantDashboard {...props} />
                     </Suspense>
                   )}
                 />

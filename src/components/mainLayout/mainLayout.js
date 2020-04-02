@@ -225,8 +225,7 @@ const SideBar = () => {
           title="Notifications"
           icon={<Icon name="bell" type="entypo" />}
         />
-        {(role.toLowerCase() === "agency" ||
-          role.toLowerCase() === "agent") && (
+        {role.toLowerCase() === "agency" && (
           <SideLinks
             link={"/dashboard/agency"}
             title="Agencies"

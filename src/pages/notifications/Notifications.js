@@ -54,7 +54,11 @@ const Notifications = () => {
       return notifications.map(item => (
         // noteDate = item.updated_at;
         <Card key={item.id} className="single-notification">
-          <NotificationCard item={item} />
+          <NotificationCard
+            link={_.get(item, "rel_path", "")}
+            content={_.get(item, "content")}
+            time={_.get(item, "updated_at")}
+          />
         </Card>
       ));
     }
