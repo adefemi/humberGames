@@ -3,10 +3,9 @@ import { store } from "../../stateManagement/store";
 import { Spinner } from "../../components/spinner/Spinner";
 import TenantDashboard from "../tenantDashboard/TenantDashboard";
 import AgentDashboard from "../agentDashboard/AgentDashboard";
-import AgencyDashboard from "../agencyDashboard/AgencyDashboard";
+import { setPageTitleAction } from "../../stateManagement/actions";
 
 import "./dashboard.css";
-import { setPageTitleAction } from "../../stateManagement/actions";
 
 function Dashboard(_) {
   const { dispatch } = useContext(store);
@@ -18,7 +17,7 @@ function Dashboard(_) {
 
   useEffect(() => {
     dispatch({ title: setPageTitleAction, payload: "Dashboard" });
-  });
+  }, []);
 
   const getProfileStats = () => {
     if (userDetails.user) {
@@ -32,11 +31,8 @@ function Dashboard(_) {
     if (role == "tenant") {
       return <TenantDashboard />;
     }
-    if (role == "agent" || role == "landlord") {
+    if (role == "agent" || role == "landlord" || role == "agency") {
       return <AgentDashboard />;
-    }
-    if (role == "agency") {
-      return <AgencyDashboard />;
     }
   };
 

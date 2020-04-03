@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { store } from "../../stateManagement/store";
 import { Button } from "../../components/button/Button";
 import Slider from "../../components/slider/slider";
-import NotificationCard from "../../components/notificationDashboardCard/NotificationCard";
+import NotificationDashboardCard from "../../components/notificationDashboardCard/NotificationDashboardCard";
 import GetActivitySummary from "../../components/dashboardAxiosCall/GetActivitySummary";
 import GetQuickView from "../../components/dashboardAxiosCall/GetQuickView";
-import { PROFILE_STATUS_URL } from "../../utils/urls";
+import { PROFILE_STATUS_URL, NOTIFICATIONS_URL } from "../../utils/urls";
 import { getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import { axiosHandler } from "../../utils/axiosHandler";
@@ -16,7 +16,9 @@ import "./TenantDashboard.css";
 
 const TenantDashboard = () => {
   const [profileStat, setProfileStat] = useState("");
-  const [proifleLoader, setProfileLoader] = useState(true);
+  const [profileLoader, setProfileLoader] = useState(true);
+  const [notificationLoader, setNotifcationLoader] = useState(true);
+  const [userNotifications, setUserNotifications] = useState({});
   const {
     state: { userDetails }
   } = useContext(store);
@@ -42,11 +44,43 @@ const TenantDashboard = () => {
     }
   };
 
-  const role = proifleLoader ? "" : userDetails.role.name;
+  const getUserNotifications = () => {
+    axiosHandler("GET", NOTIFICATIONS_URL, getToken())
+      .then(res => {
+        setUserNotifications(res.data.results.results);
+        setNotifcationLoader(false);
+      })
+      .catch(err => {
+        Notification.bubble({
+          type: "error",
+          content: "Unable to load user notifications"
+        });
+        setNotifcationLoader(false);
+      });
+  };
+
+  const showNotifications = () => {
+    if (userNotifications) {
+      if (userNotifications.length == 0) {
+        return <h4>No notifications at the moment</h4>;
+      }
+      return userNotifications.map(item => (
+        <NotificationDashboardCard
+          key={item.id}
+          title={`${item.content.substring(0, 100)}...`}
+          time={item.updated_at}
+        />
+      ));
+    }
+  };
 
   useEffect(() => {
     getProfileStats();
   }, [userDetails]);
+
+  useEffect(() => {
+    getUserNotifications();
+  }, []);
 
   return (
     <div>
@@ -55,7 +89,7 @@ const TenantDashboard = () => {
           <div className="welcome-rectangle flex align-center">
             <div className="welcome-texts">
               <p>
-                {proifleLoader
+                {profileLoader
                   ? ""
                   : `Welcome back ${userDetails.user.first_name}`}
               </p>
@@ -69,7 +103,7 @@ const TenantDashboard = () => {
               <div className="stat-circle"></div>
               <div className="stat-info">
                 <div className="counter">
-                  {proifleLoader ? <Spinner /> : `${profileStat}%`}
+                  {profileLoader ? <Spinner /> : `${profileStat}%`}
                 </div>
                 <Link to="/profile">
                   <Button>Complete Profile</Button>
@@ -88,12 +122,17 @@ const TenantDashboard = () => {
           <h4>Notifications</h4>
           <div className="notifications-and-show-more">
             <div className="notifications">
-              {[1, 2, 3, 4, 5].map((_, key) => (
+              {notificationLoader ? (
+                <Spinner color="#000" />
+              ) : (
+                showNotifications()
+              )}
+              {/* {[1, 2, 3, 4, 5].map((_, key) => (
                 <NotificationCard
                   title="You applied to Eko Atlantic"
                   time={`05-01-2020 ${" "} 03:15pm`}
                 />
-              ))}
+              ))} */}
             </div>
             <div className="show-more">
               <a className="">Show more</a>

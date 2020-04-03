@@ -13,26 +13,19 @@ const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
 const TeamMembersPage = lazy(() => import("./pages/team/TeamMembersPage.js"));
 const Branch = lazy(() => import("./pages/branch/Branch.js"));
 const Profile = lazy(() => import("./pages/profile/ProfileTemplate.js"));
-const Agency = lazy(() => import("./pages/agencyPortfolio/AgencyPortfolio"));
 const SingleRental = lazy(() => import("./pages/activeRentals/SingleRent"));
 const ActiveRents = lazy(() =>
   import("./pages/activeRentals/AllActiveRentals")
 );
 const Notifications = lazy(() => import("./pages/notifications/Notifications"));
-const AgencyGetStarted = lazy(() =>
-  import("./pages/agencyCreation/AgencyGetStarted")
-);
 const AgencySetup = lazy(() => import("./pages/agencyCreation/AgencySetup"));
-const TenantDashboard = lazy(() =>
-  import("./pages/tenantDashboard/TenantDashboard")
-);
 const AgencyDashboard = lazy(() =>
   import("./pages/agencyDashboard/AgencyDashboard")
 );
 const Transactins = lazy(() => import("./pages/transactions/Transactions"));
 const BankAccount = lazy(() => import("./pages/bankAccount/BankAccount"));
-const Portfolio = lazy(() =>
-  import("./pages/agencyPortfolio/AgencyPortfolio.js")
+const AgentPortfolio = lazy(() =>
+  import("./pages/agentPortfolio/AgentPortfolio.js")
 );
 const TenantInvite = lazy(() => import("./pages/tenantInvite/TenantInvite"));
 const LeaseMain = lazy(() => import("./pages/Lease/lease"));
@@ -70,11 +63,11 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
-                  path="/agencies"
+                  path="/agent-portfolio"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
-                      <Agency {...props} />
+                      <AgentPortfolio {...props} />
                     </Suspense>
                   )}
                 />
@@ -97,29 +90,11 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
-                  path="/agency-get-started"
-                  exact
-                  component={props => (
-                    <Suspense fallback={() => <h2>Loading...</h2>}>
-                      <AgencyGetStarted {...props} />
-                    </Suspense>
-                  )}
-                />
-                <Route
                   path="/active-rentals/single"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <SingleRental {...props} />
-                    </Suspense>
-                  )}
-                />
-                <Route
-                  path="/dashboard/tenant"
-                  exact
-                  component={props => (
-                    <Suspense fallback={() => <h2>Loading...</h2>}>
-                      <TenantDashboard {...props} />
                     </Suspense>
                   )}
                 />

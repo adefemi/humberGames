@@ -148,7 +148,7 @@ export default function GetQuickView({ userRole }) {
   };
 
   const activeRentals = () => {
-    let ar = quickView["tenants"];
+    let ar = quickView["due_tenants"];
     if (ar) {
       if (ar.length === 0) {
         return <h4> No active rentals at the moment</h4>;
@@ -161,10 +161,13 @@ export default function GetQuickView({ userRole }) {
             "last_name"
           )}`}
           cover={_.get(rentals, "user_profile.profile_picture.file")}
-          expiry={_.get(rentals, "created_at")}
+          expiry={moment(_.get(rentals, "created_at")).format("MMM Do YYYY")}
           propertyName={`${_.get(rentals, "email").substring(0, 19)}...`}
           linkToProperty="/"
-          linkToTenant="/"
+          linkToTenant={`user/${_.get(rentals, "uuid")}_${_.get(
+            rentals,
+            "id"
+          )}`}
         />
       ));
     }

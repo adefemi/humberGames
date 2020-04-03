@@ -68,8 +68,6 @@ function AgentDashboard(_) {
     }
   };
 
-  // const role = proifleLoader ? "" : userDetails.role.name;
-
   useEffect(() => {
     getProfileStats();
   }, [userDetails]);
