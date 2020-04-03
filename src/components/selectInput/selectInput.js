@@ -33,7 +33,7 @@ function SelectInput(props) {
     if (props.value !== inputValue) {
       setValue(props.value);
     }
-  }, [props.value]);
+  }, []);
 
   const onChange = e => {
     setValue(e.target.value);

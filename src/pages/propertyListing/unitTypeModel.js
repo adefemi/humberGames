@@ -22,6 +22,7 @@ function UnitTypeModel(props) {
     <Select
       placeholder={fetching ? "Loading unit types" : "--select property type--"}
       name="unit_type_id"
+      defaultOption={props.defaultOption}
       onChange={props.onChange}
       optionList={unitTypeList}
       required={props.required}

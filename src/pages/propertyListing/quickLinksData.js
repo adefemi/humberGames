@@ -15,12 +15,17 @@ function QuickLinksData(props) {
       </div>
       <br />
       <Slider className="flex align-center">
-        <div data-aos="fade-up" data-aos-delay="400">
+        <div
+          data-aos="fade-up"
+          data-aos-delay="400"
+          onClick={() => props.editProperty()}
+        >
           <QuickLinkCard
             color="green"
             icon={applicationImg}
             title="Edit Property"
             link="/"
+            status={false}
           />
         </div>
 
@@ -56,9 +61,16 @@ function QuickLinksData(props) {
   );
 }
 
-const QuickLinkCard = ({ color, icon, title, link }) => {
+const QuickLinkCard = ({ color, icon, title, link, status = true }) => {
   return (
-    <Link to={link}>
+    <Link
+      to={link}
+      onClick={e => {
+        if (!status) {
+          e.preventDefault();
+        }
+      }}
+    >
       <div className={`quickLinkCard ${color ? color : ""}`}>
         <div className="img-con">
           <img src={icon} alt="" />

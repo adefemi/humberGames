@@ -65,7 +65,7 @@ function AddressController(props) {
       >
         <FormGroup
           label="Address"
-          subLabel="Don’t worry, your address is safe with us."
+          subLabel={!props.edit && "Don’t worry, your address is safe with us."}
         >
           <Select
             placeholder="Eg. 21 folakemi street"
@@ -86,7 +86,10 @@ function AddressController(props) {
       >
         <FormGroup
           label="City"
-          subLabel="Not so certain of the word here! Your town can be a CITY too."
+          subLabel={
+            !props.edit &&
+            "Not so certain of the word here! Your town can be a CITY too."
+          }
         >
           <Input
             placeholder="Eg. Ikoyi"
@@ -105,7 +108,9 @@ function AddressController(props) {
       >
         <FormGroup
           label="State"
-          subLabel="Your region or province can be a STATE too."
+          subLabel={
+            !props.edit && "Your region or province can be a STATE too."
+          }
         >
           <Input
             placeholder="Eg. Kaduna"
@@ -124,7 +129,9 @@ function AddressController(props) {
       >
         <FormGroup
           label="Country"
-          subLabel="We believe we all have a country. Just kidding."
+          subLabel={
+            !props.edit && "We believe we all have a country. Just kidding."
+          }
         >
           <Input
             placeholder="Eg. Nigeria"

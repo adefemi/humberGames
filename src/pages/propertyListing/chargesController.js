@@ -18,6 +18,9 @@ function ChargesController(props) {
   useEffect(() => {
     setOtherCharge(true);
     getCharges();
+    if (props.defaultCharges) {
+      setChargesCount(props.defaultCharges);
+    }
     return () => {
       setOtherCharge(false);
     };
@@ -132,11 +135,12 @@ const ChargeMore = props => (
       </FormGroup>
       <FormGroup
         label="Payment frequency"
-        subLabel="Tell us how much this fee is!"
+        subLabel="Tell us how much this fee is"
       >
         <Select
           placeholder="--select duration--"
           name="duration"
+          value={props.data.duration}
           onChange={props.onChange}
           optionList={durationSelector}
         />

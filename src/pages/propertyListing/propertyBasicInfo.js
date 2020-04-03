@@ -12,22 +12,56 @@ import UnitTypeModel from "./unitTypeModel";
 import { getArrayCount, getToken } from "../../utils/helper";
 import { Spinner } from "../../components/spinner/Spinner";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { PROPERTY_CONTROLLER_URL } from "../../utils/urls";
+import {
+  GENERIC_DOCUMENT_URL,
+  PROPERTY_CONTROLLER_URL,
+  UNIT_CONTROLLER_URL
+} from "../../utils/urls";
 import SelectInput from "../../components/selectInput/selectInput";
+import { secondaryColor, sizeOptions } from "../../utils/data";
+import cloneDeep from "lodash/cloneDeep";
 
 function PropertyBasicInfo(props) {
-  const [showNext, setShowNext] = useState(0);
+  const [showNext, setShowNext] = useState(props.edit ? 10 : 0);
   const [propData, setProperty] = useState({});
   const [propertyAddress, setPropertyAddress] = useState({});
   const [showDoc, setShowDoc] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [singleUnit, setSingleUnit] = useState(false);
+  const [unitType, setUnitType] = useState({});
   const [requirementLists, setRequirementList] = useState([
     "bedroom",
     "bathroom",
     "parking"
   ]);
+
+  useEffect(() => {
+    if (props.edit) {
+      getUnitData();
+    }
+  }, [props.fetching]);
+
+  const getUnitData = () => {
+    if (props.fetching) return;
+    const unitInfo = cloneDeep(props.unitInfo);
+    setProperty({
+      size_type: unitInfo.size_type,
+      size: unitInfo.size,
+      bedroom: unitInfo.bedroom,
+      bathroom: unitInfo.bathroom,
+      parking: unitInfo.parking,
+      category: unitInfo.category,
+      unit_title: unitInfo.title
+    });
+    setUnitType({
+      title: unitInfo.unit_type.title,
+      value: unitInfo.unit_type
+    });
+    if (unitInfo.category === "sale") {
+      setShowDoc(true);
+    }
+  };
 
   const changePropertyType = value => {
     if (value === "single") {
@@ -74,6 +108,10 @@ function PropertyBasicInfo(props) {
   };
 
   const proceed = () => {
+    if (props.edit) {
+      document.getElementById("submitButt").click();
+      return;
+    }
     if (showNext === 0 && showDoc) {
       if (documents.length > 0) {
         setShowNext(showNext > 1 ? showNext : 1);
@@ -137,15 +175,39 @@ function PropertyBasicInfo(props) {
       });
       return;
     }
-    const newData = { ...propData, ...propertyAddress };
+    const newData = props.edit
+      ? { ...propData, title: propData.unit_title }
+      : { ...propData, ...propertyAddress };
+    let url = PROPERTY_CONTROLLER_URL;
+    if (props.edit) {
+      url = UNIT_CONTROLLER_URL + `/${props.unitInfo.id}`;
+    }
     setLoading(true);
-    axiosHandler("post", PROPERTY_CONTROLLER_URL, getToken(), newData).then(
+    axiosHandler(props.edit ? "patch" : "post", url, getToken(), {
+      ...newData,
+      multi_unit: singleUnit
+    }).then(
       res => {
-        props.history.push(
-          `/add-property/${res.data.results.uuid +
-            "_" +
-            res.data.results.id}?stage=1`
+        axiosHandler(
+          "post",
+          GENERIC_DOCUMENT_URL +
+            `?identifier_type=property&identifier_id=${res.data.results.id}`,
+          getToken(),
+          formatDocument(documents, res.data.results.id)
         );
+        if (props.edit) {
+          props.history.push({
+            pathname: props.location.pathname,
+            search: "stage=1"
+          });
+        } else {
+          props.history.push({
+            pathname:
+              props.location.pathname +
+              `/${res.data.results.uuid}_${res.data.results.id}`,
+            search: "stage=1"
+          });
+        }
       },
       err => {
         setLoading(false);
@@ -155,6 +217,21 @@ function PropertyBasicInfo(props) {
         });
       }
     );
+  };
+
+  const formatDocument = (docs, unit_id) => {
+    const tempDoc = [];
+
+    docs.map(item => {
+      tempDoc.push({
+        name: item,
+        identifier_type: "property",
+        identifier_id: unit_id
+      });
+      return null;
+    });
+
+    return tempDoc;
   };
 
   const checkAddress = _ => {
@@ -171,80 +248,109 @@ function PropertyBasicInfo(props) {
     }
   };
 
+  if (props.fetching) {
+    return (
+      <>
+        <br />
+        <Spinner size={15} color={secondaryColor} />
+      </>
+    );
+  }
+
   return (
     <div className="basic-info-container">
-      <div className="questions" data-aos="slide-right" data-aos-delay="200">
+      <div
+        className="questions"
+        data-aos={!props.edit && "slide-right"}
+        data-aos-delay="200"
+      >
         Quick one!, Is this property for sale or rent?
       </div>
-      <div className="radio-group" data-aos="fade-up" data-aos-delay="500">
+      <div
+        className="radio-group"
+        data-aos={!props.edit && "fade-up"}
+        data-aos-delay="500"
+      >
         <Radio
           onChange={() => onChangeCategory("sale")}
           name="propertyCategory"
           label="For sale"
+          checked={(propData && propData.category === "sale") || false}
         />
         <Radio
           onChange={() => onChangeCategory("rental")}
           name="propertyCategory"
           label="For rent"
+          checked={(propData && propData.category === "rental") || false}
         />
       </div>
       <div id="snchor" />
 
       {showDoc && (
-        <div className="item-group" data-aos="fade-up" data-aos-anchor="snchor">
+        <div
+          className="item-group"
+          data-aos={!props.edit && "fade-up"}
+          data-aos-anchor="snchor"
+        >
           <div className="questions">
             What documents are available for this property?
           </div>
-          <FacilityDocument onAdd={onSelectDocument} type="document" />
+          <FacilityDocument
+            onAdd={onSelectDocument}
+            documents={documents}
+            type="document"
+            defaultContent={props.edit && props.unitInfo.documents}
+          />
         </div>
       )}
       <form onSubmit={submit}>
-        {showNext > 0 && (
-          <div>
-            <section className="flex align-center info-section">
-              <h3 data-aos="slide-right">
-                Ok lets get on with the main information, shall we!
-              </h3>
-              <span data-aos="flip-right" data-aos-delay="200">
-                <AppIcon name="ic_sentiment_satisfied" type="md" />
-              </span>
-            </section>
-            <br />
-            <div
-              data-aos="fade-up"
-              data-aos-delay="500"
-              data-aos-anchor="snchor"
-            >
-              <FormGroup
-                label="Give your property a name"
-                subLabel="This will allow you to easily find your property. Also, it gives
-            your property some uniqueness"
-                className="facility-con"
+        {showNext > 0 &&
+          (!props.edit && (
+            <div>
+              <section className="flex align-center info-section">
+                <h3 data-aos={!props.edit && "slide-right"}>
+                  Ok lets get on with the main information, shall we!
+                </h3>
+                <span data-aos="flip-right" data-aos-delay="200">
+                  <AppIcon name="ic_sentiment_satisfied" type="md" />
+                </span>
+              </section>
+              <br />
+              <div
+                data-aos={!props.edit && "fade-up"}
+                data-aos-delay="500"
+                data-aos-anchor="snchor"
               >
-                <Input
-                  placeholder="Enter property name"
-                  onBlur={() => {
-                    if (propData.title) {
-                      setShowNext(showNext > 2 ? showNext : 2);
-                    } else {
-                      Notification.bubble({
-                        type: "info",
-                        content: "You should give your property a name."
-                      });
-                    }
-                  }}
-                  required
-                  name="title"
-                  value={propData.title}
-                  onChange={genericChange}
-                />
-              </FormGroup>
+                <FormGroup
+                  label="Give your property a name"
+                  subLabel="This will allow you to easily find your property. Also, it gives
+            your property some uniqueness"
+                  className="facility-con"
+                >
+                  <Input
+                    placeholder="Enter property name"
+                    onBlur={() => {
+                      if (propData.title) {
+                        setShowNext(showNext > 2 ? showNext : 2);
+                      } else {
+                        Notification.bubble({
+                          type: "info",
+                          content: "You should give your property a name."
+                        });
+                      }
+                    }}
+                    required
+                    name="title"
+                    value={propData.title}
+                    onChange={genericChange}
+                  />
+                </FormGroup>
+              </div>
+              <div id="section1" />
             </div>
-            <div id="section1" />
-          </div>
-        )}
+          ))}
 
-        {showNext > 1 && (
+        {showNext > 1 && !props.edit && (
           <div>
             <section
               className="flex align-center info-section"
@@ -260,36 +366,38 @@ function PropertyBasicInfo(props) {
 
         {showNext > 2 && (
           <div>
-            <div
-              className="banner"
-              data-aos="zoom-in-down"
-              data-aos-anchor="snchor"
-            >
-              <img src={infoIcon} alt="" />
-              <div className="context">
-                <h4>Quick Information</h4>
-                <p>Is this property a single unit property?</p>
-                <div className="radio-group">
-                  <Radio
-                    onChange={() => changePropertyType("single")}
-                    name="propType"
-                    label="Yes"
-                    checked={singleUnit}
-                  />
-                  <Radio
-                    onChange={() => changePropertyType("multi")}
-                    name="propType"
-                    label="No"
-                    checked={!singleUnit}
-                  />
+            {!props.edit && (
+              <div
+                className="banner"
+                data-aos={!props.edit && "zoom-in-down"}
+                data-aos-anchor="snchor"
+              >
+                <img src={infoIcon} alt="" />
+                <div className="context">
+                  <h4>Quick Information</h4>
+                  <p>Is this property a multi-unit property?</p>
+                  <div className="radio-group">
+                    <Radio
+                      onChange={() => changePropertyType("single")}
+                      name="propType"
+                      label="Yes"
+                      checked={singleUnit}
+                    />
+                    <Radio
+                      onChange={() => changePropertyType("multi")}
+                      name="propType"
+                      label="No"
+                      checked={!singleUnit}
+                    />
+                  </div>
                 </div>
+                <div className="cast">Let’s continue pleasssss</div>
               </div>
-              <div className="cast">Let’s continue pleasssss</div>
-            </div>
+            )}
             <br />
             <div className="grid grid-2 grid-gap">
               <div
-                data-aos="fade-up"
+                data-aos={!props.edit && "fade-up"}
                 data-aos-delay="300"
                 data-aos-anchor="snchor"
               >
@@ -301,14 +409,14 @@ function PropertyBasicInfo(props) {
                     placeholder="Eg. Unit 51, or Buga's court"
                     name="unit_title"
                     required
-                    value={propData.unit_title}
+                    value={!singleUnit ? propData.title : propData.unit_title}
                     onChange={genericChange}
-                    disabled={singleUnit}
+                    disabled={!singleUnit}
                   />
                 </FormGroup>
               </div>
               <div
-                data-aos="fade-up"
+                data-aos={!props.edit && "fade-up"}
                 data-aos-delay="500"
                 data-aos-anchor="snchor"
               >
@@ -316,14 +424,19 @@ function PropertyBasicInfo(props) {
                   label="Choose your unit type"
                   subLabel="Select the most appropriate category your unit falls under"
                 >
-                  <UnitTypeModel onChange={genericChange} required />
+                  <UnitTypeModel
+                    onChange={genericChange}
+                    defaultOption={unitType}
+                    required
+                  />
                 </FormGroup>
               </div>
             </div>
-            <div className="grid grid-3 grid-gap">
+            <p />
+            <div className="grid grid-3 grid-gap3">
               {requirementLists.includes("bedroom") && (
                 <div
-                  data-aos="fade-up"
+                  data-aos={!props.edit && "fade-up"}
                   data-aos-delay="700"
                   data-aos-anchor="snchor"
                 >
@@ -333,6 +446,7 @@ function PropertyBasicInfo(props) {
                       name="bedroom"
                       onChange={genericChange}
                       required
+                      value={propData.bedroom}
                       optionList={getArrayCount({ count: 30 }).map(item => {
                         return {
                           title: item,
@@ -345,7 +459,7 @@ function PropertyBasicInfo(props) {
               )}
               {requirementLists.includes("bathroom") && (
                 <div
-                  data-aos="fade-up"
+                  data-aos={!props.edit && "fade-up"}
                   data-aos-delay="900"
                   data-aos-anchor="snchor"
                 >
@@ -355,6 +469,7 @@ function PropertyBasicInfo(props) {
                       name="bathroom"
                       onChange={genericChange}
                       required
+                      value={propData.bathroom}
                       optionList={getArrayCount({ count: 30 }).map(item => {
                         return {
                           title: item,
@@ -368,7 +483,7 @@ function PropertyBasicInfo(props) {
 
               {requirementLists.includes("parking") && (
                 <div
-                  data-aos="fade-up"
+                  data-aos={!props.edit && "fade-up"}
                   data-aos-delay="1100"
                   data-aos-anchor="snchor"
                 >
@@ -378,6 +493,7 @@ function PropertyBasicInfo(props) {
                       name="parking"
                       onChange={genericChange}
                       required
+                      value={propData.parking}
                       optionList={getArrayCount({ count: 30 }).map(item => {
                         return {
                           title: item,
@@ -391,19 +507,26 @@ function PropertyBasicInfo(props) {
 
               {requirementLists.includes("size") && (
                 <div
-                  data-aos="fade-up"
+                  data-aos={!props.edit && "fade-up"}
                   data-aos-delay="500"
                   data-aos-anchor="snchor"
                 >
                   <FormGroup label="What is the size of your property? ">
                     <SelectInput
-                      defaultOption={{ title: "SQM", value: "sqm" }}
-                      optionList={[
-                        { title: "SQM", value: "sqm" },
-                        { title: "SQFT", value: "sqft" }
-                      ]}
+                      defaultOption={
+                        props.edit
+                          ? {
+                              title: propData.size_type
+                                .toString()
+                                .toUpperCase(),
+                              value: propData.size_type
+                            }
+                          : sizeOptions[0]
+                      }
+                      optionList={sizeOptions}
                       placeholder="Size eg. 3000.00"
                       name="size"
+                      value={propData.size}
                       selectName="size_type"
                       selectPosition="right"
                       onChange={changeSize}

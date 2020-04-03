@@ -48,7 +48,7 @@ export const Select = props => {
       .addEventListener("scroll", positionOptionDrop);
     window.addEventListener("resize", positionOptionDrop);
     handleClicks();
-  }, []);
+  }, [props.optionList]);
 
   useEffect(() => {
     if (props.triggerPosition) {

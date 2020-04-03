@@ -5,7 +5,7 @@ import { rentrightPercent } from "../../utils/data";
 function CalculateFee(props) {
   const getAgencyGross = () => {
     if (!props.rentFee) return;
-    let totalFee = parseFloat(props.rentFee.replace(/,/g, ""));
+    let totalFee = parseFloat(props.rentFee.toString().replace(/,/g, ""));
     if (props.agencyCommission.term_type === "percentage") {
       return (totalFee * props.agencyCommission.agency_fee) / 100;
     }

@@ -1,0 +1,42 @@
+@import "../../styles/theme";
+
+$color-main : #c2e3ff;
+
+.inspection-main {
+  .heading-context {
+    margin-top: 20px;
+    background-color: $color-main;
+    position: relative;
+    padding: 15px;
+    padding-left: 180px;
+    border-radius: 10px;
+
+    img {
+      width: 100px;
+      margin-bottom: 10px;
+      position: absolute;
+      left: 30px;
+      bottom: 0;
+    }
+
+    p {
+      max-width: 800px;
+      font-size: 12px;
+    }
+
+    h3 {
+      color: darken($color-main, 60%);
+      padding: 0;
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+
+  .transactionTable{
+    background-color: white;
+
+    tr{
+      padding: 20px 10px;
+    }
+  }
+}

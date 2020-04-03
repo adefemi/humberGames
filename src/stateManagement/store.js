@@ -12,7 +12,9 @@ import {
   globalLoaderReducer,
   globalLoaderState,
   reloadApplicationReducer,
-  reloadApplicationState
+  reloadApplicationState,
+  orderSummaryReducer,
+  orderSummaryState
 } from "./reducers/genericReducer";
 
 const reduceReducers = (...reducers) => (prevState, value, ...args) =>
@@ -27,7 +29,8 @@ const combinedReducers = reduceReducers(
   userDetailReducer,
   userRolesReducer,
   globalLoaderReducer,
-  reloadApplicationReducer
+  reloadApplicationReducer,
+  orderSummaryReducer
 );
 
 const initialState = {
@@ -36,7 +39,8 @@ const initialState = {
   ...rolesState,
   ...userDetailsState,
   ...globalLoaderState,
-  ...reloadApplicationState
+  ...reloadApplicationState,
+  ...orderSummaryState
 };
 const store = createContext(initialState);
 const { Provider } = store;

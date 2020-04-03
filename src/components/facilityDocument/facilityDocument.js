@@ -69,6 +69,9 @@ function FacilityDocument(props) {
       res => {
         formatResult(res.data.results.results);
         setDefaultContent(res.data.results.results);
+        if (props.defaultContent) {
+          setupDefaultContent(props.defaultContent);
+        }
         setFetching(false);
       },
       err => {
@@ -79,6 +82,25 @@ function FacilityDocument(props) {
         });
       }
     );
+  };
+
+  const setupDefaultContent = defaultCon => {
+    if (props.type === "facility") {
+      const tempContentList = [];
+      defaultCon.map(item => {
+        tempContentList.push(item.facility.title);
+        return null;
+      });
+      setContentList(tempContentList);
+    }
+    if (props.type === "document") {
+      const tempContentList = [];
+      defaultCon.map(item => {
+        tempContentList.push(item.name);
+        return null;
+      });
+      setContentList(tempContentList);
+    }
   };
 
   const removeContent = key => {

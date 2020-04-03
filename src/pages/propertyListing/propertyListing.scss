@@ -11,6 +11,10 @@
       border-radius: 10px;
     }
   }
+
+  &.single{
+    display: block;
+  }
 }
 
 .heading-context{
@@ -238,6 +242,11 @@
 
 .grid-gap{
   grid-column-gap: 2em;
+}
+
+.grid-gap3{
+  grid-column-gap: 2em;
+  grid-row-gap: 1em;
 }
 
 .banner{

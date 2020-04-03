@@ -14,14 +14,10 @@ import {
 } from "../../utils/urls";
 import { Spinner } from "../../components/spinner/Spinner";
 import { getToken } from "../../utils/helper";
+import { secondaryColor } from "../../utils/data";
 
 function PropertyDescription(props) {
-  const getUnitId = () => {
-    let pathList = props.match.params.uuid.split("_");
-    return pathList[pathList.length - 1];
-  };
-  const unit_id = getUnitId();
-  const [showNext, setShowNext] = useState(0);
+  const [showNext, setShowNext] = useState(props.edit ? 10 : 0);
   const [facilities, setFacilities] = useState([]);
   const [images, setImages] = useState([]);
   const [imageState, setImageState] = useState(false);
@@ -29,7 +25,12 @@ function PropertyDescription(props) {
   const [description, setDescription] = useState("");
   const [haveShown, setHaveShown] = useState([]);
   const [scroll, setScroll] = useState(0);
+
   const proceedControl = () => {
+    if (props.edit) {
+      submit();
+      return;
+    }
     if (showNext === 0) {
       if (description.length < 1) {
         Notification.bubble({
@@ -60,11 +61,13 @@ function PropertyDescription(props) {
     if (description.length > 0) setHaveShown([...haveShown, "desc"]);
     setScroll(scroll + 1);
   }, [description]);
+
   useEffect(() => {
     if (haveShown.includes("images")) return;
     if (imageState) setHaveShown([...haveShown, "images"]);
     setScroll(scroll + 1);
   }, [images]);
+
   useEffect(() => {
     if (haveShown.includes("fac")) return;
     if (facilities.length > 0) setHaveShown([...haveShown, "fac"]);
@@ -72,6 +75,13 @@ function PropertyDescription(props) {
   }, [facilities]);
 
   useEffect(() => {
+    if (props.edit && !props.fetching) {
+      setDescription(props.unitInfo.description || "");
+    }
+  }, [props.fetching]);
+
+  useEffect(() => {
+    if (props.edit) return;
     setTimeout(() => {
       try {
         document
@@ -85,9 +95,14 @@ function PropertyDescription(props) {
     if (!validateSubmit()) return;
     setLoading(true);
     Promise.all([
-      axiosHandler("patch", UNIT_CONTROLLER_URL + `/${unit_id}`, getToken(), {
-        description
-      }),
+      axiosHandler(
+        "patch",
+        UNIT_CONTROLLER_URL + `/${props.unitInfo.id}`,
+        getToken(),
+        {
+          description
+        }
+      ),
       axiosHandler("post", UNIT_IMAGE_URL, getToken(), images),
       axiosHandler(
         "post",
@@ -112,7 +127,7 @@ function PropertyDescription(props) {
     let tempList = [];
     fac.map(item => {
       tempList.push({
-        unit_id,
+        unit_id: props.unitInfo.id,
         facility_id: item
       });
       return null;
@@ -158,29 +173,37 @@ function PropertyDescription(props) {
     return true;
   };
 
+  if (props.fetching) {
+    return (
+      <>
+        <br />
+        <Spinner size={15} color={secondaryColor} />
+      </>
+    );
+  }
   return (
     <div className="description-container">
       <div
         className="questions flex align-center"
-        data-aos="slide-right"
+        data-aos={!props.edit && "slide-right"}
         data-aos-delay="200"
       >
         Tell us about your property!&nbsp;
         <AppIcon name="checkCircle" className="check" type="feather" />
       </div>
       <br />
-      <div data-aos="fade-up" data-aos-delay="300">
+      <div data-aos={!props.edit && "fade-up"} data-aos-delay="300">
         <FormGroup
           label="Described your property"
           subLabel="Provide as much information you want to provide as possible. However, don’t put your phone number or email there is really no need for that. "
         />
       </div>
-      <div data-aos="fade-up" data-aos-delay="500">
+      <div data-aos={!props.edit && "fade-up"} data-aos-delay="500">
         <Ckeditor
           value={description}
           onChange={data => setDescription(data)}
           onBlur={() => {
-            if (description) {
+            if (description && !props.edit) {
               setShowNext(1);
             }
           }}
@@ -209,9 +232,10 @@ function PropertyDescription(props) {
           </div>
           <p />
           <ImageUpload
-            unit_id={unit_id}
+            unit_id={props.unitInfo.id}
             updateImages={e => setImages(e)}
             updateImageState={e => setImageState(e)}
+            defaultImages={props.edit && props.unitInfo.unit_images}
           />
         </>
       )}
@@ -221,7 +245,11 @@ function PropertyDescription(props) {
         <>
           <div className="questions">Lets include some facilities okay!</div>
           <br />
-          <FacilityDocument onAdd={e => setFacilities(e)} type="facility" />
+          <FacilityDocument
+            onAdd={e => setFacilities(e)}
+            type="facility"
+            defaultContent={props.edit && props.unitInfo.facilities}
+          />
         </>
       )}
       {loading ? (

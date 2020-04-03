@@ -195,7 +195,7 @@ function LeaseDefinition(props) {
           <div />
           <div className="flex justify-between head-part">
             <div className="info-list">
-              {!props.view && !leaseInfo.signatures && (
+              {!props.view && !leaseInfo.signatures[0] && (
                 <div className="flex align-center">
                   <div
                     className={`mode-item ${mode === 0 ? "" : "active"}`}

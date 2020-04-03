@@ -8,6 +8,7 @@ export const LEASE_URL = BASE_URL + "property-lease/leases";
 export const LEASE_TEMPLATE_URL = BASE_URL + "property-lease/templates";
 export const LEASE_GENERATE_URL = BASE_URL + "property-lease/lease-interface";
 export const LEASE_SIGNATURE_URL = BASE_URL + "property-lease/signatures";
+export const LEASE_CHARGE_URL = BASE_URL + "property-lease/lease-charge";
 export const LEASE_DECLARATION_URL =
   BASE_URL + "property-lease/lease-declaration";
 export const UNITS_URL = BASE_URL + "unit-property/unit";
@@ -32,14 +33,19 @@ export const UNIT_FACILITY_URL = BASE_URL + "unit-property/unit-facility";
 export const UNIT_IMAGE_URL = BASE_URL + "unit-property/unit-image";
 export const UNIT_COMMISSION_URL = BASE_URL + "unit-property/unit-commission";
 export const GENERIC_FEE_URL = BASE_URL + "misc/fee";
+export const GENERIC_DOCUMENT_URL = BASE_URL + "misc/document";
 export const FILE_UPLOAD_URL = BASE_URL + "misc/file-upload";
 export const MISC_TEMPLATE_URL = BASE_URL + "misc/templates";
 export const TEAMS_URL = BASE_URL + "user/team";
 export const TEAM_REQUEST_URL =
   BASE_URL + "user/join-agency-request?request_status=pending";
-export const PROPERTY_URL = PROPERTY_CONTROLLER_URL;
 export const USER_ME = BASE_URL + "user/me";
 export const GET_ACCESS_TOKEN = BASE_URL + "gateway/refresh";
 export const LOGOUT = BASE_URL + "gateway/logout";
 export const DASHBOARD_URL = BASE_URL + "user/dashboard";
 export const AGENCY_TRANSACTION_URL = BASE_URL + "payment/agency_transactions";
+export const GENERATE_INVOICE_URL = BASE_URL + "payment/generate/";
+export const INITIATE_INVOICE_TRANSACTION_URL =
+  BASE_URL + "payment/invoice-transaction-initiation/";
+export const VERIFY_INVOICE_TRANSACTION_URL =
+  BASE_URL + "payment/invoice-transaction-verification/";

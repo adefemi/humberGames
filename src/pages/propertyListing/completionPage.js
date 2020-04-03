@@ -7,13 +7,11 @@ import { axiosHandler } from "../../utils/axiosHandler";
 import { UNIT_CONTROLLER_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import { getToken } from "../../utils/helper";
+import QuickLinksData from "./quickLinksData";
+import AOS from "aos";
+import { secondaryColor } from "../../utils/data";
 
 function CompletionPage(props) {
-  const getUnitId = () => {
-    let pathList = props.match.params.uuid.split("_");
-    return pathList[pathList.length - 1];
-  };
-  const unit_id = getUnitId();
   const [showModal, setShowModal] = useState(false);
   const [activeUnit, setActiveUnit] = useState(null);
   const [fetching, setFetching] = useState(true);
@@ -23,11 +21,16 @@ function CompletionPage(props) {
     setShowModal(false);
     setAddProperty(false);
   };
-  const submit = () => {
+  const submit = _ => {
     setPublishing(true);
-    axiosHandler("patch", UNIT_CONTROLLER_URL + `/${unit_id}`, getToken(), {
-      published: !(activeUnit && activeUnit.published)
-    }).then(
+    axiosHandler(
+      "patch",
+      UNIT_CONTROLLER_URL + `/${props.unitInfo.id}`,
+      getToken(),
+      {
+        published: !(activeUnit && activeUnit.published)
+      }
+    ).then(
       res => {
         setPublishing(false);
         getActiveUnit();
@@ -44,8 +47,10 @@ function CompletionPage(props) {
           content: "Congrats, we've published your property."
         });
         setShowModal(false);
-        setAddProperty(true);
-        setTimeout(() => setShowModal(true), 1000);
+        if (activeUnit.property.multi_unit) {
+          setAddProperty(true);
+          setTimeout(() => setShowModal(true), 1000);
+        }
       },
       err => {
         Notification.bubble({
@@ -57,11 +62,41 @@ function CompletionPage(props) {
     );
   };
   useEffect(() => {
-    getActiveUnit();
-  }, []);
+    if ((props.edit || props.view || props.continue) && !props.fetching) {
+      setActiveUnit(props.unitInfo);
+      setFetching(false);
+      AOS.init();
+    }
+  }, [props.fetching]);
+
+  const pushState = () => {
+    props.history.push(`/edit-property/${props.match.params.uuid}`);
+  };
+
+  const editProperty = () => {
+    if (activeUnit && !activeUnit.published) {
+      pushState();
+      return;
+    }
+    setPublishing(true);
+    axiosHandler(
+      "patch",
+      UNIT_CONTROLLER_URL + `/${props.unitInfo.id}`,
+      getToken(),
+      {
+        published: !(activeUnit && activeUnit.published)
+      }
+    ).then(res => {
+      pushState();
+    });
+  };
 
   const getActiveUnit = () => {
-    axiosHandler("get", UNIT_CONTROLLER_URL + `/${unit_id}`, getToken()).then(
+    axiosHandler(
+      "get",
+      UNIT_CONTROLLER_URL + `/${props.unitInfo.id}`,
+      getToken()
+    ).then(
       res => {
         setActiveUnit(res.data.results);
         setFetching(false);
@@ -74,6 +109,15 @@ function CompletionPage(props) {
       }
     );
   };
+
+  if (fetching) {
+    return (
+      <>
+        <br />
+        <Spinner size={15} color={secondaryColor} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -134,7 +178,7 @@ function CompletionPage(props) {
           </div>
         </div>
       </Modal>
-      <div className="completionPage" data-aos="fade-up" data-aos-delay="500">
+      <div className="completionPage" data-aos="fade-up" data-aos-delay="200">
         {(!activeUnit || !activeUnit.property.property_owner) && (
           <>
             <div className="questions">Getting Set...</div>
@@ -197,6 +241,9 @@ function CompletionPage(props) {
           </div>
         </div>
       )}
+      <br />
+      <br />
+      <QuickLinksData editProperty={editProperty} />
     </>
   );
 }

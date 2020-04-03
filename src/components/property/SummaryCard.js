@@ -13,12 +13,14 @@ function SummaryCard({ total, type }) {
   return (
     <div className="SummaryCard">
       <Card>
-        <div className="flex w-100 summary-flex">
-          <span>
-            <img src={icons[type.toLowerCase()]} alt="" />
-          </span>
-          <div className="card-stat-text">Total {type}</div>
-          <strong className="stat-figure">{total}</strong>
+        <div className="summary-flex">
+          <div className="flex align-center">
+            <span>
+              <img src={icons[type.toLowerCase()]} alt="" />
+            </span>
+            <div className="card-stat-text">Total {type}</div>
+          </div>
+          <div className="stat-figure">{total}</div>
         </div>
       </Card>
     </div>

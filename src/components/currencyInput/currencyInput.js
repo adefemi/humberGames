@@ -56,6 +56,7 @@ function CurrencyInput(props) {
       <Input
         placeholder="0.00"
         value={value}
+        style={props.hideCurrency ? { minWidth: 200 } : {}}
         onChange={onChangeCurrency}
         disabled={props.disabled}
         onBlur={props.onBlur}

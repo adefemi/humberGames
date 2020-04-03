@@ -6,7 +6,9 @@
   }
 
   .page-layout {
-    margin-top: 70px;
+    display: grid;
+    grid-template-columns: 6fr 2fr;
+    grid-gap: 3em;
 
     .badge-text {
       &::after {
@@ -18,32 +20,35 @@
     }
 
     .main-page {
-      max-width: calc(100% - 280px);
-      margin-right: 25px;
+      overflow: hidden;
+      padding-top: 50px;
 
       .rectangle {
         width: 100%;
-        padding: 30px 50px;
+        padding: 3px 30px;
         box-sizing: border-box;
-        height: 120px;
         background: #baffd6;
         border-radius: 10px;
         align-items: center;
-        margin-bottom: 70px;
+        margin-bottom: 50px;
+        position: relative;
 
         img {
-          margin-right: 35px;
-          width: 120px;
-          height: 120px;
+          width: 150px;
+          position: absolute;
+          bottom: -3px;
         }
 
         .rectangle-text {
+          margin-left: 180px;
           .text-1 {
             font-weight: 600;
+            font-size: 15px;
           }
 
           .text-2 {
-            font-size: 14px;
+            font-size: 13px;
+            max-width: 600px;
           }
         }
       }
@@ -74,18 +79,16 @@
             }
           }
         }
-      }
-
-      .section-begin {
-        margin-top: 40px;
+        margin-bottom: 40px;
       }
 
       .property-section {
         margin-top: 20px;
         background-color: white;
-        padding: 20px 30px;
+        padding: 15px 30px;
         border: 1px solid #eeeeee;
         border-radius: 4px;
+        overflow: hidden;
       }
 
       /*
@@ -97,15 +100,25 @@
           .property-details {
             .home-icon {
               color: $danger-color;
-              margin-right: 20px;
+              margin-right: 15px;
             }
 
             .property-name {
               font-weight: 600;
+              color: $black-color;
+              max-width: 300px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
 
             .address {
               color: $color-text-light;
+              font-size: 12px;
+              max-width: 300px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
           }
 
@@ -134,21 +147,24 @@
         }
 
         .property-management {
-          padding-left: 15px;
+          //padding-left: 15px;
 
           button {
             background-color: transparent;
-            font-weight: 600;
+            padding: 0;
+            margin: 0;
+            font-weight: bold;
 
             svg {
               margin-right: 5px;
               position: relative;
               top: -2px;
+              width: 12px;
             }
 
             &.btn-edit {
               color: $primary-color;
-              margin-right: 10px;
+              margin-right: 20px;
             }
 
             &.btn-delete {
@@ -158,12 +174,18 @@
         }
 
         .view-all {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           font-weight: 600;
+          font-size: 12px;
+          font-weight: bold;
         }
       }
 
+
+
       .property-slider {
-        margin-top: 20px;
         display: flex;
         width: 100%;
         max-width: 1240px;
@@ -175,23 +197,26 @@
       }
 
       .PropertyCard {
-        width: 400px;
         margin-right: 15px;
 
         .single-line {
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
-          width: 180px;
+          width: 130px;
+
         }
 
         .card-main {
-          height: 155px;
-          width: 346px;
-          margin: 25px 0;
+          height: 130px;
+          width: 300px;
+          margin: 15px 0;
+
+          border-radius: 10px !important;
+          box-shadow: 0 5px 10px rgba(black, 0.1);
 
           .property-image {
-            width: 145px;
+            width: 130px;
             background-image: url("https://via.placeholder.com/200");
             background-position: center;
             background-repeat: no-repeat;
@@ -201,14 +226,27 @@
             background-color: lighten($color-text-light, 27);
           }
 
+          .top{
+            strong{
+              font-size: 13px;
+            }
+            .single-line{
+              font-size: 12px;
+              color: darken(white, 80%);
+            }
+          }
+
           .property-description {
             padding: 10px 0;
 
             .property-type {
-              font-size: 13px;
+              font-size: 11px;
+              font-weight: 600;
+              color: darken(white, 50%);
             }
 
             .property-status {
+              font-size: 13px;
               &.unpublished {
                 color: $danger-color;
               }
@@ -222,10 +260,37 @@
           }
         }
       }
+
+      .property-grid{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-row-gap: 1em;
+
+        .card-main{
+          width: 100%;
+          max-width: 400px;
+
+          .top{
+            strong{
+              width: 100px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            .single-line{
+              width: 100px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+      }
     }
 
     .right-nav {
       width: 280px;
+      margin-top: 50px;
 
       .section-header {
         font-weight: 600;
@@ -236,35 +301,43 @@
       }
 
       .SummaryCard {
-        margin-bottom: 12px;
+        margin-bottom: 15px;
 
         .card-main {
+          border: 1px solid darken(white, 10%);
+          border-radius: 10px;
           .card-content {
             align-items: center;
-            display: flex;
             padding: 0 15px;
 
             .summary-flex {
-              &>span {
+              display: grid;
+              grid-template-columns: 5fr 2fr;
+
+              span {
                 align-self: center;
                 position: relative;
                 top: 2px;
+
+                width: 25px;
+                display: block;
               }
 
-              &>strong {
-                padding: 0 10px;
-                align-self: center;
-                width: 30px;
+              .stat-figure {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-left: 1px solid darken(white, 10%);
+                font-weight: bold;
               }
             }
 
             .card-stat-text {
-              flex-grow: 1;
-              padding: 40px 10px;
-
-              border-right: 1px solid #dae3ea;
-              text-align: center;
-              font-weight: bold;
+              margin-left: 20px;
+              padding: 30px 0;
+              font-weight: 600;
+              color: darken(white, 60%);
+              font-size: 14px;
             }
           }
         }
@@ -300,8 +373,5 @@
       }
     }
 
-    button {
-      border-radius: 40px;
-    }
   }
 }

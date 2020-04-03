@@ -142,6 +142,7 @@ function MainLayout(props) {
                 </div>
               </Link>
               <div className="role-switcher">
+                <div className="head">Active Role</div>
                 <RoleSwitcher hideTitle />
               </div>
             </div>
@@ -192,56 +193,61 @@ const SideBar = () => {
           link={"/"}
           title="Dashboard"
           active
-          icon={<Icon name="creditCard" type="feather" />}
+          icon={<Icon name="blackboard" type="entypo" />}
         />
         {role.toLowerCase() !== "tenant" && (
           <SideLinks
             link={"/properties"}
             title="Properties"
-            icon={<Icon name="folder" type="feather" />}
+            icon={<Icon name="briefcase" type="entypo" />}
           />
         )}
         <SideLinks
           link={"/applications"}
           title="Applications"
-          icon={<Icon name="packageIcon" type="feather" />}
+          icon={<Icon name="folder" type="entypo" />}
         />
         {role.toLowerCase() !== "tenant" && (
           <SideLinks
             link={"/leases"}
             title="Leases"
-            icon={<Icon name="checkSquare" type="feather" />}
+            icon={<Icon name="documentInverted" type="entypo" />}
           />
         )}
         <SideLinks
+          link={"/lease-charges"}
+          title="Lease Charges"
+          icon={<Icon name="database" type="entypo" />}
+        />
+        <SideLinks
           link={"/inspections"}
           title="Inspections"
-          icon={<Icon name="eye" type="feather" />}
+          icon={<Icon name="address" type="entypo" />}
         />
         <SideLinks
           link={"/transactions"}
           title="Transactions"
-          icon={<Icon name="barChart" type="feather" />}
+          icon={<Icon name="graph" type="entypo" />}
         />
 
         <SideLinks
           link={"/notifications"}
           title="Notifications"
-          icon={<Icon name="bell" type="feather" />}
+          icon={<Icon name="bell" type="entypo" />}
         />
         {(role.toLowerCase() === "agency" ||
           role.toLowerCase() === "agent") && (
           <SideLinks
             link={"/agencies"}
             title="Agencies"
-            icon={<Icon name="user" type="feather" />}
+            icon={<Icon name="suitcase" type="entypo" />}
           />
         )}
         <SideLinks
           link={"/logout"}
           logout
           title="Logout"
-          icon={<Icon name="logOut" type="ionicons" />}
+          icon={<Icon name="out" type="entypo" />}
         />
       </div>
     </div>

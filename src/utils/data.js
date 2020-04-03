@@ -26,6 +26,14 @@ export const genderOptions = [
   { title: "prefer not to say", value: "prefer_not_to_say" }
 ];
 
+export const propertySortOptions = [
+  { title: "All", value: "" },
+  { title: "Date - newest", value: "desc" },
+  { title: "Date - oldest", value: "asc" },
+  { title: "Price - highest", value: "high" },
+  { title: "Price - lowest", value: "low" }
+];
+
 export const maritalStatusOption = [
   { title: "married", value: "married" },
   { title: "single", value: "single" },
@@ -38,10 +46,24 @@ export const countryCode = [
   { title: "+111", value: "111" }
 ];
 
+export const sizeOptions = [
+  { title: "SQM", value: "sqm" },
+  { title: "SQFT", value: "sqft" }
+];
+
 export const currencyOptions = [
   { title: "NGN", value: "NGN" },
   { title: "USD", value: "USD" },
   { title: "GBP", value: "GBP" }
+];
+
+export const propertyStatusOption = [
+  { title: "All", value: "" },
+  { title: "Sold", value: "sold" },
+  { title: "Rented", value: "rented" },
+  { title: "Pending", value: "pending" },
+  { title: "Published", value: "published" },
+  { title: "Unpublished", value: "unpublished" }
 ];
 
 export const leaseSortOptions = [
@@ -49,6 +71,19 @@ export const leaseSortOptions = [
   { title: "Active lease", value: "active" },
   { title: "Pending lease", value: "pending" },
   { title: "Annulled lease", value: "annulled" }
+];
+
+export const leaseChargeSortOptions = [
+  { title: "All Charge", value: "all" },
+  { title: "Paid Charge", value: "paid" },
+  { title: "Pending Charge", value: "pending" }
+];
+
+export const inspectionSortOptions = [
+  { title: "All", value: "all" },
+  { title: "Pending", value: "pending" },
+  { title: "Completed", value: "completed" },
+  { title: "Failed", value: "failed" }
 ];
 
 export const getNoImage = () => NoImage;

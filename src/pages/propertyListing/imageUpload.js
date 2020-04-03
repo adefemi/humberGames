@@ -10,11 +10,32 @@ function ImageUpload(props) {
   const [fileToDelete, setFileToDelete] = useState(null);
   const maxImageUpload = 15;
   useEffect(() => {
-    if (!coverImage.id && imageList.length > 0) {
+    if (!coverImage) {
       setCoverImage(imageList[0]);
     }
+
     pushImageData();
-  }, [imageList]);
+  }, [imageList, coverImage]);
+
+  useEffect(() => {
+    if (props.defaultImages) {
+      let tempImageList = [];
+      let coverImage = null;
+      props.defaultImages.map(item => {
+        if (item.cover) {
+          coverImage = item;
+        }
+        tempImageList.push({
+          id: item.image.id,
+          src: item.image.file,
+          completed: true
+        });
+        return null;
+      });
+      setCoverImage(coverImage ? coverImage : tempImageList[0]);
+      setImageList(tempImageList);
+    }
+  }, []);
 
   const pushImageData = () => {
     let canPush = true;
@@ -28,7 +49,7 @@ function ImageUpload(props) {
         image_id: imageList[i].id,
         unit_id: props.unit_id
       };
-      if (coverImage.id && coverImage.id === imageList[i].id) {
+      if (coverImage && coverImage.id === imageList[i].id) {
         tempData.cover = true;
       }
       imageData.push(tempData);
@@ -79,7 +100,7 @@ function ImageUpload(props) {
           <ImageCard
             item={item}
             key={id}
-            isCover={coverImage.id === item.id}
+            isCover={coverImage ? coverImage.id === item.id : false}
             changeCover={changeCover}
             removeImage={removeImage}
           />

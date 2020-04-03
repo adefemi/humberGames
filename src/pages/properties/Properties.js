@@ -1,5 +1,8 @@
 import React, { useEffect, useContext } from "react";
-import { setPageTitleAction } from "../../stateManagement/actions";
+import {
+  setGlobalLoader,
+  setPageTitleAction
+} from "../../stateManagement/actions";
 import { store } from "../../stateManagement/store";
 import houses from "../../assets/houses.svg";
 import Input from "../../components/input/Input";
@@ -18,28 +21,34 @@ import _ from "lodash";
 import PropertyModal from "../../components/property/PropertyModal";
 import { getToken } from "../../utils/helper";
 import Affixed from "../../components/Affixed/affixed";
+import { propertySortOptions, propertyStatusOption } from "../../utils/data";
 function Properties() {
-  const { dispatch, state } = useContext(store);
+  const { dispatch } = useContext(store);
   const [queryParams, setQueryParams] = useState({});
-  const [properties, setProperties] = useState([]);
+  const [activeObj, setActiveObj] = useState({});
+  const [properties, setProperties] = useState({});
   const [modalState, setModalState] = useState(false);
+  const [modalType, setModalType] = useState("unit");
   const [formState, setFormState] = useState({
     keyword: ""
   });
-  const [propertiesLoading, setPropertiesLoading] = useState();
+  const [propertiesLoading, setPropertiesLoading] = useState(true);
+  let searchDelay;
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Properties" });
-    // console.log(state);
     getProperties();
   }, []);
+
   useEffect(() => {
     let params = qs.stringify(queryParams);
     getProperties(`${PROPERTIES_URL}?${params}`);
   }, [queryParams]);
 
-  const getProperties = (pageRoute = PROPERTIES_URL) => {
-    setPropertiesLoading(true);
+  const getProperties = (pageRoute = PROPERTIES_URL, status = false) => {
+    if (!propertiesLoading && !status) {
+      setPropertiesLoading(true);
+    }
     try {
       axiosHandler("GET", pageRoute, getToken()).then(res => {
         setProperties(res.data.results);
@@ -53,13 +62,28 @@ function Properties() {
     Modal.confirm({
       title: "Delete Property",
       content:
-        "Are you sure you want to delete this propery along with all unit(s) attached to it?",
+        "Are you sure you want to delete this property?, Note that all unit(s) attached to this property would be deleted as well.",
       onOK: () => {
+        dispatch({
+          type: setGlobalLoader,
+          payload: {
+            status: true,
+            content: "Deleting property, Please wait..."
+          }
+        });
         axiosHandler("DELETE", `${PROPERTIES_URL}/${propertyId}`, getToken())
           .then(res => {
             Notification.bubble({
-              type: "Success",
-              content: "Property sucessfully deleted"
+              type: "success",
+              content: "Property successfully deleted"
+            });
+            getProperties(`${PROPERTIES_URL}?${qs.stringify(queryParams)}`);
+            dispatch({
+              type: setGlobalLoader,
+              payload: {
+                status: false,
+                content: ""
+              }
             });
           })
           .catch(err => {
@@ -71,9 +95,15 @@ function Properties() {
       }
     });
   };
+
   const setFormStateHandler = e => {
     setFormState({ [e.target.id]: e.target.value });
-    addQueryString("keyword", e.target.value);
+    clearTimeout(searchDelay);
+    setSearchDelay(e.target.value);
+  };
+
+  const setSearchDelay = search => {
+    searchDelay = setTimeout(() => addQueryString("keyword", search), 500);
   };
 
   const addQueryString = (key, value) => {
@@ -81,11 +111,29 @@ function Properties() {
     setQueryParams(newQueryStrings);
   };
 
-  const getQueryString = key => qs.parse(queryParams)[key];
+  const onEdit = activeProperty => {
+    setActiveObj(activeProperty);
+    setModalType("property");
+    setModalState(true);
+  };
+
+  const onAddUnit = activeProperty => {
+    setActiveObj(activeProperty);
+    setModalType("unit");
+    setModalState(true);
+  };
+
+  const closeVisibility = refresh => {
+    if (refresh) {
+      getProperties(`${PROPERTIES_URL}?${qs.stringify(queryParams)}`);
+    }
+
+    setModalState(false);
+  };
 
   return (
     <div className="Properties">
-      <div className="page-layout flex">
+      <div className="page-layout">
         <div className="main-page">
           <div className="rectangle flex">
             <img src={houses} alt="tenant-invite-svg" />
@@ -119,29 +167,23 @@ function Properties() {
                   placeholder={"Property Type"}
                 />
                 <Select
-                  placeholder="Status"
-                  optionList={[
-                    { title: "Sold", value: "sold" },
-                    { title: "Rented", value: "rented" },
-                    { title: "Pending", value: "pending" },
-                    { title: "Published", value: "published" },
-                    { title: "Unpublished", value: "unpublished" }
-                  ]}
+                  placeholder="Filter..."
+                  optionList={propertyStatusOption}
                   name={"status"}
                   onChange={e => {
                     addQueryString("status", e.target.value);
                   }}
-                  defaultOption={{ title: "Status" }}
                 />
                 <Select
-                  placeholder={"Sort by date"}
+                  placeholder="Sort by..."
                   onChange={e => {
-                    addQueryString("date", e.target.value);
+                    if (e.target.value === "low" || e.target.value === "high") {
+                      addQueryString("price", e.target.value);
+                    } else {
+                      addQueryString("date", e.target.value);
+                    }
                   }}
-                  optionList={[
-                    { title: "DATE: Newest First", value: "desc" },
-                    { title: "DATE: Oldest First", value: "asc" }
-                  ]}
+                  optionList={propertySortOptions}
                 />
               </div>
             </div>
@@ -155,11 +197,13 @@ function Properties() {
               <Skeleton height={240} />
             </div>
           ) : (
-            _.get(properties, "results", []).map(property => (
-              <section className="property-section section-begin">
+            _.get(properties, "results", []).map((property, key) => (
+              <section key={key} className="property-section section-begin">
                 <PropertyContainer
                   toggleModal={() => setModalState(!modalState)}
                   onDelete={onDelete}
+                  onEdit={onEdit}
+                  onAddUnit={onAddUnit}
                   queryParams={queryParams}
                   key={property.id}
                   property={property}
@@ -179,7 +223,12 @@ function Properties() {
           </Affixed>
         </div>
       </div>
-      <PropertyModal />
+      <PropertyModal
+        visible={modalState}
+        modalType={modalType}
+        activeObj={activeObj}
+        closeVisibility={closeVisibility}
+      />
     </div>
   );
 }

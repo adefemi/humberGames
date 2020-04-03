@@ -8,15 +8,13 @@ import Skeleton from "react-loading-skeleton";
 import { axiosHandler } from "../../utils/axiosHandler";
 import { UNITS_URL } from "../../utils/urls";
 import { useState } from "react";
-import ms from "microseconds";
 import _ from "lodash";
 import qs from "query-string";
-import { useContext } from "react";
-import { store } from "../../stateManagement/store";
-import { setPropertyPage } from "../../stateManagement/actions";
+import { getArrayCount } from "../../utils/helper";
+
 function PropertyContainer(props) {
-  const { dispatch, state } = useContext(store);
   const [units, setUnits] = useState([]);
+  const [viewAll, setViewAll] = useState(false);
   const [loaders, setLoaders] = useState({});
 
   const toggleLoaders = key => {
@@ -28,13 +26,6 @@ function PropertyContainer(props) {
     meta: { total_unit },
     address_info: { address }
   } = props.property;
-
-  const addUnitHandler = id => {
-    dispatch({
-      type: setPropertyPage,
-      payload: { modalStatus: true, activePropertyId: id }
-    });
-  };
 
   useEffect(() => {
     let queryParams = { ...props.queryParams, property_id: id };
@@ -63,7 +54,10 @@ function PropertyContainer(props) {
           </div>
         </div>
         <div className="property-options flex">
-          <Button onClick={() => addUnitHandler(id)} className="btn-add-unit">
+          <Button
+            onClick={() => props.onAddUnit(props.property)}
+            className="btn-add-unit"
+          >
             <div className="flex align-center">
               <AppIcon type="md" name="ic_add_circle_outline" />
               New Unit
@@ -79,28 +73,48 @@ function PropertyContainer(props) {
       </div>
       <div className="property-container-body">
         <div className="property-cards">
-          <Slider className="flex property-slider">
-            {!loaders.units ? (
-              Array(4)
-                .fill(null)
-                .map((v, i) => (
-                  <div className="space-right" key={ms.now() * i}>
+          {!viewAll && (
+            <Slider className="flex property-slider">
+              {!loaders.units ? (
+                getArrayCount({ count: 4, start: 0 }).map((v, i) => (
+                  <div className="space-right" key={i}>
                     <Skeleton height={160} width={320} />
                   </div>
                 ))
-            ) : (
-              <>
-                {_.get(units, "results").map(unit => (
-                  <PropertyCard unit={unit} />
-                ))}
-              </>
-            )}
-          </Slider>
+              ) : (
+                <>
+                  {_.get(units, "results").map((unit, key) => (
+                    <PropertyCard key={key} unit={unit} />
+                  ))}
+                </>
+              )}
+            </Slider>
+          )}
+          {viewAll && (
+            <div className="property-grid">
+              {!loaders.units ? (
+                getArrayCount({ count: 4, start: 0 }).map((v, i) => (
+                  <div className="space-right" key={i}>
+                    <Skeleton height={160} width={320} />
+                  </div>
+                ))
+              ) : (
+                <>
+                  {_.get(units, "results").map((unit, key) => (
+                    <PropertyCard key={key} unit={unit} />
+                  ))}
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <div className="flex justify-between property-container-footer">
         <div className="property-management flex">
-          <Button className="btn-edit">
+          <Button
+            className="btn-edit"
+            onClick={() => props.onEdit(props.property)}
+          >
             <div className="flex align-center">
               <AppIcon type="feather" name="edit" />
               Edit
@@ -114,7 +128,15 @@ function PropertyContainer(props) {
           </Button>
         </div>
         <div className="view-all">
-          <a href="#">View All</a>
+          <a
+            href="/"
+            onClick={e => {
+              e.preventDefault();
+              setViewAll(!viewAll);
+            }}
+          >
+            {viewAll ? "Minimize" : "View All"}
+          </a>
         </div>
       </div>
     </div>

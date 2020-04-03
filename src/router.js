@@ -1,11 +1,9 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import MainLayout from "./components/mainLayout/mainLayout";
-import PropertyListing from "./pages/propertyListing/propertyListing";
-import Properties from "./pages/properties/Properties";
-import Application from "./pages/application/Application";
 import GlobalLoader from "./components/GlobalLoader/globalLoader";
 import Logout from "./components/logout/logout";
+import OrderSummary from "./components/orderSummary/orderSummary";
 
 const HomeIndex = lazy(() => import("./pages/Dashboard/dashboard.js"));
 const TeamCreatePage = lazy(() => import("./pages/team/TeamCreatePage.js"));
@@ -28,7 +26,7 @@ const TenantDashboard = lazy(() =>
 const AgencyDashboard = lazy(() =>
   import("./pages/agencyDashboard/AgencyDashboard")
 );
-const Transactins = lazy(() => import("./pages/transactions/Transactions"));
+const Transactions = lazy(() => import("./pages/transactions/Transactions"));
 const BankAccount = lazy(() => import("./pages/bankAccount/BankAccount"));
 const Portfolio = lazy(() =>
   import("./pages/agencyPortfolio/AgencyPortfolio.js")
@@ -36,11 +34,19 @@ const Portfolio = lazy(() =>
 const TenantInvite = lazy(() => import("./pages/tenantInvite/TenantInvite"));
 const LeaseMain = lazy(() => import("./pages/Lease/lease"));
 const LeaseDefinition = lazy(() => import("./pages/Lease/leaseDefinition"));
+const LeaseCharge = lazy(() => import("./pages/leaseCharge/leaseCharge"));
+const PropertyListing = lazy(() =>
+  import("./pages/propertyListing/propertyListing")
+);
+const Properties = lazy(() => import("./pages/properties/Properties"));
+const Application = lazy(() => import("./pages/application/Application"));
+const Inspections = lazy(() => import("./pages/inspection/inspection"));
 
 const RouterMain = props => {
   return (
     <>
       <GlobalLoader />
+      <OrderSummary />
       <BrowserRouter>
         <Switch>
           <Route path="/logout" exact component={Logout} />
@@ -121,6 +127,15 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
+                  path="/lease-charges"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <LeaseCharge {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
                   path="/agency-setup"
                   exact
                   component={props => (
@@ -134,7 +149,7 @@ const RouterMain = props => {
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
-                      <Transactins {...props} />
+                      <Transactions {...props} />
                     </Suspense>
                   )}
                 />
@@ -221,6 +236,26 @@ const RouterMain = props => {
                     </Suspense>
                   )}
                 />
+
+                <Route
+                  path="/view-property/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <PropertyListing {...props} view />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/edit-property/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <PropertyListing {...props} edit />
+                    </Suspense>
+                  )}
+                />
                 <Route
                   path="/properties"
                   exact
@@ -263,6 +298,15 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <Profile {...props} active={0} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/inspections"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Inspections {...props} />
                     </Suspense>
                   )}
                 />

@@ -22,67 +22,55 @@ import { axiosHandler } from "../../utils/axiosHandler";
 import {
   GENERIC_FEE_URL,
   UNIT_COMMISSION_URL,
-  UNIT_CONTROLLER_URL,
   UNIT_TERM_URL
 } from "../../utils/urls";
 import { Spinner } from "../../components/spinner/Spinner";
 import { getToken } from "../../utils/helper";
 
 function PropertyTerm(props) {
-  const getUnitId = () => {
-    let pathList = props.match.params.uuid.split("_");
-    return pathList[pathList.length - 1];
-  };
-  const [fetching, setFetching] = useState(true);
   const [activeUnit, setActiveUnit] = useState(null);
   const [selectMinLease, setSelectedMinLease] = useState(null);
   const [chargeShow, setChargeShow] = useState(true);
+  const [fetching, setFetching] = useState(true);
   const [canAddCharges, setCanAddCharges] = useState(false);
   const [loading, setLoading] = useState(false);
   const [propertyTerm, setPropertyTerm] = useState({});
   const [charges, setCharges] = useState([]);
-  const [showNext, setShowNext] = useState(0);
-  const unit_id = getUnitId();
+  const [showNext, setShowNext] = useState(props.edit ? 10 : 0);
   const [agencyCommission, setAgencyCommission] = useState({
-    term_type: "percentage"
+    term_type: "percentage",
+    value: "10",
+    agency_fee: "10"
   });
 
-  const getActiveUnit = () => {
-    axiosHandler("get", UNIT_CONTROLLER_URL + `/${unit_id}`, getToken()).then(
-      res => {
-        setActiveUnit(res.data.results);
-        console.log(res.data.results);
-        setFetching(false);
-      },
-      err => {
-        Notification.bubble({
-          type: "error",
-          content: "Ops!, and error occurred while fetching unit..."
-        });
-      }
-    );
-  };
-
   const checkTerms = _ => {
+    let status = true;
     if (activeUnit.category === "rental") {
       if (selectMinLease && propertyTerm.amount && propertyTerm.tenure_type) {
-        setShowNext(1);
+        if (!props.edit) {
+          setShowNext(1);
+        }
       } else {
         Notification.bubble({
           type: "info",
           content: "You need to define the basic term first!"
         });
+        status = false;
       }
     } else {
       if (propertyTerm.amount) {
-        setShowNext(1);
+        if (!props.edit) {
+          setShowNext(1);
+        }
       } else {
         Notification.bubble({
           type: "info",
           content: "You need to enter your sale amount"
         });
+        status = false;
       }
     }
+    return status;
   };
   const genericChange = e => {
     let data = {
@@ -100,55 +88,75 @@ function PropertyTerm(props) {
         if (!item.fee_name || !item.amount || !item.duration) {
           canProceed = false;
         }
+        return null;
       });
     }
     if (canProceed) {
-      setShowNext(2);
+      if (!props.edit) {
+        setShowNext(2);
+      }
     }
+    return canProceed;
+  };
+
+  const submitData = () => {
+    if (!checkAgencyFee()) return;
+    let newPropTerm = {
+      ...propertyTerm,
+      tenure: selectMinLease | 0,
+      unit_id: props.unitInfo.id
+    };
+    let newCommissionData = {
+      commission_type: agencyCommission.term_type,
+      category: "main",
+      value: agencyCommission.agency_fee,
+      commission_fee: propertyTerm.currency_type,
+      agent_id: 44,
+      unit_id: props.unitInfo.id
+    };
+    let newFeeData = canAddCharges ? formatChargesData(charges) : [];
+    setLoading(true);
+    let method = "post";
+    let termUrl = UNIT_TERM_URL;
+    let commissionUrl = UNIT_COMMISSION_URL;
+    let feeUrl =
+      GENERIC_FEE_URL +
+      `?identifier_id=${props.unitInfo.id}&identifier_type=unit`;
+    if (props.edit && props.unitInfo.term) {
+      termUrl += `/${props.unitInfo.term.id}`;
+      commissionUrl += `/${props.unitInfo.unit_commissions[0].id}`;
+      method = "patch";
+    }
+
+    Promise.all([
+      axiosHandler(method, termUrl, getToken(), newPropTerm),
+      axiosHandler(method, commissionUrl, getToken(), newCommissionData),
+      axiosHandler("post", feeUrl, getToken(), newFeeData)
+    ])
+      .then(values => {
+        props.history.push(props.location.pathname + "?stage=2");
+      })
+      .catch(err => {
+        Notification.bubble({
+          type: "error",
+          content: "Ops, an error occurred."
+        });
+        setLoading(false);
+      });
   };
 
   const proceedControl = e => {
+    if (props.edit) {
+      if (checkTerms() && checkCharges()) {
+        submitData();
+      }
+    }
     if (showNext === 0) {
       checkTerms();
     } else if (showNext === 1) {
       checkCharges();
     } else if (showNext === 2) {
-      if (!checkAgencyFee()) return;
-      let newPropTerm = {
-        ...propertyTerm,
-        tenure: selectMinLease | 0,
-        unit_id
-      };
-      let newCommissionData = {
-        commission_type: agencyCommission.term_type,
-        category: "main",
-        value: agencyCommission.agency_fee,
-        commission_fee: propertyTerm.currency_type,
-        agent_id: 44,
-        unit_id
-      };
-      let newFeeData = formatChargesData(charges);
-      setLoading(true);
-      Promise.all([
-        axiosHandler("post", UNIT_TERM_URL, getToken(), newPropTerm),
-        axiosHandler(
-          "post",
-          UNIT_COMMISSION_URL,
-          getToken(),
-          newCommissionData
-        ),
-        axiosHandler("post", GENERIC_FEE_URL, getToken(), newFeeData)
-      ])
-        .then(values => {
-          props.history.push(props.location.pathname + "?stage=2");
-        })
-        .catch(err => {
-          Notification.bubble({
-            type: "error",
-            content: "Ops, an error occurred."
-          });
-          setLoading(false);
-        });
+      submitData();
     }
   };
 
@@ -176,7 +184,7 @@ function PropertyTerm(props) {
     let newList = [];
     data.map(item => {
       newList.push({
-        identifier_id: unit_id,
+        identifier_id: props.unitInfo.id,
         identifier_type: "unit",
         fee_title: item.fee_name,
         amount: item.amount,
@@ -198,6 +206,8 @@ function PropertyTerm(props) {
         e[1].target.value === "percentage"
           ? e[0].target.value
           : e[0].target.rawValue
+          ? e[0].target.rawValue
+          : e[0].target.value && parseFloat(e[0].target.value.replace(/,/g, ""))
     });
   };
 
@@ -241,8 +251,51 @@ function PropertyTerm(props) {
   };
 
   useEffect(() => {
-    getActiveUnit();
-  }, []);
+    if ((props.edit || props.continue) && !props.fetching) {
+      getActiveUnit();
+    }
+  }, [props.fetching]);
+
+  const getActiveUnit = () => {
+    setActiveUnit(props.unitInfo);
+    if (props.unitInfo.term) {
+      setPropertyTerm({
+        amount: props.unitInfo.term.amount,
+        tenure: props.unitInfo.term.tenure,
+        tenure_type: props.unitInfo.term.tenure_type,
+        currency_type: props.unitInfo.term.currency_type
+      });
+      setSelectedMinLease(props.unitInfo.term.tenure);
+    }
+
+    if (props.unitInfo.unit_commissions[0]) {
+      setAgencyCommission({
+        value: props.unitInfo.unit_commissions[0].value,
+        term_type: props.unitInfo.unit_commissions[0].commission_type
+      });
+    }
+
+    if (props.unitInfo.charges.length > 0) {
+      setCanAddCharges(true);
+      setCharges(formatCharges(props.unitInfo.charges));
+    }
+
+    setFetching(false);
+  };
+
+  const formatCharges = charges => {
+    const retVal = [];
+    charges.map(item => {
+      retVal.push({
+        fee_name: item.fee_title,
+        currency_type: item.currency_type,
+        amount: item.amount,
+        duration: item.duration_type
+      });
+      return null;
+    });
+    return retVal;
+  };
 
   if (fetching) {
     return (
@@ -266,7 +319,7 @@ function PropertyTerm(props) {
       <div id="snchor" />
       <br />
       <div className="grid grid-2 grid-gap">
-        <div data-aos="fade-up" data-aos-delay="300">
+        <div data-aos={!props.edit && "fade-up"} data-aos-delay="300">
           <FormGroup
             label={`Whats your ${
               activeUnit.category === "rental" ? "rent" : "sale"
@@ -283,7 +336,7 @@ function PropertyTerm(props) {
           </FormGroup>
         </div>
         {activeUnit.category === "rental" && (
-          <div data-aos="fade-up" data-aos-delay="500">
+          <div data-aos={!props.edit && "fade-up"} data-aos-delay="500">
             <FormGroup
               label="Whats the fee duration?"
               subLabel="Choose how long the rent fee  covers."
@@ -291,6 +344,10 @@ function PropertyTerm(props) {
               <Select
                 placeholder="--select duration--"
                 name="tenure_type"
+                defaultOption={{
+                  title: propertyTerm.tenure_type,
+                  value: propertyTerm.tenure_type
+                }}
                 onChange={genericChange}
                 optionList={durationSelector}
               />
@@ -300,7 +357,7 @@ function PropertyTerm(props) {
       </div>
       <p />
       {activeUnit.category === "rental" && (
-        <div data-aos="fade-up" data-aos-delay="700">
+        <div data-aos={!props.edit && "fade-up"} data-aos-delay="700">
           <FormGroup
             label="Whats the minimum lease?"
             subLabel="Tell us the minimum time a tenant must be willing to take this property"
@@ -350,7 +407,13 @@ function PropertyTerm(props) {
 
       {canAddCharges && (
         <>
-          <ChargesController onChange={e => setCharges(e)} />
+          <ChargesController
+            onChange={e => {
+              console.log(e);
+              setCharges(e);
+            }}
+            defaultCharges={charges}
+          />
           <div id="section2" />
         </>
       )}
@@ -360,7 +423,7 @@ function PropertyTerm(props) {
           <div
             className="banner"
             className="banner"
-            data-aos="zoom-in-down"
+            data-aos={!props.edit && "zoom-in-down"}
             data-aos-anchor="snchor"
           >
             <img src={infoIcon} alt="" />
@@ -374,26 +437,39 @@ function PropertyTerm(props) {
           <br />
           <div className="grid grid-2 grid-gap">
             <div
-              data-aos="fade-up"
+              data-aos={!props.edit && "fade-up"}
               data-aos-delay="300"
               data-aos-anchor="snchor"
             >
               <FormGroup
                 label="Commission"
-                subLabel="You can enter your commission here, You can use flat rate or percentage.s"
+                subLabel="You can enter your commission here, You can use flat rate or percentage"
               >
+                {console.log(agencyCommission)}
                 <SelectInput
-                  defaultOption={{
-                    title: "Percentage (%)",
-                    value: "percentage"
-                  }}
+                  defaultOption={
+                    props.edit
+                      ? agencyCommission.term_type === "percentage"
+                        ? {
+                            title: "Percentage (%)",
+                            value: "percentage"
+                          }
+                        : {
+                            title: "Flat Rate",
+                            value: "flat_rate"
+                          }
+                      : {
+                          title: "Percentage (%)",
+                          value: "percentage"
+                        }
+                  }
                   minWidth={150}
                   selectName="term_type"
                   name="agency_fee"
                   type="number"
                   value={agencyCommission.value}
                   onChange={onAgencyFee}
-                  isCurrency={agencyCommission.term_type !== "percentage"}
+                  isCurrency={agencyCommission.term_type === "flat_rate"}
                   hideCurrency={true}
                   optionList={[
                     { title: "Percentage (%)", value: "percentage" },
@@ -404,7 +480,7 @@ function PropertyTerm(props) {
             </div>
             <div
               className="charge-info"
-              data-aos="fade-up"
+              data-aos={!props.edit && "fade-up"}
               data-aos-delay="500"
               data-aos-anchor="snchor"
             >

@@ -12,16 +12,14 @@ import { Link } from "react-router-dom";
 function ApplicationCard(props) {
   let {
     id,
+    inspection,
     unit: {
-      title,
-      description,
       unit_images,
       property: {
         address_info: { address, city, state, country }
       }
     },
     lease,
-    unit_schedules,
     status,
     created_at
   } = props.application;
@@ -86,7 +84,7 @@ function ApplicationCard(props) {
           <div className="booking-detail">
             <div className="flex justify-between">
               <div className="booking-status">No booked viewing</div>
-              {status === "accepted" && (
+              {status === "accepted" && !inspection && (
                 <div className="book-viewing">
                   <a href="#">Book Viewing</a>
                 </div>

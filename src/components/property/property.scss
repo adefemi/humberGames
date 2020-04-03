@@ -1,0 +1,54 @@
+@import "../../styles/theme";
+
+.order-summary-con.property-con{
+
+  .summary-con{
+    max-width: 600px;
+    overflow: auto;
+    box-sizing: border-box;
+    //max-height: calc(100vh - 20px);
+  }
+  .overlay{
+    background-color: rgba(black, 0.5);
+  }
+  .inner{
+    max-width: unset;
+
+  }
+}
+
+.new-unit{
+  .banner{
+    background-color: #faf5b3;
+    .banner-header{
+      align-items: center;
+    }
+    margin-bottom: 30px;
+
+    .banner-text{
+      margin-left: 20px;
+      font-size: 13px;
+    }
+  }
+  .add-unit-form{
+    margin-top: 30px;
+  }
+  .main-body{
+    span{
+      svg{
+        color: $danger-color;
+      }
+    }
+    .property-description{
+      margin-left: 20px;
+      strong{
+        font-size: 13px;
+      }
+      .property-location{
+        font-size: 12px;
+        color: darken(white, 50%);
+        font-weight: 600;
+      }
+    }
+  }
+}
