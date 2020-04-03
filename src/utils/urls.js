@@ -44,8 +44,15 @@ export const GET_ACCESS_TOKEN = BASE_URL + "gateway/refresh";
 export const LOGOUT = BASE_URL + "gateway/logout";
 export const DASHBOARD_URL = BASE_URL + "user/dashboard";
 export const AGENCY_TRANSACTION_URL = BASE_URL + "payment/agency_transactions";
+export const AGENCY_URL = BASE_URL + "user/agency";
+export const PROFILE_STATUS_URL = BASE_URL + "user/profile-status";
 export const GENERATE_INVOICE_URL = BASE_URL + "payment/generate/";
 export const INITIATE_INVOICE_TRANSACTION_URL =
   BASE_URL + "payment/invoice-transaction-initiation/";
 export const VERIFY_INVOICE_TRANSACTION_URL =
   BASE_URL + "payment/invoice-transaction-verification/";
+<<<<<<< HEAD
+export const NOTIFICATIONS_URL = BASE_URL + "user/notifications";
+=======
+export const CUSTOMER_TRANSACTION_URL = BASE_URL + "payment/transactions";
+>>>>>>> 5b0d3cff82defea60516f9b063ce84843447decd

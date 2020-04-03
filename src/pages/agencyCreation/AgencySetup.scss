@@ -91,6 +91,7 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
+        margin-right: 20px;
       }
 
       p {
@@ -113,9 +114,16 @@
   }
 }
 
-.agency-location {
-  gap: 20px;
-}
+// .agency-setup-container {
+//   .agency-location {
+//     .grid.grid-2.grid-gap {
+//       div {
+//         opacity: 1;
+//         transform: unset;
+//       }
+//     }
+//   }
+// }
 
 .corporate-hint {
   font-size: 13px;

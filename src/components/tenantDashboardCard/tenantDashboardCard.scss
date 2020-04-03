@@ -1,6 +1,6 @@
 @import "../../styles/theme";
 
-.tenant-dashboard-card{
+.tenant-dashboard-card {
   display: flex;
   margin-bottom: 15px;
   height: 80px;
@@ -10,11 +10,11 @@
   border-bottom: 1px solid darken(white, 10%);
   padding-bottom: 20px;
 
-  &:last-child{
+  &:last-child {
     border-bottom: none;
   }
 
-  .img-con{
+  .img-con {
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -23,13 +23,14 @@
     background-repeat: no-repeat;
   }
 
-  h4, p{
+  h4,
+  p {
     margin: 0;
     color: black;
     padding: 0;
   }
 
-  .link{
+  .link {
     width: 30px;
     height: 30px;
     background-color: $secondary-color;
@@ -38,38 +39,39 @@
     justify-content: center;
     border-radius: 50%;
 
-    svg{
+    svg {
       transform: rotateY(180deg);
       color: white;
       margin-bottom: 5px;
     }
   }
 
-  .content{
+  .content {
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 0 10px;
     flex: 1;
 
-    p{
+    p {
       font-size: 12px;
       font-weight: 600;
       color: darken($blue2-con, 30%);
 
-      svg{
+      svg {
         margin-bottom: 4px;
         margin-right: 5px;
         color: $secondary-color;
       }
     }
-    small{
+    small {
       font-size: 10px;
       font-weight: 600;
       color: darken(white, 50%);
     }
-    h4{
+    h4 {
       font-size: 13px;
+      padding: unset;
     }
   }
 }

@@ -12,6 +12,9 @@ import TransactionTable from "../transactionTable/transactionTable";
 import _ from "lodash";
 import TenantDashboardCard from "../tenantDashboardCard/tenantDashboardCard";
 import PropertyDashboardCard from "../propertyDashboardCard/propertyDashboardCard";
+import { numberWithCommas, getToken } from "../../utils/helper";
+
+import noImage from "../../assets/images/no-image.jpg";
 
 export default function GetQuickView({ userRole }) {
   const [quickView, setQuickView] = useState({});
@@ -22,7 +25,7 @@ export default function GetQuickView({ userRole }) {
   }, []);
 
   const getQuickView = () => {
-    axiosHandler("GET", DASHBOARD_URL + `?user_role=${userRole}`, testToken)
+    axiosHandler("GET", DASHBOARD_URL + `?user_role=${userRole}`, getToken())
       .then(res => {
         setQuickView(res.data.quick_views);
         setQucickViewLoader(false);
@@ -117,18 +120,35 @@ export default function GetQuickView({ userRole }) {
       if (rt.length === 0) {
         return <h4>No recent transactions at the moment</h4>;
       }
-      return rt.map(transaction => (
-        <TransactionTable
-          key={["blah", "blah"]}
-          values={[["a", 1], ["b", 2]]}
-        />
-      ));
+      return (
+        <>
+          <TransactionTable
+            keys={["Reference", "Amount", "Tag"]}
+            values={formatTransaction(rt)}
+          />
+        </>
+      );
     }
     return <h4>Failed to load recent transactions</h4>;
   };
 
+  const formatTransaction = trans => {
+    let newList = [];
+    trans.map(item => {
+      newList.push([
+        _.get(item, "reference"),
+        `${_.get(item, "currency_type")}${numberWithCommas(
+          _.get(item, "amount")
+        )}`,
+        _.get(item, "identifier_type")
+      ]);
+      return null;
+    });
+    return newList;
+  };
+
   const activeRentals = () => {
-    let ar = quickView["tenants"];
+    let ar = quickView["due_tenants"];
     if (ar) {
       if (ar.length === 0) {
         return <h4> No active rentals at the moment</h4>;
@@ -136,12 +156,18 @@ export default function GetQuickView({ userRole }) {
       return ar.map(rentals => (
         <TenantDashboardCard
           key={_.get(rentals, "uuid")}
-          name={_.get(rentals, "user.first_name")}
-          cover={_.get(rentals, "user.user_profile.profile_picture.file")}
-          expiry={_.get(rentals, "expiry")}
-          propertyName={_.get(rentals, "title")}
+          name={`${_.get(rentals, "first_name")} ${_.get(
+            rentals,
+            "last_name"
+          )}`}
+          cover={_.get(rentals, "user_profile.profile_picture.file")}
+          expiry={moment(_.get(rentals, "created_at")).format("MMM Do YYYY")}
+          propertyName={`${_.get(rentals, "email").substring(0, 19)}...`}
           linkToProperty="/"
-          linkToTenant="/"
+          linkToTenant={`user/${_.get(rentals, "uuid")}_${_.get(
+            rentals,
+            "id"
+          )}`}
         />
       ));
     }
@@ -156,10 +182,10 @@ export default function GetQuickView({ userRole }) {
       }
       return unpub.map(unit => (
         <PropertyDashboardCard
-          key={_.get(unit, "uuid")}
-          title={_.get(unit, "title")}
-          cover={_.get(unit, "unit_images[0].image.file")}
-          description={_.get(unit, "description")}
+          key={_.get(unit, "uuid", "")}
+          title={_.get(unit, "title", "")}
+          cover={_.get(unit, "unit_images[0].image.file", noImage)}
+          description={`${_.get(unit, "description", "")}`}
           link="/"
         />
       ));
@@ -224,7 +250,7 @@ export default function GetQuickView({ userRole }) {
     if (userRole == "agent" || userRole == "landlord") {
       return (
         <>
-          {quickViewLoader ? (
+          {/* {quickViewLoader ? (
             <Skeleton width={360} height={407} />
           ) : (
             <>
@@ -232,7 +258,7 @@ export default function GetQuickView({ userRole }) {
                 {upComingInspections()}
               </ViewCard>
             </>
-          )}
+          )} */}
           {quickViewLoader ? (
             <Skeleton width={360} height={407} />
           ) : (

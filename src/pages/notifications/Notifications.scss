@@ -11,7 +11,8 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #ff3e30;
+  background: green;
+  margin-right: 20px;
 }
 
 .notification-image {
@@ -20,6 +21,14 @@
   height: 30px;
   margin-left: 1%;
   margin-right: 3%;
+}
+
+.notification-details {
+  padding: 0 2%;
+  max-width: 82%;
+  a {
+    color: unset !important;
+  }
 }
 
 .time-container {
@@ -32,7 +41,7 @@
 }
 
 .yesterday {
-  margin-top: 5%;
+  margin: 5% 0;
 }
 
 //#-------------------------Responsiveness-------------------------------#
