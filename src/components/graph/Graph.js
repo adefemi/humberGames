@@ -7,6 +7,8 @@ export default function Graph({
   labels,
   datasets,
   options,
+  width,
+  height,
   className
 }) {
   const data = {
@@ -18,7 +20,7 @@ export default function Graph({
 
   return (
     <div className={className}>
-      <NewT data={data} options={options} />
+      <NewT data={data} options={options} width={width} height={height} />
     </div>
   );
 }
@@ -27,7 +29,9 @@ Graph.propTypes = {
   chartType: PropTypes.func,
   labels: PropTypes.array,
   datasets: PropTypes.arrayOf(PropTypes.object),
-  options: PropTypes.object
+  options: PropTypes.object,
+  width: PropTypes.number,
+  height: PropTypes.number
 };
 
 Graph.defaultProps = {
