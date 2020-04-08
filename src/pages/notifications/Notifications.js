@@ -15,14 +15,17 @@ import { Spinner } from "../../components/spinner/Spinner";
 import "./Notifications.css";
 
 const Notifications = () => {
-  const { dispatch } = useContext(store);
+  const {
+    dispatch,
+    state: { userDetails }
+  } = useContext(store);
   const [loader, setLoader] = useState(true);
   const [notifications, setNotifications] = useState({});
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Notifications" });
     getNotifications();
-  }, []);
+  }, [userDetails]);
 
   const today = moment().format("DD-MM-YYYY");
   const yesterday = moment()

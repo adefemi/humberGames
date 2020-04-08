@@ -16,16 +16,23 @@ import { axiosHandler } from "../../utils/axiosHandler";
 import { LEASE_URL } from "../../utils/urls";
 
 function Lease(props) {
-  const { dispatch } = useContext(store);
+  const {
+    dispatch,
+    state: { userDetails }
+  } = useContext(store);
   const temCounter = getArrayCount({ count: 2 });
   const [leases, setLeases] = useState([]);
   const [fetching, setFetching] = useState(true);
   const [viewType, setViewType] = useState(1); // 0 for list and 1 for grid
 
   useEffect(() => {
+    if (!userDetails.role) return;
+    if (userDetails.role.name.toLowerCase() === "tenant") {
+      props.history.push("/");
+    }
     dispatch({ type: setPageTitleAction, payload: "Leases" });
     fetchLease();
-  }, []);
+  }, [userDetails]);
 
   const fetchLease = () => {
     if (!fetching) setFetching(true);

@@ -17,22 +17,29 @@ import { getToken } from "../../utils/helper";
 import Skeleton from "react-loading-skeleton";
 import qs from "query-string";
 import { store } from "../../stateManagement/store";
-import { setGlobalLoader } from "../../stateManagement/actions";
+import {
+  setGlobalLoader,
+  setPageTitleAction
+} from "../../stateManagement/actions";
 import { Notification } from "../../components/notification/Notification";
 
 function LeaseCharge(props) {
   const [fetching, setFetching] = useState(true);
   const [leaseCharges, setLeaseCharges] = useState([]);
-  const { dispatch } = useContext(store);
+  const {
+    dispatch,
+    state: { userDetails }
+  } = useContext(store);
 
   useEffect(() => {
+    dispatch({ type: setPageTitleAction, payload: "Lease Charges" });
     const query = qs.parse(props.location.search);
     if (query.reference) {
       verifyPayment(query.reference);
     } else {
       getData();
     }
-  }, []);
+  }, [userDetails]);
 
   const verifyPayment = reference => {
     dispatch({

@@ -19,12 +19,12 @@ import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
 import AgencyGetStarted from "../agencyCreation/AgencyGetStarted";
 
-const AgencyDashboard = () => {
-  const { dispatch } = useContext(store);
+const AgencyDashboard = props => {
   const [agency, setAgency] = useState({});
   const [loader, setLoader] = useState(true);
 
   const {
+    dispatch,
     state: { userDetails }
   } = useContext(store);
 
@@ -50,6 +50,10 @@ const AgencyDashboard = () => {
   }, []);
 
   useEffect(() => {
+    if (!userDetails.role) return;
+    if (userDetails.role.name.toLowerCase() !== "agency") {
+      props.history.push("/");
+    }
     getAgency();
   }, [userDetails]);
 

@@ -7,6 +7,7 @@ export const USERDATA = "rr_user";
 // cookies
 export const USERDETAILS = "USERDETAILS";
 export const USERROLE = "USERROLE";
+export const FrontEndUrl = "https://rfrontend.clubly.io";
 
 export const primaryColor = "#1CA0D7";
 export const secondaryColor = "#f18910";

@@ -80,7 +80,7 @@ const TenantDashboard = () => {
 
   useEffect(() => {
     getUserNotifications();
-  }, []);
+  }, [userDetails]);
 
   return (
     <div>

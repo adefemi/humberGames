@@ -5,35 +5,6 @@
         text-align: right;
     }
 
-    .rectangle {
-        width: 100%;
-        padding: 30px 50px;
-        box-sizing: border-box;
-        height: 120px;
-        background: rgba(162, 255, 255, 0.27);
-        border-radius: 10px;
-        align-items: center;
-        margin: 50px 0;
-
-        img {
-            margin-right: 35px;
-            width: 120px;
-            height: 120px;
-            position: relative;
-            top: -35px;
-        }
-
-        .rectangle-text {
-            .text-1 {
-                font-weight: 600;
-                color: #017C8F;
-            }
-
-            .text-2 {
-                font-size: 14px;
-            }
-        }
-    }
 
     .add-branch {
         button {

@@ -5,6 +5,13 @@
     margin-right: 10px;
   }
 
+  .heading-context{
+    background-color: lighten($success-color, 30%);
+    h3{
+    color: darken($success-color, 30%);
+    }
+  }
+
   .page-layout {
     display: grid;
     grid-template-columns: 6fr 2fr;
@@ -22,36 +29,6 @@
     .main-page {
       overflow: hidden;
       padding-top: 50px;
-
-      .rectangle {
-        width: 100%;
-        padding: 3px 30px;
-        box-sizing: border-box;
-        background: #baffd6;
-        border-radius: 10px;
-        align-items: center;
-        margin-bottom: 50px;
-        position: relative;
-
-        img {
-          width: 150px;
-          position: absolute;
-          bottom: -3px;
-        }
-
-        .rectangle-text {
-          margin-left: 180px;
-          .text-1 {
-            font-weight: 600;
-            font-size: 15px;
-          }
-
-          .text-2 {
-            font-size: 13px;
-            max-width: 600px;
-          }
-        }
-      }
 
       .search-section {
         &>.flex {

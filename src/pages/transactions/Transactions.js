@@ -20,6 +20,7 @@ import contractSvg from "../../assets/transactions/contract.svg";
 import earningSvg from "../../assets/transactions/earnings.svg";
 
 import "./Transactions.css";
+import moneyList from "../../assets/pngs/moneyList.png";
 
 const Transactions = () => {
   const { dispatch } = useContext(store);
@@ -199,16 +200,19 @@ const Transactions = () => {
     getCustomerTransactions();
   }, []);
   return (
-    <div>
-      <div className="rectangle flex">
-        <img src={contractSvg} alt="contract" className="contract-svg" />
-        <div className="flex transaction-header">
-          <p>Transactions</p>
+    <div className="transaction-main">
+      <br />
+      <section className="heading-context">
+        <img src={contractSvg} alt="garden" />
+        <div className="context">
+          <h3>View Transactions</h3>
           <p>
             View your transactions here in details and visualize your cash flow
           </p>
         </div>
-      </div>
+      </section>
+      <br />
+      <br />
       {showCards()}
       {showGraph()}
       <div className="transactions-container">{showTransactions()}</div>

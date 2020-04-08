@@ -28,6 +28,7 @@ function PropertyModal(props) {
                 closeVisibility={props.closeVisibility}
               />
             )}
+            {props.modalType === "generic" && props.children}
           </div>
         )}
       </div>

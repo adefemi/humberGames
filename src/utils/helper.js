@@ -284,3 +284,14 @@ export const getToken = _ => {
   }
   return null;
 };
+export const genericChangeSingle = (e, setter, current) => {
+  setter({ ...current, [e.target.name]: e.target.value });
+};
+export const genericChangeMulti = (e, setter, current) => {
+  let newData = {};
+  e.map(item => {
+    newData[item.target.name] = item.target.value;
+    return null;
+  });
+  setter({ ...current, ...newData });
+};

@@ -6,6 +6,7 @@ import AgentDashboard from "../agentDashboard/AgentDashboard";
 import { setPageTitleAction } from "../../stateManagement/actions";
 
 import "./dashboard.css";
+import { rolesState } from "../../stateManagement/reducers/genericReducer";
 
 function Dashboard(_) {
   const { dispatch } = useContext(store);
@@ -28,10 +29,10 @@ function Dashboard(_) {
   const role = profileLoader ? "" : userDetails.role.name;
 
   const whatToShow = () => {
-    if (role == "tenant") {
+    if (role === "tenant") {
       return <TenantDashboard />;
     }
-    if (role == "agent" || role == "landlord" || role == "agency") {
+    if (role === "agent" || role === "landlord" || role === "agency") {
       return <AgentDashboard />;
     }
   };

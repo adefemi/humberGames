@@ -51,8 +51,6 @@ export const INITIATE_INVOICE_TRANSACTION_URL =
   BASE_URL + "payment/invoice-transaction-initiation/";
 export const VERIFY_INVOICE_TRANSACTION_URL =
   BASE_URL + "payment/invoice-transaction-verification/";
-<<<<<<< HEAD
 export const NOTIFICATIONS_URL = BASE_URL + "user/notifications";
-=======
 export const CUSTOMER_TRANSACTION_URL = BASE_URL + "payment/transactions";
->>>>>>> 5b0d3cff82defea60516f9b063ce84843447decd
+export const INSPECTION_URL = BASE_URL + "property-inspection/inspection";

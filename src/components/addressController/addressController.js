@@ -4,6 +4,7 @@ import Input from "../input/Input";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { formatAddress, getActiveAddress } from "../../utils/helper";
 import { Select } from "../select/Select";
+import "../../pages/propertyListing/propertyListing.css";
 
 function AddressController(props) {
   const [addressData, setAddressData] = useState({});

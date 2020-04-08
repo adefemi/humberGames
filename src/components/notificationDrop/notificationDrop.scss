@@ -13,6 +13,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    visibility: visible;
 
     .overlay{
       position: fixed;
@@ -25,6 +26,9 @@
 
     .not-content{
       position: fixed;
+      //transition: .3s ease;
+      visibility: visible;
+      opacity: 1;
 
       z-index: 1;
       background-color: white;
@@ -41,18 +45,40 @@
         border-bottom: 1px solid darken(white, 5%);
         cursor: pointer;
         .info{
-          font-size: 13px;
+          font-size: 12px;
           line-height: 25px;
           color: darken(white, 80%);
+          font-weight: 600;
         }
         .time{
-          font-size: 12px;
+          font-size: 10px;
           margin-top: 10px;
           color: darken(white, 50%);
+          font-weight: 500;
         }
+
+        &.active{
+          //.info, .time{
+          //  color: darken($success-color, 20%);
+          //}
+          background-color: lighten($success-color, 40%);
+          border-color: white;
+        }
+
         &:last-child{
           border-bottom: none;
         }
+      }
+
+
+    }
+
+    &.closed{
+      z-index: -1000;
+      visibility: hidden;
+      .not-content{
+        visibility: hidden;
+        opacity: 0;
       }
     }
   }

@@ -3,34 +3,20 @@
 $color-main : #c2e3ff;
 
 .inspection-main {
-  .heading-context {
+  .heading-context{
     margin-top: 20px;
     background-color: $color-main;
-    position: relative;
-    padding: 15px;
-    padding-left: 180px;
-    border-radius: 10px;
-
-    img {
-      width: 100px;
-      margin-bottom: 10px;
-      position: absolute;
-      left: 30px;
-      bottom: 0;
+    h3{
+      color: darken($color-main, 50%);
     }
 
-    p {
-      max-width: 800px;
-      font-size: 12px;
-    }
-
-    h3 {
-      color: darken($color-main, 60%);
-      padding: 0;
-      margin: 0;
-      font-size: 14px;
+    img{
+      width: 110px;
+      height: 110px;
+      top: -30px;
     }
   }
+
 
   .transactionTable{
     background-color: white;
@@ -38,5 +24,19 @@ $color-main : #c2e3ff;
     tr{
       padding: 20px 10px;
     }
+  }
+}
+
+.inspection-form{
+  h3{
+    font-size: 14px;
+    margin: 0;
+  }
+
+  p{
+    font-size: 12px;
+    font-weight: 500;
+    color: darken(white, 50%);
+    margin: 0;
   }
 }

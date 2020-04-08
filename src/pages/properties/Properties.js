@@ -22,8 +22,13 @@ import PropertyModal from "../../components/property/PropertyModal";
 import { getToken } from "../../utils/helper";
 import Affixed from "../../components/Affixed/affixed";
 import { propertySortOptions, propertyStatusOption } from "../../utils/data";
-function Properties() {
-  const { dispatch } = useContext(store);
+import file from "../../assets/file.svg";
+
+function Properties(props) {
+  const {
+    dispatch,
+    state: { userDetails }
+  } = useContext(store);
   const [queryParams, setQueryParams] = useState({});
   const [activeObj, setActiveObj] = useState({});
   const [properties, setProperties] = useState({});
@@ -37,8 +42,15 @@ function Properties() {
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Properties" });
-    getProperties();
   }, []);
+
+  useEffect(() => {
+    if (!userDetails.role) return;
+    getProperties();
+    if (userDetails.role.name.toLowerCase() === "tenant") {
+      props.history.push("/");
+    }
+  }, [userDetails]);
 
   useEffect(() => {
     let params = qs.stringify(queryParams);
@@ -135,17 +147,19 @@ function Properties() {
     <div className="Properties">
       <div className="page-layout">
         <div className="main-page">
-          <div className="rectangle flex">
-            <img src={houses} alt="tenant-invite-svg" />
-            <div className="rectangle-text">
-              <p className="text-1">Manage Your Properties</p>
-              <p className="text-2">
+          <section className="heading-context">
+            <img src={houses} alt="garden" />
+            <div className="context">
+              <h3>Manage Properties</h3>
+              <p>
                 You can always adjust your properties as you see fit, however,
                 in some cases where your property has engaged in some
                 activities, updating such property might proof some what hard.
               </p>
             </div>
-          </div>
+          </section>
+          <br />
+          <br />
           <section className="search-section">
             <div className="flex justify-between">
               <div className="search-box">

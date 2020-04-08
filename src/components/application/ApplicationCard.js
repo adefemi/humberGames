@@ -5,8 +5,7 @@ import { Button } from "../button/Button";
 import { Modal } from "../modal/Modal";
 import _ from "lodash";
 import moment from "moment";
-import { axiosHandler } from "../../utils/axiosHandler";
-import { APPLICATIONS_URL, PUBLIC_URL } from "../../utils/urls";
+import { PUBLIC_URL } from "../../utils/urls";
 import { Link } from "react-router-dom";
 
 function ApplicationCard(props) {
@@ -25,7 +24,12 @@ function ApplicationCard(props) {
   } = props.application;
   let { unit } = props.application;
 
-  console.log(props.application);
+  const getInspectionSchedule = ins => {
+    if (!ins) return;
+    let dateTime = `${ins.inspection_date} ${ins.inspection_time}`;
+    dateTime = new Date(dateTime);
+    return moment(dateTime).format("DD MMMM, YYYY.  h:m a");
+  };
 
   const deleteApplication = id => {
     Modal.confirm({
@@ -82,14 +86,36 @@ function ApplicationCard(props) {
             </div>
           </div>
           <div className="booking-detail">
-            <div className="flex justify-between">
-              <div className="booking-status">No booked viewing</div>
-              {status === "accepted" && !inspection && (
+            {status === "accepted" && !inspection ? (
+              <div className="flex justify-between">
+                <div className="booking-status">No booked viewing</div>
                 <div className="book-viewing">
-                  <a href="#">Book Viewing</a>
+                  <span
+                    className="link"
+                    onClick={() => props.bookViewing(props.application)}
+                  >
+                    Book Viewing
+                  </span>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="flex justify-between align-center">
+                <div className="inspectSchedule">
+                  Inspection scheduled for:{" "}
+                  <strong>{getInspectionSchedule(inspection)}</strong>
+                </div>
+                {inspection && inspection.status !== "completed" && (
+                  <div className="book-viewing">
+                    <span
+                      className="link"
+                      onClick={() => props.updateViewing(inspection)}
+                    >
+                      Update
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           {lease && (
             <div className="view-lease-con">
