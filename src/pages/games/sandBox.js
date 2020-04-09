@@ -2,65 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import "./games.css";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
-import Affixed from "../../components/Affixed/affixed";
-import SummaryCard from "../../components/property/SummaryCard";
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
-import { Select } from "../../components/select/Select";
-import { countryCode, statusMode, winningRules } from "../../utils/data";
-import TransactionTable from "../../components/transactionTable/transactionTable";
-import { Paginator } from "../../components/paginator/paginator";
+import { countryCode } from "../../utils/data";
+
 import { Button } from "../../components/button/Button";
 import ContentModal from "../../components/contentModal/contentModal";
 import FormGroup from "../../components/formGroup/formGroup";
-import CurrencyInput from "../../components/currencyInput/currencyInput";
 import { genericChangeMulti, genericChangeSingle } from "../../utils/helper";
-import { TextAreaField } from "../../components/textarea/TextAreaField";
-import DatePicker from "../../components/DatePicker/datePicker";
 import { Notification } from "../../components/notification/Notification";
-import { Link } from "react-router-dom";
 import { Radio } from "../../components/radio/Radio";
 import FileUploadNew from "../../components/fileUploadNew/fileUploadNew";
 import SelectInput from "../../components/selectInput/selectInput";
-import Badge from "../../components/Badge/badge";
 
 function Games(props) {
-  const headings = [
-    "ID",
-    "Game Name",
-    "Game Type",
-    "Cost",
-    "Status",
-    "EndDate",
-    ""
-  ];
-  const play = val => {
-    setVisible(true);
-  };
-  const data = [
-    [
-      "001",
-      "Diamond Xtra Daily Raffle",
-      "Raffle",
-      "NGN 200",
-      <Badge status="success">active</Badge>,
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "002",
-      "Access Wallet Weekly Raffle",
-      "Raffle",
-      "NGN 150",
-      <Badge status="success">active</Badge>,
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ]
-  ];
   const { dispatch } = useContext(store);
   const [visible, setVisible] = useState(false);
 
@@ -71,34 +26,44 @@ function Games(props) {
     });
   }, []);
   return (
-    <div className="singleGames">
+    <div className="games">
       <br />
-      <div className="left-nav">
-        <div className="flex align-center justify-between">
-          <div>
-            <div className="lease-search-box">
-              <Input
-                placeholder="Search"
-                iconRight={<AppIcon name="search" type="feather" />}
-              />
+      <div className="grid grid-3 grid-gap-2">
+        <div>
+          <div className="game-card">
+            <div
+              className="img-con"
+              style={{
+                backgroundImage: `url("https://secureservercdn.net/45.40.148.106/l8q.5a1.myftpupload.com/wp-content/uploads/2016/11/WednesdaySundayRaffles-500x321.jpg")`
+              }}
+            />
+            <div className="flex column justify-between conMain">
+              <div>
+                <div className="title">Diamond Xtra Daily Raffle</div>
+                <div className="info">Raffle</div>
+              </div>
+              <Button onClick={() => setVisible(true)}>Play</Button>
             </div>
           </div>
-          <div className="flex align-center props">
-            &nbsp;
-            <Select
-              className="lease-search-box"
-              defaultOption={statusMode[0]}
-              optionList={statusMode}
+        </div>
+        <div>
+          <div className="game-card">
+            <div
+              className="img-con"
+              style={{
+                backgroundImage: `url("https://techcrunch.com/wp-content/uploads/2018/03/facebook-instant-games.jpg?w=730&crop=1")`
+              }}
             />
+
+            <div className="flex column justify-between conMain">
+              <div>
+                <div className="title">Access Wallet Weekly Raffle</div>
+                <div className="info">Raffle</div>
+              </div>
+              <Button onClick={() => setVisible(true)}>Play</Button>
+            </div>
           </div>
         </div>
-        <br />
-        <br />
-        <TransactionTable keys={headings} values={data} />
-        <br />
-        <Paginator total={1} current={1} />
-        <br />
-        <br />
       </div>
       <ContentModal visible={visible} setVisible={setVisible}>
         <NewGame setVisible={setVisible} />
