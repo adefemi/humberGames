@@ -4,7 +4,6 @@ import { StateProvider } from "./stateManagement/store";
 import { CookiesProvider } from "react-cookie";
 
 function App() {
-<<<<<<< US-merging-notification
   return (
     <CookiesProvider>
       <StateProvider>
@@ -12,9 +11,6 @@ function App() {
       </StateProvider>
     </CookiesProvider>
   );
-=======
-  return <RouterMain />;
->>>>>>> local
 }
 
 export default App;

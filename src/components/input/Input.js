@@ -54,14 +54,10 @@ export const Input = props => {
               props.onChange(e);
             }}
             {...newProps}
-<<<<<<< US-merging-notification
             value={props.value === null ? "" : props.value}
             className={`${props.className} ${
               props.iconRight ? "iconRight" : ""
             } ${props.iconLeft ? "iconLeft" : ""}`}
-=======
-            value={convertValue(props, defaultCode)}
->>>>>>> local
           />
           {props.iconRight && (
             <span className="iconRight">{props.iconRight}</span>

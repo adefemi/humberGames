@@ -1,6 +1,5 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-<<<<<<< US-merging-notification
 import MainLayout from "./components/mainLayout/mainLayout";
 import GlobalLoader from "./components/GlobalLoader/globalLoader";
 import Logout from "./components/logout/logout";
@@ -85,25 +84,6 @@ const RouterMain = props => {
         </Switch>
       </BrowserRouter>
     </>
-=======
-const HomeIndex = lazy(() => import("./pages/homepage"));
-
-const RouterMain = props => {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route
-          path="/"
-          exact
-          component={props => (
-            <Suspense fallback={() => <h2>Loading...</h2>}>
-              <HomeIndex {...props} />
-            </Suspense>
-          )}
-        />
-      </Switch>
-    </BrowserRouter>
->>>>>>> local
   );
 };
 
