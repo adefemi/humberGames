@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./mainlayout.css";
 import { Button } from "../button/Button";
 import { Link } from "react-router-dom";
-import logo from "../../assets/svgs/logo.svg";
+import logo from "../../assets/images/logo.jpg";
 import { Icon } from "../icons";
 import { addClass, hasClass, removeClass } from "../../utils/helper";
 import { store } from "../../stateManagement/store";
