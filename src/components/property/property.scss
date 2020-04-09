@@ -1,53 +1,48 @@
 @import "../../styles/theme";
 
-.order-summary-con.property-con{
+.SummaryCard {
+  margin-bottom: 15px;
 
-  .summary-con{
-    max-width: 600px;
-    overflow: auto;
-    box-sizing: border-box;
-    //max-height: calc(100vh - 20px);
-  }
-  .overlay{
-    background-color: rgba(black, 0.5);
-  }
-  .inner{
-    max-width: unset;
-
-  }
-}
-
-.new-unit{
-  .banner{
-    background-color: #faf5b3;
-    .banner-header{
+  .card-main {
+    border: 1px solid darken(white, 10%);
+    border-radius: 10px;
+    .card-content {
       align-items: center;
-    }
-    margin-bottom: 30px;
+      padding: 0 15px;
 
-    .banner-text{
-      margin-left: 20px;
-      font-size: 13px;
-    }
-  }
-  .add-unit-form{
-    margin-top: 30px;
-  }
-  .main-body{
-    span{
-      svg{
-        color: $danger-color;
+      .summary-flex {
+        display: grid;
+        grid-template-columns: 5fr 2fr;
+
+        span {
+          align-self: center;
+          position: relative;
+          top: 2px;
+
+          width: 25px;
+          display: block;
+
+          img{
+            width: 50px;
+            height: 50px;
+          }
+        }
+
+        .stat-figure {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-left: 1px solid darken(white, 10%);
+          font-weight: bold;
+        }
       }
-    }
-    .property-description{
-      margin-left: 20px;
-      strong{
-        font-size: 13px;
-      }
-      .property-location{
-        font-size: 12px;
-        color: darken(white, 50%);
+
+      .card-stat-text {
+        margin-left: 40px;
+        padding: 30px 0;
         font-weight: 600;
+        color: darken(white, 60%);
+        font-size: 14px;
       }
     }
   }

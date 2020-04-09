@@ -1,14 +1,13 @@
 import React from "react";
 import { Card } from "../card/Card";
-import AppIcon from "../icons/Icon";
-import properties from "../../assets/svg/properties.svg";
-import units from "../../assets/svg/units.svg";
-import interests from "../../assets/svg/interests.svg";
+import games from "../../assets/svgs/game.svg";
+import wins from "../../assets/svgs/win.svg";
+import "./property.css";
+
 function SummaryCard({ total, type }) {
   let icons = {
-    properties,
-    units,
-    interests
+    games,
+    wins
   };
   return (
     <div className="SummaryCard">

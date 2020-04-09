@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./mainlayout.css";
 import { Button } from "../button/Button";
 import { Link } from "react-router-dom";
-import logo from "../../assets/images/logo.svg";
+import logo from "../../assets/svgs/logo.svg";
 import { Icon } from "../icons";
 import { addClass, hasClass, removeClass } from "../../utils/helper";
 import { store } from "../../stateManagement/store";
@@ -11,11 +11,7 @@ import { axiosHandler } from "../../utils/axiosHandler";
 import { GET_ACCESS_TOKEN, USER_ME, USER_ROLE } from "../../utils/urls";
 import { Spinner } from "../spinner/Spinner";
 import qs from "query-string";
-import { useCookies } from "react-cookie";
 import { setRoles, setUserDetails } from "../../stateManagement/actions";
-import ProfileNav from "../profileNav/profileNav";
-import { RoleSwitcher } from "../profile/Settings";
-import AppIcon from "../icons/Icon";
 import NotificationDrop from "../notificationDrop/notificationDrop";
 
 function MainLayout(props) {
@@ -23,7 +19,7 @@ function MainLayout(props) {
   const {
     state: { pageTitle }
   } = useContext(store);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const toggleSlider = () => {
     const el = document.getElementById("sideBar");
@@ -42,27 +38,32 @@ function MainLayout(props) {
 
   useEffect(() => {
     // check token
-    let token = JSON.parse(localStorage.getItem(USERTOKEN));
-    // verify token
+    let token = localStorage.getItem(USERTOKEN);
     if (token) {
-      axiosHandler("get", USER_ME, token.access).then(
-        res => {
-          setLoading(false);
-          setUpUserCookie(res.data);
-          const query = qs.parse(props.location.search);
-          if (query.refresh) {
-            delete query.refresh;
-            let newQuery = qs.stringify(query);
-            props.history.push(props.location.pathname + `?${newQuery}`);
-          }
-        },
-        _ => {
-          handleRefresh("logout");
-        }
-      );
+      setLoading(false);
     } else {
-      handleRefresh("logout");
+      props.history.push("/login");
     }
+    // verify token
+    // if (token) {
+    //   axiosHandler("get", USER_ME, token.access).then(
+    //     res => {
+    //       setLoading(false);
+    //       setUpUserCookie(res.data);
+    //       const query = qs.parse(props.location.search);
+    //       if (query.refresh) {
+    //         delete query.refresh;
+    //         let newQuery = qs.stringify(query);
+    //         props.history.push(props.location.pathname + `?${newQuery}`);
+    //       }
+    //     },
+    //     _ => {
+    //       handleRefresh("logout");
+    //     }
+    //   );
+    // } else {
+    //   handleRefresh("logout");
+    // }
   }, [props]);
 
   const setUpUserCookie = user_data => {
@@ -104,6 +105,10 @@ function MainLayout(props) {
       loginUrl + `?redirect=${props.location.pathname}${logout}`;
   };
 
+  if (loading) {
+    return <Spinner size={15} color={secondaryColor} />;
+  }
+
   return (
     <div className="mainLayout">
       <div className="desktop">
@@ -132,18 +137,6 @@ function MainLayout(props) {
             <div className="navRight">
               <div className="notifier">
                 <NotificationDrop />
-              </div>
-              <Link to="/add-property" className="navItem">
-                <Button>Post Property</Button>
-              </Link>
-              <Link to="/profile" className="navItem">
-                <div className="navItem">
-                  <ProfileNav />
-                </div>
-              </Link>
-              <div className="role-switcher">
-                <div className="head">Active Role</div>
-                <RoleSwitcher hideTitle />
               </div>
             </div>
           </div>
@@ -175,73 +168,49 @@ const SideLinks = ({ icon, title, link, active = false, logout }) => (
   </Link>
 );
 
-const SideBar = () => {
-  const [role, setRole] = useState("agency");
-  const {
-    state: { userDetails }
-  } = useContext(store);
-  useEffect(() => {
-    if (userDetails.role) {
-      setRole(userDetails.role.name);
+const getActive = val => {
+  let ret = false;
+  let pathArr = window.location.pathname.split("/");
+  if (val === "/") {
+    if (window.location.pathname === "/" || window.location.pathname === "") {
+      return true;
     }
-  }, [userDetails]);
+  }
+  if (pathArr.includes(val)) {
+    ret = true;
+  }
+  return ret;
+};
+
+const SideBar = () => {
   return (
     <div className="sideBar">
       <img src={logo} className="logo" alt="logo" />
       <div className="sideLinks">
         <SideLinks
           link={"/"}
-          title="Dashboard"
-          active
+          title="Performance Reports"
+          active={getActive("/")}
           icon={<Icon name="blackboard" type="entypo" />}
         />
-        {role.toLowerCase() !== "tenant" && (
-          <SideLinks
-            link={"/properties"}
-            title="Properties"
-            icon={<Icon name="briefcase" type="entypo" />}
-          />
-        )}
         <SideLinks
-          link={"/applications"}
-          title="Applications"
-          icon={<Icon name="folder" type="entypo" />}
-        />
-        {role.toLowerCase() !== "tenant" && (
-          <SideLinks
-            link={"/leases"}
-            title="Leases"
-            icon={<Icon name="documentInverted" type="entypo" />}
-          />
-        )}
-        <SideLinks
-          link={"/lease-charges"}
-          title="Lease Charges"
-          icon={<Icon name="database" type="entypo" />}
+          link={"/games"}
+          title="Games"
+          active={getActive("games")}
+          icon={<Icon name="controller" type="entypo" />}
         />
         <SideLinks
-          link={"/inspections"}
-          title="Inspections"
-          icon={<Icon name="address" type="entypo" />}
+          link={"/sandbox"}
+          title="Sandbox"
+          active={getActive("sandbox")}
+          icon={<Icon name="branch" type="entypo" />}
         />
         <SideLinks
-          link={"/transactions"}
-          title="Transactions"
-          icon={<Icon name="graph" type="entypo" />}
+          link={"settings"}
+          title="Settings"
+          active={getActive("settings")}
+          icon={<Icon name="cog" type="entypo" />}
         />
-
-        <SideLinks
-          link={"/notifications"}
-          title="Notifications"
-          icon={<Icon name="bell" type="entypo" />}
-        />
-        {role.toLowerCase() === "agency" && (
-          <SideLinks
-            link={"/dashboard/agency"}
-            title="Agencies"
-            icon={<Icon name="suitcase" type="entypo" />}
-          />
-        )}
         <SideLinks
           link={"/logout"}
           logout

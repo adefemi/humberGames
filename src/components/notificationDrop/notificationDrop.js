@@ -36,7 +36,7 @@ function NotificationDrop(props) {
       }
     });
 
-    getNotifications();
+    // getNotifications();
   }, []);
 
   const defineCount = notArray => {

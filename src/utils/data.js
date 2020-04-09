@@ -1,5 +1,3 @@
-import NoImage from "../assets/file.svg";
-
 export const SITETITTLE = "Taskprox";
 export const USERTOKEN = "rr_token";
 export const USERDATA = "rr_user";
@@ -11,7 +9,6 @@ export const FrontEndUrl = "https://rfrontend.clubly.io";
 
 export const primaryColor = "#1CA0D7";
 export const secondaryColor = "#f18910";
-export const noImage = NoImage;
 
 export const durationSelector = [
   { title: "yearly", value: "yearly" },
@@ -52,6 +49,20 @@ export const sizeOptions = [
   { title: "SQFT", value: "sqft" }
 ];
 
+export const statusMode = [
+  { title: "All", value: "all" },
+  { title: "Active", value: "active" },
+  { title: "Inactive", value: "inactive" }
+];
+
+export const winningRules = [
+  { title: "ODDS_1_IN_100", value: "ODDS_1_IN_100" },
+  { title: "ODDS_5_IN_3000", value: "ODDS_5_IN_3000" },
+  { title: "ODDS_100_IN_100000", value: "ODDS_100_IN_100000" },
+  { title: "ODDS_10_IN_10000", value: "ODDS_10_IN_10000" },
+  { title: "ODDS_15_IN_25000", value: "ODDS_15_IN_25000" }
+];
+
 export const currencyOptions = [
   { title: "NGN", value: "NGN" },
   { title: "USD", value: "USD" },
@@ -86,8 +97,6 @@ export const inspectionSortOptions = [
   { title: "Completed", value: "completed" },
   { title: "Failed", value: "failed" }
 ];
-
-export const getNoImage = () => NoImage;
 
 export const maxPercent = 10;
 export const minPercent = 5;

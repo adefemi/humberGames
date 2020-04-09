@@ -1,6 +1,6 @@
 import React from "react";
 import "./fileDragger.css";
-import fileDragImg from "../../assets/images/file-drag.svg";
+import fileDragImg from "../../assets/svgs/file-drag.svg";
 import FileUploadNew from "../fileUploadNew/fileUploadNew";
 import { FILE_UPLOAD_URL, tempToken } from "../../utils/urls";
 import proptype from "prop-types";
