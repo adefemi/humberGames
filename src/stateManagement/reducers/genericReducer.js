@@ -1,5 +1,6 @@
 import {
   reloadApplication,
+  setGameType,
   setGlobalLoader,
   setOrderSummary,
   setRoles,
@@ -9,6 +10,11 @@ import {
 export const userDetailsState = {
   userDetails: {}
 };
+
+export const gameTypeState = {
+  gameType: null
+};
+
 export const rolesState = {
   roles: []
 };
@@ -44,6 +50,17 @@ export const userRolesReducer = (state, action) => {
     return {
       ...state,
       roles: action.payload
+    };
+  } else {
+    return state;
+  }
+};
+
+export const gameTypeReducer = (state, action) => {
+  if (action.type === setGameType) {
+    return {
+      ...state,
+      gameType: action.payload
     };
   } else {
     return state;

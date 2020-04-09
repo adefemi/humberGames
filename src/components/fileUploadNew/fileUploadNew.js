@@ -88,19 +88,22 @@ function FileUploadNew(props) {
   };
 
   useEffect(() => {
-    imageData.map(item => {
-      if (!item.started) {
-        new UploadClass({
-          fileName: props.fileName,
-          uploadUrl: props.uploadUrl,
-          method: props.method,
-          token: props.token,
-          callBack: updateImageData,
-          fileData: item
-        });
-      }
-      return null;
-    });
+    if (!props.disableUpload) {
+      imageData.map(item => {
+        if (!item.started) {
+          new UploadClass({
+            fileName: props.fileName,
+            uploadUrl: props.uploadUrl,
+            method: props.method,
+            token: props.token,
+            callBack: updateImageData,
+            fileData: item
+          });
+        }
+        return null;
+      });
+    }
+
     props.onChange(imageData);
   }, [imageData]);
 
@@ -183,6 +186,7 @@ FileUploadNew.defaultProps = {
 
 FileUploadNew.propType = {
   disabled: proptype.bool,
+  disableUpload: proptype.bool,
   multiple: proptype.bool,
   validImageTypesSrc: proptype.array,
   fileName: proptype.string,

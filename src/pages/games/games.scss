@@ -46,19 +46,3 @@
   }
 }
 
-.prices-card{
-  position: relative;
-  margin-bottom: 20px;
-  border-bottom: 2px solid black;
-
-  .close{
-    position: absolute !important;
-    top: -10px !important;
-    right: 0 !important;
-    color: $danger-color !important;
-  }
-
-  &:last-child{
-    border-bottom: none;
-  }
-}

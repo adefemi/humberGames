@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import "./games.css";
 import { store } from "../../stateManagement/store";
-import { setPageTitleAction } from "../../stateManagement/actions";
+import { setGameType, setPageTitleAction } from "../../stateManagement/actions";
 import { Link } from "react-router-dom";
 
 function Games(props) {
@@ -10,10 +10,16 @@ function Games(props) {
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Games" });
   }, []);
+
+  const setGame = (link, game) => {
+    dispatch({ type: setGameType, payload: game });
+    props.history.push(link);
+  };
+
   return (
     <div className="games">
       <div className="grid grid-3 grid-gap-2">
-        <Link to="/games/raffle">
+        <div onClick={() => setGame("/games/raffle", "raffle")}>
           <div className="game-card">
             <div
               className="img-con"
@@ -36,8 +42,8 @@ function Games(props) {
               </div>
             </div>
           </div>
-        </Link>
-        <Link to="/games/instant">
+        </div>
+        <div onClick={() => setGame("/games/instant", "instant")}>
           <div className="game-card">
             <div
               className="img-con"
@@ -61,7 +67,7 @@ function Games(props) {
               </div>
             </div>
           </div>
-        </Link>
+        </div>
       </div>
     </div>
   );

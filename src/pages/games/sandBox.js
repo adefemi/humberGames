@@ -22,17 +22,28 @@ import { Link } from "react-router-dom";
 import { Radio } from "../../components/radio/Radio";
 import FileUploadNew from "../../components/fileUploadNew/fileUploadNew";
 import SelectInput from "../../components/selectInput/selectInput";
+import Badge from "../../components/Badge/badge";
 
 function Games(props) {
-  const headings = ["ID", "Cost", "Status", "EndDate", ""];
+  const headings = [
+    "ID",
+    "Game Name",
+    "Game Type",
+    "Cost",
+    "Status",
+    "EndDate",
+    ""
+  ];
   const play = val => {
     setVisible(true);
   };
   const data = [
     [
       "001",
-      "NGN 2000",
-      "active",
+      "Diamond Xtra Daily Raffle",
+      "Raffle",
+      "NGN 200",
+      <Badge status="success">active</Badge>,
       "20-02-2020",
       <span className="link" onClick={() => play(2000)}>
         Play
@@ -40,98 +51,10 @@ function Games(props) {
     ],
     [
       "002",
-      "NGN 4000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "003",
-      "NGN 6000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "004",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "005",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "006",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "007",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "008",
-      "NGN 5000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "009",
-      "NGN 10000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "0010",
-      "NGN 1000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "0011",
-      "NGN 20000",
-      "active",
-      "20-02-2020",
-      <span className="link" onClick={() => play(2000)}>
-        Play
-      </span>
-    ],
-    [
-      "0012",
-      "NGN 2000",
-      "active",
+      "Access Wallet Weekly Raffle",
+      "Raffle",
+      "NGN 150",
+      <Badge status="success">active</Badge>,
       "20-02-2020",
       <span className="link" onClick={() => play(2000)}>
         Play
@@ -155,7 +78,7 @@ function Games(props) {
           <div>
             <div className="lease-search-box">
               <Input
-                placeholder="Search ID"
+                placeholder="Search"
                 iconRight={<AppIcon name="search" type="feather" />}
               />
             </div>
@@ -173,7 +96,7 @@ function Games(props) {
         <br />
         <TransactionTable keys={headings} values={data} />
         <br />
-        <Paginator total={10} current={1} />
+        <Paginator total={1} current={1} />
         <br />
         <br />
       </div>
@@ -188,6 +111,7 @@ const NewGame = props => {
   const [gameData, setGameData] = useState({});
   const [propertyType, setPropertyType] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const onSubmit = e => {
     e.preventDefault();
@@ -205,21 +129,17 @@ const NewGame = props => {
   return (
     <div className="newGame">
       <h3>Play Game</h3>
-      <p>play well and good luck</p>
 
       <br />
-      <div>
-        Price: <span>NGN 1,000</span>
-      </div>
-      <br />
       <FormGroup label="Choose game mode">
-        <div className="radio-group">
+        <div className="flex align-center radio-group">
           <Radio
             onChange={() => setPropertyType("single")}
             name="propType"
             label="Single"
             checked={propertyType === "single"}
           />
+          &nbsp; &nbsp; &nbsp; &nbsp;
           <Radio
             onChange={() => setPropertyType("bulk")}
             name="propType"
@@ -260,13 +180,41 @@ const NewGame = props => {
         )}
         {propertyType === "bulk" && (
           <>
-            <FileUploadNew>Upload Game Plays</FileUploadNew>
+            <FileUploadNew
+              onChange={e => {
+                if (e[0]) {
+                  setSelectedFile(e[0].name);
+                }
+              }}
+              disableUpload
+            >
+              Upload Game Plays
+            </FileUploadNew>
+            {selectedFile && (
+              <>
+                <br />
+                <div className="flex align-center">
+                  <div
+                    onClick={() => setSelectedFile(null)}
+                    className="pointer"
+                  >
+                    <AppIcon name="x" type="feather" />
+                  </div>
+                  &nbsp; &nbsp; &nbsp;
+                  <div className="link">{selectedFile}</div>
+                </div>
+              </>
+            )}
           </>
         )}
       </FormGroup>
       <br />
       <br />
-      <Button loading={loading} disabled={loading} onClick={onSubmit}>
+      <Button
+        loading={loading}
+        disabled={loading || !propertyType}
+        onClick={onSubmit}
+      >
         Submit
       </Button>
       <br />

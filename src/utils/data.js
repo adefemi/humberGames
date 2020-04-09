@@ -55,6 +55,12 @@ export const statusMode = [
   { title: "Inactive", value: "inactive" }
 ];
 
+export const durationType = [
+  { title: "Daily", value: "daily" },
+  { title: "Weekly", value: "weekly" },
+  { title: "Monthly", value: "monthly" }
+];
+
 export const winningRules = [
   { title: "ODDS_1_IN_100", value: "ODDS_1_IN_100" },
   { title: "ODDS_5_IN_3000", value: "ODDS_5_IN_3000" },

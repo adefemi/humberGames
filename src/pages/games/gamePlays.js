@@ -59,7 +59,6 @@ function Games(props) {
     ]
   ];
   const { dispatch } = useContext(store);
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     dispatch({
@@ -101,7 +100,13 @@ function Games(props) {
         <div className="right-nav">
           <Affixed offset={50}>
             <>
-              <Button color="success" block onClick={() => setVisible(true)}>
+              <Button
+                color="success"
+                block
+                onClick={() =>
+                  props.history.push(`/games/${props.match.params.uuid}/create`)
+                }
+              >
                 Create Game Instance
               </Button>
               <br />
@@ -115,140 +120,8 @@ function Games(props) {
           </Affixed>
         </div>
       </div>
-      <ContentModal visible={visible} setVisible={setVisible}>
-        <NewGame setVisible={setVisible} />
-      </ContentModal>
     </div>
   );
 }
-
-const NewGame = props => {
-  const [gameData, setGameData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [prices, setPrices] = useState([{}]);
-  const remove = key => {
-    setPrices(prices.filter((_, key2) => key2 !== key));
-  };
-  const change = (key, e) => {
-    const activeCharge = prices.filter((item, index) => index === key)[0];
-    activeCharge[e.target.name] = e.target.value;
-    if (e.target.currency) activeCharge.currency_type = e.target.currency;
-    if (e.target.rawValue) activeCharge[e.target.name] = e.target.rawValue;
-    const newChargeList = prices.map((item, index) => {
-      if (index === key) return activeCharge;
-      return item;
-    });
-
-    setPrices(newChargeList);
-  };
-
-  const onSubmit = e => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      Notification.bubble({
-        type: "success",
-        content: "Game instance added successfully"
-      });
-      setLoading(false);
-      props.setVisible(false);
-    }, 2000);
-  };
-
-  return (
-    <div className="newGame">
-      <h3>Create new Instance</h3>
-      <p>let us in on the requirements of your game</p>
-
-      <form action="" onSubmit={onSubmit}>
-        <FormGroup label="Cost">
-          <CurrencyInput
-            onChange={e => genericChangeSingle(e, setGameData, gameData)}
-            value={gameData.cost || 0}
-            name={"cost"}
-            required
-            defaultCurrencyOption={{
-              title: "NGN",
-              value: "NGN"
-            }}
-          />
-        </FormGroup>
-        <br />
-        <h3>Define your prices</h3>
-        <div className="prices-lists">
-          {prices.map((item, key) => (
-            <PricesConfig
-              onRemove={() => remove(key)}
-              gameData={item}
-              key={key}
-              canShow={prices.length > 1}
-              onChange={e => change(key, e)}
-            />
-          ))}
-        </div>
-        <p />
-        <div className="flex justify-end">
-          <div className="link" onClick={() => setPrices([...prices, {}])}>
-            Add More Prices
-          </div>
-        </div>
-        <br />
-        <h3>Set EndDate</h3>
-        <DatePicker />
-        <br />
-        <br />
-        <Button loading={loading} disabled={loading} type="submit">
-          Submit
-        </Button>
-      </form>
-      <br />
-      <br />
-    </div>
-  );
-};
-
-const PricesConfig = props => {
-  return (
-    <div className="prices-card">
-      {props.canShow && (
-        <div className="close" onClick={props.onRemove}>
-          <AppIcon name="x" type="feather" />
-        </div>
-      )}
-      <FormGroup label="Label">
-        <Input
-          name="label"
-          onChange={props.onChange}
-          value={props.gameData.label || ""}
-          required
-        />
-      </FormGroup>
-      <div className="grid grid-2 grid-gap-2">
-        <FormGroup label="Amount">
-          <CurrencyInput
-            onChange={props.onChange}
-            value={props.gameData.amount || 0}
-            name={"amount"}
-            required
-            defaultCurrencyOption={{
-              title: "NGN",
-              value: "NGN"
-            }}
-          />
-        </FormGroup>
-        <FormGroup label="Amount">
-          <Select
-            onChange={props.onChange}
-            value={props.gameData.winningRule || ""}
-            name={"winningRule"}
-            placeholder="--select a winning rule--"
-            optionList={winningRules}
-            required
-          />
-        </FormGroup>
-      </div>
-    </div>
-  );
-};
 
 export default Games;

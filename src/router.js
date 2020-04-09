@@ -10,6 +10,7 @@ const SingleGame = lazy(() => import("./pages/games/singleGame"));
 const GamePlay = lazy(() => import("./pages/games/gamePlays"));
 const SandBox = lazy(() => import("./pages/games/sandBox"));
 const Settings = lazy(() => import("./pages/settings/settings"));
+const CreateGame = lazy(() => import("./pages/createGame/createGame"));
 
 const RouterMain = props => {
   return (
@@ -38,6 +39,15 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <SingleGame {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/games/:uuid/create"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <CreateGame {...props} />
                     </Suspense>
                   )}
                 />

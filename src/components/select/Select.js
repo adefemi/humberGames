@@ -108,18 +108,18 @@ export const Select = props => {
       const inputBounds = inputField.getBoundingClientRect();
       el.style.left = `${inputBounds.x}px`;
       el.style.width = `${inputBounds.width}px`;
-      const dropBounds = el.getBoundingClientRect();
-      const mainDocBounds = document
-        .getElementById("mainBar")
-        .getBoundingClientRect();
+      const dropDownVPos =
+        el.getBoundingClientRect().height +
+        inputBounds.top +
+        inputBounds.height;
+      const windowHeight = window.innerHeight - 20;
 
-      let checkerX = dropBounds.height + dropBounds.top;
-
-      if (checkerX > mainDocBounds.height - 200) {
-        const newTop = inputBounds.y - 10 - dropBounds.height;
-        el.style.top = `${newTop}px`;
+      if (dropDownVPos > windowHeight) {
+        el.style.top = `${inputBounds.top -
+          10 -
+          el.getBoundingClientRect().height}px`;
       } else {
-        el.style.top = `${inputBounds.y + inputBounds.height / 2 + 25}px`;
+        el.style.top = `${inputBounds.top + inputBounds.height + 10}px`;
       }
     } catch (e) {}
   };
