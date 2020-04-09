@@ -2,11 +2,13 @@ import React from "react";
 import { Card } from "../card/Card";
 import games from "../../assets/svgs/game.svg";
 import wins from "../../assets/svgs/win.svg";
+import gamesplays from "../../assets/svgs/money.svg";
 import "./property.css";
 
 function SummaryCard({ total, type }) {
   let icons = {
     games,
+    gamesplays,
     wins
   };
   return (

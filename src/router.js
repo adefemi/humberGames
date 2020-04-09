@@ -5,7 +5,6 @@ import GlobalLoader from "./components/GlobalLoader/globalLoader";
 import Logout from "./components/logout/logout";
 import Login from "./pages/login/login";
 
-const HomeIndex = lazy(() => import("./pages/dashboard/dashboard"));
 const Games = lazy(() => import("./pages/games/games"));
 const SingleGame = lazy(() => import("./pages/games/singleGame"));
 const GamePlay = lazy(() => import("./pages/games/gamePlays"));
@@ -26,15 +25,6 @@ const RouterMain = props => {
               <MainLayout {...props}>
                 <Route
                   path="/"
-                  exact
-                  component={props => (
-                    <Suspense fallback={() => <h2>Loading...</h2>}>
-                      <HomeIndex {...props} />
-                    </Suspense>
-                  )}
-                />
-                <Route
-                  path="/games"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>

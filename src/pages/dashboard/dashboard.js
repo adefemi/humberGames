@@ -1,18 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import "./dashboard.css";
-import { store } from "../../stateManagement/store";
-import { setPageTitleAction } from "../../stateManagement/actions";
 import { Card } from "../../components/card/Card";
 import { DATA, OPTIONS, DATA2, OPTIONS2 } from "./transactionGraphData";
 import Graph from "../../components/graph/Graph";
 
 function Dashboard(props) {
-  const { dispatch } = useContext(store);
-
-  useEffect(() => {
-    dispatch({ type: setPageTitleAction, payload: "Performance Reports" });
-  }, []);
-
   return (
     <div className="dashboard">
       <div className="computes">

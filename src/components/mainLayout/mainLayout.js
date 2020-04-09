@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./mainlayout.css";
-import { Button } from "../button/Button";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg";
 import { Icon } from "../icons";
@@ -8,7 +7,7 @@ import { addClass, hasClass, removeClass } from "../../utils/helper";
 import { store } from "../../stateManagement/store";
 import { loginUrl, secondaryColor, USERTOKEN } from "../../utils/data";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { GET_ACCESS_TOKEN, USER_ME, USER_ROLE } from "../../utils/urls";
+import { GET_ACCESS_TOKEN, USER_ROLE } from "../../utils/urls";
 import { Spinner } from "../spinner/Spinner";
 import qs from "query-string";
 import { setRoles, setUserDetails } from "../../stateManagement/actions";
@@ -189,14 +188,8 @@ const SideBar = () => {
       <div className="sideLinks">
         <SideLinks
           link={"/"}
-          title="Performance Reports"
-          active={getActive("/")}
-          icon={<Icon name="blackboard" type="entypo" />}
-        />
-        <SideLinks
-          link={"/games"}
           title="Games"
-          active={getActive("games")}
+          active={getActive("/")}
           icon={<Icon name="controller" type="entypo" />}
         />
         <SideLinks

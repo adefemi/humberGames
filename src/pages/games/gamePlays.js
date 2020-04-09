@@ -19,116 +19,42 @@ import { TextAreaField } from "../../components/textarea/TextAreaField";
 import DatePicker from "../../components/DatePicker/datePicker";
 import { Notification } from "../../components/notification/Notification";
 import { Link } from "react-router-dom";
+import Badge from "../../components/Badge/badge";
 
 function Games(props) {
-  const headings = ["ID", "Cost", "Status", "EndDate", ""];
+  const headings = [
+    "ID",
+    "Game Name",
+    "Operation Cost",
+    "Cost",
+    "Status",
+    "Total GamePlays",
+    "Total Winnings",
+    ""
+  ];
   const data = [
     [
       "001",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
+      "Diamond Xtra Daily Raffle",
+      "NGN 300",
+      "NGN 30",
+      <Badge status="processing" text="active" />,
+      "1586",
+      "5",
       <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
+        View Game Instance
       </Link>
     ],
     [
       "002",
-      "NGN 4000",
-      "inactive",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "003",
-      "NGN 6000",
-      "inactive",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "004",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "005",
-      "NGN 2000",
-      "inactive",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "006",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "007",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "008",
-      "NGN 5000",
-      "inactive",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "009",
-      "NGN 10000",
-      "active",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "0010",
+      "Access Wallet Weekly Raffle",
       "NGN 1000",
-      "active",
-      "20-02-2020",
+      "NGN 80",
+      <Badge status="error" text="inactive" />,
+      "0",
+      "0",
       <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "0011",
-      "NGN 20000",
-      "active",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
-      </Link>
-    ],
-    [
-      "0012",
-      "NGN 2000",
-      "active",
-      "20-02-2020",
-      <Link to={`/games/${props.match.params.uuid}/gameplays`} className="link">
-        GamePlays
+        View Game Instance
       </Link>
     ]
   ];
@@ -182,8 +108,9 @@ function Games(props) {
               <br />
               <div className="section-header">Quick Summary</div>
               <p />
-              <SummaryCard type={"games"} total={"10,000"} />
-              <SummaryCard type={"wins"} total={15} />
+              <SummaryCard type={"gamesplays"} total={"2"} />
+              <SummaryCard type={"games"} total={"1,589"} />
+              <SummaryCard type={"wins"} total={"15"} />
             </>
           </Affixed>
         </div>
@@ -320,13 +247,6 @@ const PricesConfig = props => {
           />
         </FormGroup>
       </div>
-      <FormGroup label="description">
-        <TextAreaField
-          onChange={props.onChange}
-          name="desc"
-          value={props.gameData.desc || ""}
-        />
-      </FormGroup>
     </div>
   );
 };
