@@ -1,31 +1,23 @@
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
 
-function Step(props) {
-  let activeStatus = props.active ? " active " : "";
+export function Step({active, step=1, value=""}) {
+  let activeStatus = active ? " active " : "";
 
   return (
     <Fragment>
       <div className="dflex">
         <button className={"outline-btn-primary btn-page-nav" + activeStatus}>
-          {props.step}
+          {step}
         </button>
+<<<<<<< US-merging-notification
         <div>
-          {props.value}
+          {value}
 
         </div>
+=======
+        <div>{props.value}</div>
+>>>>>>> local
       </div>
     </Fragment>
   );
 }
-
-Step.propTypes = {
-  step: PropTypes.number
-};
-
-Step.defaultProptypes = {
-  step: 1,
-  value: ""
-};
-
-export default Step;

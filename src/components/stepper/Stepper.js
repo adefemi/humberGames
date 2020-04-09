@@ -2,8 +2,13 @@ import React from "react";
 
 import "./Stepper.css";
 
-export default function Stepper(props) {
-  let stepsArray = React.Children.toArray(props.children),
+export function Stepper({
+  active,
+  children,
+  className = "",
+  vertical = false
+}) {
+  let stepsArray = React.Children.toArray(children),
     activeStatus;
 
   const steps = () => {
@@ -20,11 +25,11 @@ export default function Stepper(props) {
     });
   };
   return (
-    <div className={"Stepper " + props.className}>
+    <div className={"Stepper " + className}>
       <div
         className={
           "dflex justify-around " +
-          (props.vertical ? "columns vertical-orientation" : "")
+          (vertical ? "columns vertical-orientation" : "")
         }
       >
         {steps()}

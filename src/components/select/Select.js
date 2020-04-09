@@ -1,202 +1,262 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import proptype from "prop-types";
 
 import "./Select.css";
-import { getNewProps } from "../input/Input";
+import Input from "../input/Input";
+import AppIcon from "../icons/Icon";
+import ms from "microseconds";
+import {
+  addClass,
+  hasClass,
+  randomIDGenerator,
+  removeClass
+} from "../../utils/helper";
 
-let selectCount = 0;
-
-const defaultPropList = {
-  value: PropTypes.any,
-  onChange: PropTypes.func.isRequired,
-  error: PropTypes.bool,
-  errorText: PropTypes.string,
-  className: PropTypes.string,
-  style: PropTypes.object,
-  size: PropTypes.oneOf(["default", "small", "large"]),
-  disabled: PropTypes.bool,
-  iconLeft: PropTypes.any,
-  placeholder: PropTypes.string,
-  showDropDown: PropTypes.bool,
-  displayed: PropTypes.any,
-  children: PropTypes.any,
-  secondary: PropTypes.bool,
-  defaultOption: PropTypes.bool,
-  noInitial: PropTypes.bool,
-  selectName: PropTypes.string
-};
-
-// function to check if an element has a class
-export const hasClass = (el, className) => {
-  if (!el) {
-    return;
-  }
-  return el.classList.contains(className);
-};
-
-// function to add a class to an element
-export const addClass = (el, className) => {
-  if (!el) {
-    return;
-  }
-  el.classList.add(className);
-};
-
-// function to remove a class from an element
-export const removeClass = (ele, cls) => {
-  if (!ele) {
-    return;
-  }
-  if (hasClass(ele, cls)) {
-    ele.classList.remove(cls);
-  }
-};
-
-const fixChildren = (children, props) => {
-  if (typeof children !== "object") {
-    return null;
-  }
-
-  if (!children || children.length < 1) {
-    return null;
-  }
-
-  let newChildren = children;
-  if (!children.length) {
-    newChildren = [children];
-  }
-
-  if (props.defaultOption) {
-    let defaultOpt = newChildren[0];
-    newChildren = newChildren[1];
-    newChildren.unshift(defaultOpt);
-  }
-
-  newChildren = newChildren.filter(item => {
-    if (typeof item !== "object") {
-      return null;
-    } else if (!item || item.length < 1) {
-      return null;
-    } else if (!item.length) {
-      return item;
-    } else {
-      for (let i = 0; i < item.length; i++) {
-        return item[parseInt(i, 10)];
-      }
-    }
-    return null;
-  });
-  return newChildren;
-};
-
-// base functional component for select, makes use of react hooks...
-const Select = props => {
-  let newProps = getNewProps(props, defaultPropList);
-  for (let key in newProps) {
-    if (
-      newProps.hasOwnProperty(key) &&
-      ["noinitial", "selectname"].includes(key.toLowerCase())
-    ) {
-      delete newProps[key];
-    }
-  }
-  let children = fixChildren(props.children, props);
-
-  const [count, setCount] = useState(selectCount);
-  const [value, setValue] = useState(props.value || "");
+export const Select = props => {
+  const [optionList, setOptionList] = useState([]);
+  const [defaultOptionList, setDefaultOptionList] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selection, setSelection] = useState("");
+  const [name, setName] = useState("");
+  const [activeOption, setActiveOption] = useState("");
+  const [activeID] = useState(`${randomIDGenerator(6)}-${ms.now()}`);
+  const [selectId] = useState(`${randomIDGenerator(6)}-${ms.now()}`);
 
   useEffect(() => {
-    setCount(selectCount++);
-    setValue(props.value);
-  }, [props.value]);
+    setOptionList(props.optionList);
+    setDefaultOptionList(props.optionList);
+    setName(props.name);
+    if (props.value) {
+      setActiveOption(props.value);
+    }
+  }, [props]);
 
-  const onChange = e => {
-    setValue(e.target.value);
-    props.onChange(e);
+  useEffect(() => {
+    if (selection !== "") {
+      handleSelection();
+    }
+  }, [selection]);
+
+  useEffect(() => {
+    createSetupOption();
+    if (props.defaultOption && props.defaultOption.title) {
+      setSelection(props.defaultOption.title);
+    }
+    setTimeout(() => positionOptionDrop(), 1000);
+    document
+      .getElementById("mainBar")
+      .addEventListener("scroll", positionOptionDrop);
+    window.addEventListener("resize", positionOptionDrop);
+    handleClicks();
+  }, [props.optionList]);
+
+  useEffect(() => {
+    if (props.triggerPosition) {
+      positionOptionDrop();
+      props.triggerReset();
+    }
+
+    if (props.selectTrigger) {
+      setActiveOption("");
+      props.selectTriggerReset();
+    }
+  }, [props.triggerPosition, props.selectTrigger]);
+
+  useEffect(() => {
+    const selectDrop = document.getElementById(activeID);
+    const ul = selectDrop.getElementsByTagName("ul")[0];
+    if (!ul) {
+      return;
+    }
+    ul.innerHTML = "";
+    appendSelections(ul, optionList);
+    setTimeout(() => positionOptionDrop(), 200);
+  }, [optionList]);
+
+  const createSetupOption = () => {
+    let el = document.createElement("div");
+    el.id = activeID;
+    el.classList.add("select-root");
+    document.body.appendChild(el);
+    addOptions(el);
   };
 
-  if (!props.noInitial) {
-    let placeholderText = props.selectName || props.name;
-    if (children) {
-      children = [
-        <option key={-100} value={""}>
-          {`Select ${
-            placeholderText && /[aeiou]/i.test(placeholderText[0]) ? "an" : "a"
-          }  ${placeholderText && placeholderText.replace(/([A-Z])/g, " $1")}`}
-        </option>,
-        ...children
-      ];
+  const addOptions = el => {
+    let ul = document.createElement("ul");
+    ul.classList.add("select-ul");
+    appendSelections(ul, defaultOptionList);
+    el.appendChild(ul);
+  };
+
+  const appendSelections = (ul, _list) => {
+    _list.map((item, index) => {
+      let li = document.createElement("li");
+      li.classList.add("select-li");
+      li.innerHTML = item.title;
+      li.onclick = e => {
+        setSelection(e.target.innerHTML);
+      };
+      ul.appendChild(li);
+      return null;
+    });
+  };
+
+  const positionOptionDrop = _ => {
+    try {
+      let el = document.getElementById(activeID.toString());
+      let inputField = document.getElementById(selectId.toString());
+      const inputBounds = inputField.getBoundingClientRect();
+      el.style.left = `${inputBounds.x}px`;
+      el.style.width = `${inputBounds.width}px`;
+      const dropBounds = el.getBoundingClientRect();
+      const mainDocBounds = document
+        .getElementById("mainBar")
+        .getBoundingClientRect();
+
+      let checkerX = dropBounds.height + dropBounds.top;
+
+      if (checkerX > mainDocBounds.height - 200) {
+        const newTop = inputBounds.y - 10 - dropBounds.height;
+        el.style.top = `${newTop}px`;
+      } else {
+        el.style.top = `${inputBounds.y + inputBounds.height / 2 + 25}px`;
+      }
+    } catch (e) {}
+  };
+
+  const handleSelection = _ => {
+    const valueCheck = defaultOptionList.filter(
+      item => item.title === selection
+    );
+    if (valueCheck.length > 0) {
+      const inputElement = document.getElementById(selectId);
+      inputElement.onblur = e => false;
+      setSelectedOption(valueCheck[0]);
+      setActiveOption(valueCheck[0].title);
+      if (props.onChange) {
+        props.onChange({
+          target: {
+            name,
+            value: valueCheck[0].value
+          }
+        });
+      }
+      closeAllSelect();
     }
-  }
+  };
+
+  const handleClicks = () => {
+    const input = document.getElementById(selectId);
+
+    document.body.onclick = e => {
+      if (
+        hasClass(e.target, "select-li") ||
+        hasClass(e.target, "select-input")
+      ) {
+        return;
+      }
+      closeAllSelect();
+    };
+    input.onclick = () => {
+      const selectDrop = document.getElementById(activeID);
+
+      if (!hasClass(selectDrop, "open")) {
+        closeAllSelect(activeID);
+        addClass(selectDrop, "open");
+      } else {
+        removeClass(selectDrop, "open");
+      }
+    };
+    if (props.onBlur) {
+      props.onBlur();
+    }
+  };
+
+  const closeAllSelect = id => {
+    const allSelect = document.getElementsByClassName("select-root");
+    if (allSelect) {
+      for (let i = 0; i < allSelect.length; i++) {
+        if (hasClass(allSelect[i], "open")) {
+          if (id && allSelect[id] !== id) {
+            removeClass(allSelect[i], "open");
+          } else {
+            removeClass(allSelect[i], "open");
+          }
+        }
+      }
+    }
+  };
+
+  const onChange = e => {
+    if (props.onTypeChange) {
+      props.onTypeChange({
+        target: {
+          name: props.name,
+          value: e.target.value
+        }
+      });
+    }
+    setActiveOption(e.target.value);
+    setSelectedOption(null);
+    const newList = defaultOptionList.filter(item =>
+      item.title.toString().includes(e.target.value.toLowerCase())
+    );
+    if (e.target.value.length > 0) {
+      setOptionList(newList);
+    } else {
+      setOptionList(defaultOptionList);
+    }
+  };
 
   return (
-    <div
-      className={
-        props.error
-          ? props.className +
-            ` select-control select${count}  error ` +
-            props.size
-          : props.className + ` select-control select${count} ` + props.size
+    <Input
+      id={selectId}
+      type="text"
+      style={props.style}
+      className={`select-input ${props.className ? props.className : ""}`}
+      value={activeOption}
+      onBlur={_ => {
+        if (props.onBlur) {
+          props.onBlur();
+        }
+        if (props.autoComplete) {
+          return;
+        }
+        if (!selectedOption) {
+          setActiveOption("");
+          setTimeout(() => setOptionList(defaultOptionList), 500);
+        }
+      }}
+      onChange={onChange}
+      placeholder={props.placeholder}
+      required={props.required}
+      disabled={props.fetching}
+      iconRight={
+        props.autoComplete ? (
+          <></>
+        ) : props.icon ? (
+          props.icon
+        ) : (
+          <AppIcon name="ic_arrow_drop_down" type="md" />
+        )
       }
-      style={{ ...props.style }}
-    >
-      <div
-        className={`select-button select${count} ${
-          props.disabled ? "disabled" : ""
-        } ${props.secondary && "secondary"}`}
-      >
-        {props.iconLeft && <span className="left-icon">{props.iconLeft}</span>}
-
-        <select
-          className={`selectInput${count} ${props.disabled ? "disabled" : ""}`}
-          onChange={onChange}
-          disabled={props.disabled}
-          placeholder={props.placeholder || ""}
-          value={value}
-          name={props.name}
-          autoComplete={"new"}
-          {...newProps}
-        >
-          {children &&
-            children.length > 0 &&
-            children.map((item, key) => (
-              <option
-                key={key}
-                value={item.props.value}
-                data-order={item.props.order}
-                data-value={item.props.dataValue}
-              >
-                {item.props.children}
-              </option>
-            ))}
-        </select>
-      </div>
-
-      {props.error && (
-        <div className={`select-error-text select${count}`}>
-          {props.errorText}
-        </div>
-      )}
-    </div>
+    />
   );
 };
 
-// select component extension to handle option...
-Select.Option = ({ value, displayed }) => null;
-
-Select.propTypes = defaultPropList;
-
-Select.defaultProps = {
-  value: "Hello",
-  onChange: () => null,
-  error: false,
-  errorText: "Invalid selection",
-  className: "",
-  size: "default",
-  disabled: false,
-  placeholder: "Make a selection",
-  showDropDown: true,
-  secondary: false
+Select.propTypes = {
+  defaultOption: proptype.objectOf(proptype.any),
+  optionList: proptype.arrayOf(proptype.objectOf(proptype.any)),
+  placeholder: proptype.string,
+  onChange: proptype.func,
+  name: proptype.string,
+  value: proptype.any,
+  autoComplete: proptype.bool,
+  fetching: proptype.bool,
+  onTypeChange: proptype.func
 };
 
-export default Select;
+Select.defaultProps = {
+  autoComplete: false,
+  fetching: false
+};

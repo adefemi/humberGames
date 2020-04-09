@@ -1,8 +1,7 @@
 import React from "react";
 import "./Toggle.css";
-import proptypes from "prop-types";
 
-export default function Toggle({ toggleStatus, handleToggle, className }) {
+export function Toggle({ toggleStatus, handleToggle, className }) {
   return (
     <div className={`Toggle ${className}`}>
       <div
@@ -14,9 +13,3 @@ export default function Toggle({ toggleStatus, handleToggle, className }) {
     </div>
   );
 }
-
-Toggle.propTypes = {
-  toggleStatus: proptypes.bool,
-  handleToggle: proptypes.func,
-  className: proptypes.string
-};

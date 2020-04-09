@@ -1,4 +1,4 @@
-@import "../../../styles/_theme.scss";
+@import "../../styles/theme";
 
 .notification-main {
   width: 100%;
@@ -40,7 +40,7 @@
 }
 
 .notification-main.info {
-  background-color: $secondary-color-light;
+  background-color: $blue3-con;
 }
 
 .notification-main.warning {

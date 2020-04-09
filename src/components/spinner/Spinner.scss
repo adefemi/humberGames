@@ -1,4 +1,4 @@
-@import "../../../styles/_theme";
+@import "../../styles/theme";
 
 .lds-dual-ring {
   display: inline-block;
@@ -7,7 +7,7 @@
   margin: 1px;
   border-radius: 50%;
   border: 2px solid transparent;
-  animation: lds-dual-ring 1.2s linear infinite;
+  animation: lds-dual-ring 0.5s linear infinite;
 }
 
 @keyframes lds-dual-ring {

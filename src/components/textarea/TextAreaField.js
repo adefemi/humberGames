@@ -3,7 +3,7 @@ import React from "react";
 
 import "./TextAreaField.css";
 
-const TextAreaField = props => {
+export const TextAreaField = props => {
   return (
     <React.Fragment>
       <textarea
@@ -12,7 +12,7 @@ const TextAreaField = props => {
         placeholder={props.placeholder}
         maxLength={props.maxlength}
         onChange={props.onChange}
-        style={({ ...props.style }, { resize: "none", height: "120px" })}
+        style={{ ...props.style, resize: "none", height: "120px" }}
         className={props.error ? "textarea-error" : ""}
         defaultValue={props.defaultValue}
         value={props.value}
@@ -43,5 +43,3 @@ TextAreaField.defaultProps = {
   error: false,
   errorText: "Error validating the input"
 };
-
-export default TextAreaField;

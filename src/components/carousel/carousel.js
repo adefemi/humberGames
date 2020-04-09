@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "../common/slider-wrapper/Slider.css";
 
-function Carousel(props) {
+export function Carousel(props) {
   let slickSettings = {
     dots: false,
     arrows: true,
@@ -61,5 +61,3 @@ function Carousel(props) {
     </div>
   );
 }
-
-export default Carousel;

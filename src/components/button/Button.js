@@ -1,11 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Spinner } from "../spinner";
-
 import "./Button.css";
+import { Spinner } from "../spinner/Spinner";
 
-const Button = props => {
+export const Button = props => {
   return (
     <button
       style={props.style}
@@ -20,19 +19,17 @@ const Button = props => {
       type={props.type}
       value={props.value}
       title={props.title}
+      onBlur={props.onBlur}
     >
       <span className={"content"}>
         {props.icon && <span className={"icon-left"}>{props.icon}</span>}
         {props.children}
       </span>
-      {props.loading ? (
-        <span className={`spinner ${props.color}`}>
-          <Spinner />
-        </span>
-      ) : null}
+      {props.loading ? <Spinner /> : null}
     </button>
   );
 };
+
 Button.propTypes = {
   color: PropTypes.oneOf(["primary", "success", "danger", "default"]),
   onClick: PropTypes.func,
@@ -54,5 +51,3 @@ Button.defaultProps = {
   className: "",
   type: "button"
 };
-
-export default Button;

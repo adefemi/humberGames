@@ -80,11 +80,7 @@ export default class Tabs extends Component {
 
   //Static method for tab panes
   static TabPane({ tab }) {
-    return (
-     <div>
-       {tab}
-     </div>
-    );
+    return <div>{tab}</div>;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {

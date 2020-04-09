@@ -1,34 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 import "./Spinner.css";
 
-const defaultProps = {
-  type: "default",
-  color: "#ffffff",
-  size: 15
-};
-
-const propTypes = {
-  type: PropTypes.oneOf(["default", "alternate"]),
-  color: PropTypes.string,
-  size: PropTypes.number
-};
-
-const Spinner = props => {
+export const Spinner = ({ color = "#ffffff", size = 15, type = "default" }) => {
   return (
     <div
       style={{
-        borderRightColor: props.color,
-        width: `${props.size}px`,
-        height: `${props.size}px`
+        borderRightColor: color,
+        width: `${size}px`,
+        height: `${size}px`
       }}
-      className={`lds-dual-ring ${props.type}`}
+      className={`lds-dual-ring ${type}`}
     />
   );
 };
-
-Spinner.defaultProps = defaultProps;
-Spinner.propTypes = propTypes;
-
-export default Spinner;

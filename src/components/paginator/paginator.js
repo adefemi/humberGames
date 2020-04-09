@@ -4,7 +4,7 @@ import AppIcon from "../icons/Icon";
 import "./paginator.css";
 import proptypes from "prop-types";
 
-function Paginator(props) {
+export function Paginator(props) {
   return (
     <div className="pagination-main">
       <ReactPaginate
@@ -33,5 +33,3 @@ Paginator.propType = {
   current: proptypes.number,
   onChange: proptypes.func
 };
-
-export default Paginator;

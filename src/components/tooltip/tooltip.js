@@ -1,18 +1,13 @@
 import React, { useState } from "react";
-import proptypes from "prop-types";
 import ReactTooltip from "react-tooltip";
 import "./tooltip.css";
 
-function Tooltip(props) {
+export function Tooltip({ tipText, children }) {
   const [id] = useState(Date.now());
   return (
     <>
-      <div
-        data-tip={props.tipText}
-        data-for={id.toString()}
-        className={"tooltip"}
-      >
-        {props.children}
+      <div data-tip={tipText} data-for={id.toString()} className={"tooltip"}>
+        {children}
       </div>
       <ReactTooltip
         className="tooltip-inner"
@@ -23,9 +18,3 @@ function Tooltip(props) {
     </>
   );
 }
-
-Tooltip.propTypes = {
-  tipText: proptypes.string
-};
-
-export default Tooltip;

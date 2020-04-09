@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import "./Dropdown.css";
-import { hasClass, addClass, removeClass } from "../select/Select";
+import { hasClass, addClass, removeClass } from "../../utils/helper";
 import { hasSomeParentTheClass } from "../../utils/helper";
 import propTypes from "prop-types";
+
 const proptypes = {
   dropDownWidth: propTypes.string,
   active: propTypes.any.isRequired,
@@ -11,7 +12,7 @@ const proptypes = {
   staticContent: propTypes.bool
 };
 
-class DropDown extends Component {
+export class DropDown extends Component {
   onCLickSet = option => {
     this.props.onChange(option);
     this.setState({ active: option.value });
@@ -123,5 +124,3 @@ DropDown.defaultProps = {
   dropDownWidth: "100px",
   staticContent: false
 };
-
-export default DropDown;

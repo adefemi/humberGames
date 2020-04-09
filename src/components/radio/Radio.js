@@ -1,19 +1,23 @@
-import React  from "react";
+import React from "react";
 import PropTypes from "prop-types";
-
+import ms from "microseconds";
 import "./Radio.css";
+import { randomIDGenerator } from "../../utils/helper";
 
-const Radio = props => {
+export const Radio = props => {
+  const id = `${randomIDGenerator(5)}-${ms.now()}`;
+
   const properties = {
     ...props,
     className: "Radio " + props.className,
-    type: "radio"
+    type: "radio",
+    id
   };
 
   return (
     <div className="input-radio">
       <input {...properties} />
-      <label htmlFor={props.id}>{props.label}</label>
+      <label htmlFor={id}>{props.label}</label>
     </div>
   );
 };
@@ -29,11 +33,8 @@ Radio.propTypes = {
 
 //default proptypes
 Radio.defaultProps = {
-  id: 0,
   label: "",
   name: "",
   onChange: null,
   className: ""
 };
-
-export default Radio;

@@ -1,4 +1,4 @@
-@import "../../../styles/_theme";
+@import "../../styles/theme";
 
 .btn-main {
     background: blue;
@@ -7,12 +7,15 @@
 .btn {
     font-family: $secondary-font;
     background: transparent;
-    border-radius: 2px;
-    padding: 8px 15px;
+    border-radius: 4px;
+    padding: 0 15px;
+    height: 35px;
     color: white;
     cursor: pointer;
+    font-weight: 600;
     display: flex;
     align-items: center !important;
+    font-size: 12px;
     justify-content: center !important;
     border: 1px solid transparent;
 }
@@ -87,12 +90,6 @@
     .disabled {
         opacity: 0.6;
         cursor: not-allowed;
-    }
-
-    &:active,
-    &:focus {
-        outline: none !important;
-        border: none !important;
     }
 
     &.block {

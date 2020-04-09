@@ -1,4 +1,4 @@
-@import "../../../styles/theme";
+@import "../../styles/theme";
 
 .modal-main {
   width: 100%;
@@ -7,7 +7,7 @@
   box-sizing: border-box;
   display: flex;
   font-family: $secondary-font;
-  //max-width: 600px;
+
 
   transition: 0.3s ease;
   margin-bottom: 20px;
@@ -85,6 +85,7 @@
   align-items: center;
   transition: 0.3s ease;
   z-index: 1;
+
 }
 
 .modal-bubble {
@@ -115,7 +116,7 @@
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: rgba($black-color, 0.7);
+  background-color: rgba($black-color, 0.3);
   padding: 0 20px;
   z-index: 100000001;
 
@@ -125,11 +126,11 @@
     transition: 0.5s ease;
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%) scale(0);
+    top: -50%;
+    transform: translate(-50%, -50%) scale(1);
     max-height: 80vh;
     overflow-y: auto;
-    animation: modalBubble 0.3s ease-in-out forwards;
+    animation: modalBubble 0.5s ease-in-out forwards;
     padding: 0 20px !important;
     box-sizing: border-box;
 
@@ -139,6 +140,7 @@
       box-shadow: 0 2px 5px rgba($black-color, 0.1);
       width: 100%;
       height: 100%;
+      border-radius: 6px;
     }
 
     .close-button {
@@ -219,5 +221,6 @@
 @keyframes modalBubble {
   to {
     transform: translate(-50%, -50%) scale(1);
+    top: 50%;
   }
 }
