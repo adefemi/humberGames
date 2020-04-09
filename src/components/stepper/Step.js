@@ -9,10 +9,14 @@ export function Step({active, step=1, value=""}) {
         <button className={"outline-btn-primary btn-page-nav" + activeStatus}>
           {step}
         </button>
+<<<<<<< US-merging-notification
         <div>
           {value}
 
         </div>
+=======
+        <div>{props.value}</div>
+>>>>>>> local
       </div>
     </Fragment>
   );

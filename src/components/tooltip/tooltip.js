@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import ReactTooltip from "react-tooltip";
 import "./tooltip.css";
 
-export function Tooltip({tipText, children}) {
+export function Tooltip({ tipText, children }) {
   const [id] = useState(Date.now());
   return (
     <>
-      <div
-        data-tip={tipText}
-        data-for={id.toString()}
-        className={"tooltip"}
-      >
+      <div data-tip={tipText} data-for={id.toString()} className={"tooltip"}>
         {children}
       </div>
       <ReactTooltip

@@ -2,7 +2,12 @@ import React from "react";
 
 import "./Stepper.css";
 
-export function Stepper({active, children, className="", vertical=false}) {
+export function Stepper({
+  active,
+  children,
+  className = "",
+  vertical = false
+}) {
   let stepsArray = React.Children.toArray(children),
     activeStatus;
 

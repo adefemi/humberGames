@@ -1,7 +1,7 @@
 import React from "react";
 import "./Spinner.css";
 
-export const Spinner = ({color="#ffffff", size=15, type="default"}) => {
+export const Spinner = ({ color = "#ffffff", size = 15, type = "default" }) => {
   return (
     <div
       style={{

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Icon } from "../";
 import "./Rater.css";
 
-export function Rater({ rate=0, total=5, size=24, changeable, getRate }) {
+export function Rater({ rate = 0, total = 5, size = 24, changeable, getRate }) {
   const [rateState, changeRateState] = useState(rate);
   const changeRateStateAndCB = rate => {
     changeRateState(rate);
