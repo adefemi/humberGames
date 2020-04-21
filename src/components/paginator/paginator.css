@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
+.pagination-main {
+  align-self: flex-start;
+}
+.pagination-main .activePage a {
+  background-color: #5B68A4;
+  color: #ffffff !important;
+}
+.pagination-main ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  margin-top: 20px;
+}
+.pagination-main ul li {
+  padding: 0 !important;
+  overflow: hidden;
+  background-color: #ffffff;
+  margin-right: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.07);
+  border-radius: 50%;
+  color: #495383;
+  font-weight: 600;
+  outline: none !important;
+}
+.pagination-main ul li a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  outline: none !important;
+}
+.pagination-main ul li:last-child {
+  margin-right: 0;
+}
+@media screen and (max-width: 480px) {
+  .pagination-main ul li a {
+    width: 35px;
+    height: 35px;
+    font-size: 12px;
+  }
+}
+
+/*# sourceMappingURL=paginator.css.map */

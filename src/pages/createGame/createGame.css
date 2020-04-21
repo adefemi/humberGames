@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
+.newGame {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.newGame h3 {
+  font-size: 15px;
+}
+.newGame .prices-lists .prices-card {
+  position: relative;
+  margin-bottom: 20px;
+  border-bottom: 2px solid black;
+}
+.newGame .prices-lists .prices-card .close {
+  position: absolute !important;
+  top: -10px !important;
+  right: 0 !important;
+  color: #ff652d !important;
+  cursor: pointer;
+}
+.newGame .prices-lists .prices-card:last-child {
+  border-bottom: none;
+}
+.newGame .createButton {
+  background-color: #5B68A4;
+  height: 60px;
+  width: 150px;
+  font-size: 16px;
+}
+
+/*# sourceMappingURL=createGame.css.map */

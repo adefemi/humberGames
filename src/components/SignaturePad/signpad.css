@@ -1,0 +1,26 @@
+.sign-canvas canvas {
+  width: 100%;
+  background-color: #f4f4f4;
+  border-radius: 6px;
+}
+.sign-canvas .sign-area-main {
+  position: relative;
+}
+.sign-canvas .sign-area-main .illustrator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #999999;
+}
+.sign-canvas .sign-area-main .disabled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  z-index: 100000;
+}
+
+/*# sourceMappingURL=signpad.css.map */
