@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
-.newGame {
-  max-width: 900px;
-  margin: 0 auto;
+.newGame .inner {
+  display: grid;
+  grid-template-columns: 8fr 7fr;
+  grid-gap: 3em;
 }
 .newGame h3 {
   font-size: 15px;
@@ -22,8 +23,9 @@
   border-bottom: none;
 }
 .newGame .createButton {
+  margin-top: 30px;
   background-color: #5B68A4;
-  height: 60px;
+  height: 50px;
   width: 150px;
   font-size: 16px;
 }

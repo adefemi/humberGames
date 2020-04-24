@@ -2,142 +2,85 @@ import React, { useContext, useEffect, useState } from "react";
 import "./games.css";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
-import Input from "../../components/input/Input";
-import AppIcon from "../../components/icons/Icon";
-import { Select } from "../../components/select/Select";
-import { statusMode, winningRules } from "../../utils/data";
-import TransactionTable from "../../components/transactionTable/transactionTable";
-import { Paginator } from "../../components/paginator/paginator";
-import Badge from "../../components/Badge/badge";
 import { Tabs } from "../../components/tabs/tabs";
 import Dashboard from "../dashboard/dashboard";
-import { Card } from "../../components/card/Card";
+import GameTransactions from "./gameTransactions";
+import InstanceConfig from "./instanceConfig";
+import { axiosHandler } from "../../utils/axiosHandler";
+import { GAME_INSTANCE_URL } from "../../utils/urls";
+import { errorHandler, getClientId, getToken } from "../../utils/helper";
+import { Notification } from "../../components/notification/Notification";
+import AppIcon from "../../components/icons/Icon";
+import { primaryColor } from "../../utils/data";
 
 function Games(props) {
-  const headings = [
-    "ID",
-    "Transaction Ref",
-    "User ID",
-    "Status",
-    "Game Token",
-    "Draw TIme"
-  ];
-  const headingsPrice = ["label", "Amount", "Winning Rule", "Quantity"];
-  const pricedata = [
-    ["Diamond 1", "NGN 100", "ODDS_1_IN_100", "1"],
-    ["Diamond 2", "NGN 120", "ODDS_1_IN_120", "3"]
-  ];
-  const data = [
-    [
-      "f51b5bf5-08df-4393-b781-4c687d079651",
-      "hg2020190303",
-      "8012345678",
-      <Badge status="processing">pending</Badge>,
-      "TYWHDAD",
-      "10:15 am"
-    ],
-    [
-      "f61b5bf5-08df-4393-b781-4c387d079651",
-      "hg2020190304",
-      "8012345678",
-      <Badge status="error">lose</Badge>,
-      "HADYUAD",
-      "10:23 am"
-    ],
-    [
-      "f51b5bf5-08df-4393-b781-4c687d079652",
-      "hg2020190305",
-      "8012345678",
-      <Badge status="success">won</Badge>,
-      "ADDYUAD",
-      "11:40 am"
-    ],
-    [
-      "f51b5bf5-08df-4393-b781-4c687d079653",
-      "hg2020190306",
-      "8012345678",
-      <Badge status="processing">pending</Badge>,
-      "FYWHDAH",
-      "12:15 am"
-    ]
-  ];
   const { dispatch } = useContext(store);
+  const [activeInstance, setActiveInstance] = useState(null);
+  const [gameLink, setGameLink] = useState("");
+  const [fetching, setFetching] = useState(true);
+  const [transactionLink, setTransactionLink] = useState("");
+  const [prizesLink, setPrizesLink] = useState("");
+  const [drawsLink, setDrawsLink] = useState("");
 
   useEffect(() => {
     dispatch({
       type: setPageTitleAction,
-      payload: `Instance 001 GamePlays`
+      payload: props.match.params.label
     });
+    setGameData();
   }, []);
 
-  const log = (
-    <>
-      <div className="flex align-center justify-between">
-        <div>
-          <div className="lease-search-box">
-            <Input
-              placeholder="Search ID"
-              iconRight={<AppIcon name="search" type="feather" />}
-            />
-          </div>
-        </div>
-        <div className="flex align-center props">
-          &nbsp;
-          <Select
-            className="lease-search-box"
-            defaultOption={statusMode[0]}
-            optionList={statusMode}
-          />
-        </div>
-      </div>
-      <br />
-      <br />
-      <TransactionTable keys={headings} values={data} />
-      <br />
-      <Paginator total={1} current={1} />
-      <br />
-      <br />
-    </>
-  );
+  const setGameData = () => {
+    axiosHandler({
+      method: "get",
+      url: GAME_INSTANCE_URL + `?id=${props.match.params.uuid}`,
+      clientID: getClientId(),
+      token: getToken()
+    })
+      .then(res => {
+        const activeInstanceMain = res.data._embedded.gameInstances[0];
+        setActiveInstance(activeInstanceMain);
+        setGameLink(activeInstanceMain._links.game.href);
+        setTransactionLink(activeInstanceMain._links.gameTransactions.href);
+        setPrizesLink(activeInstanceMain._links.prizes.href);
+        setDrawsLink(activeInstanceMain._links.draws.href);
+        setFetching(false);
+      })
+      .catch(err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err, true)
+        });
+      });
+  };
 
-  const config = (
-    <>
-      <Card heading="Game Settings">
-        <div className="contentCard">
-          <span className="info">Game Name:</span>{" "}
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <span className="content">Diamond Xtra Daily Raffle</span>
-        </div>
-        <div className="contentCard">
-          <span className="info">Winning Rule:</span>{" "}
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <span className="content">ODDS_1_IN_100</span>
-        </div>
-        <div className="contentCard">
-          <span className="info">Total Operational Budget:</span>{" "}
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <span className="content">NGN 1,000</span>
-        </div>
-        <div className="contentCard">
-          <span className="info">Revenue:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <span className="content">NGN 100</span>
-        </div>
-      </Card>
-
-      <br />
-
-      <Card heading="Prices">
-        <TransactionTable keys={headingsPrice} values={pricedata} />
-      </Card>
-    </>
-  );
-
-  const bodies = [<Dashboard />, log, config];
+  const bodies = [
+    <Dashboard />,
+    <GameTransactions transactionLink={transactionLink} />,
+    <InstanceConfig
+      gameLink={gameLink}
+      activeInstance={activeInstance}
+      prizesLink={prizesLink}
+      fetching={fetching}
+    />
+  ];
 
   const heading = ["Performance Report", "GamePlays", "Configuration"];
 
   return (
     <div className="singleGames">
+      <div className="flex align-center">
+        <div onClick={() => props.history.goBack()}>
+          <AppIcon
+            name="arrowLeft"
+            type="icomoon"
+            style={{ color: primaryColor, cursor: "pointer" }}
+          />
+        </div>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <h4>Back</h4>
+      </div>
+
       <Tabs heading={heading} body={bodies} />
     </div>
   );

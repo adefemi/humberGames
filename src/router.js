@@ -7,7 +7,7 @@ import Login from "./pages/login/login";
 
 const Games = lazy(() => import("./pages/games/games"));
 const SingleGame = lazy(() => import("./pages/games/singleGame"));
-const GamePlay = lazy(() => import("./pages/games/gamePlays"));
+const GameInstance = lazy(() => import("./pages/games/gameInstance"));
 const SandBox = lazy(() => import("./pages/games/sandBox"));
 const Settings = lazy(() => import("./pages/settings/settings"));
 const CreateGame = lazy(() => import("./pages/createGame/createGame"));
@@ -34,7 +34,7 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
-                  path="/games/:uuid/gameplays"
+                  path="/instance/:uuid/:label"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
@@ -43,7 +43,7 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
-                  path="/games/:uuid/create"
+                  path="/games/create/:uuid/:label"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
@@ -52,14 +52,15 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
-                  path="/games/:uuid"
+                  path="/games/:uuid/:label"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
-                      <GamePlay {...props} />
+                      <GameInstance {...props} />
                     </Suspense>
                   )}
                 />
+
                 <Route
                   path="/sandbox"
                   exact

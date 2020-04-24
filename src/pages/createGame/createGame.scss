@@ -1,9 +1,11 @@
 @import "../../styles/theme";
 
 .newGame{
-  max-width: 900px;
-  margin: 0 auto;
-
+  .inner{
+    display: grid;
+    grid-template-columns: 8fr 7fr;
+    grid-gap: 3em;
+  }
   h3{
     font-size: 15px;
   }
@@ -28,8 +30,9 @@
   }
 
   .createButton{
+    margin-top: 30px;
     background-color: $primary-color;
-    height: 60px;
+    height: 50px;
     width: 150px;
     font-size: 16px;
   }

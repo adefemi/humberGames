@@ -23,7 +23,36 @@ body {
   text-transform: capitalize;
 }
 
+.search-section {
+  &>.flex {
+    .select-input {
+      background-color: transparent;
+      outline: transparent;
+      border: none;
+      min-width: 147px;
 
+      &:hover,
+      &:focus {
+        border: none;
+        background-color: transparent;
+      }
+    }
+
+    .search-box {
+      min-width: 300px;
+      margin-right: 15px;
+      max-width: 385px;
+      width: 100%;
+    }
+
+    .filter-box {
+      div:not(:last-child) {
+        margin-right: 25px;
+      }
+    }
+  }
+  margin-bottom: 40px;
+}
 
 .pointer{
   cursor: pointer;
@@ -70,6 +99,10 @@ a {
 
   &.grid-2 {
     grid-template-columns: 1fr 1fr;
+  }
+
+  &.grid-gap-h-2{
+    grid-column-gap: 2em;
   }
 
   &.grid-3 {

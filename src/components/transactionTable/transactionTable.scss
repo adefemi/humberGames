@@ -4,8 +4,17 @@
   table {
     display: block;
     background-color: white;
+    overflow-x: auto;
   }
   width: 100%;
+
+  .noData{
+    padding: 30px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: darken(white, 50%);
+  }
   thead {
     background-color: darken(white, 5%);
     width: 100%;
@@ -23,18 +32,33 @@
       &:last-child {
         border-bottom: none;
       }
+
+      &.hoverable:hover{
+        background-color: darken(white, 1%);
+        cursor: pointer;
+      }
     }
   }
   tr {
-    height: 60px;
+    height: 40px;
     display: flex;
     align-items: center;
+    padding: 10px;
   }
   th,
   td {
     flex: 1;
-    font-size: 13px;
+    font-size: 12px;
     text-align: left;
     padding-left: 20px;
+    min-width: 100px;
+  }
+
+  .loading{
+    padding: 40px;
+    text-align: center;
+    .lds-dual-ring{
+      border-color: rgba($primary-color, 0.5);
+    }
   }
 }

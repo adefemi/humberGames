@@ -24,6 +24,7 @@
 
   .conMain{
     padding: 20px;
+    flex: 1;
   }
 
   .title{
@@ -43,6 +44,80 @@
 
   .contentCard{
     padding: 20px;
+  }
+  
+  .left-nav{
+    overflow: hidden;
+  }
+}
+
+.instanceList{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 1em;
+}
+
+.instanceCard{
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  border: 1px solid darken(white, 5%);
+  cursor: pointer;
+  position: relative;
+  transition: .3s ease;
+  max-width: 300px;
+
+  &:hover{
+    transform: scale(1.01);
+  }
+
+  h3{
+    margin: 0;
+    font-size: 14px;
+  }
+  small{
+    font-size: 10px;
+    font-weight: bold;
+    color: darken(white, 50%);
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .info{
+    margin-right: 10px;
+  }
+  .context{
+    font-size: 12px;
+  }
+  .amount{
+    margin-top: 50px;
+    color: $secondary-color;
+    font-weight: bold;
+
+    &.sandbox{
+      color: $primary-color;
+    }
+
+  }
+
+  .play{
+    color: $secondary-color;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .status{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: $danger-color;
+
+    &:active{
+      background-color: $success-color;
+    }
   }
 }
 
