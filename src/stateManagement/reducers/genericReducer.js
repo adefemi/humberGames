@@ -1,5 +1,6 @@
 import {
   reloadApplication,
+  setActiveClient,
   setGameType,
   setGlobalLoader,
   setOrderSummary,
@@ -13,6 +14,10 @@ export const userDetailsState = {
 
 export const gameTypeState = {
   gameType: null
+};
+
+export const activeClientState = {
+  activeClient: null
 };
 
 export const rolesState = {
@@ -39,6 +44,17 @@ export const userDetailReducer = (state, action) => {
     return {
       ...state,
       userDetails: action.payload
+    };
+  } else {
+    return state;
+  }
+};
+
+export const activeClientReducer = (state, action) => {
+  if (action.type === setActiveClient) {
+    return {
+      ...state,
+      activeClient: action.payload
     };
   } else {
     return state;

@@ -15,9 +15,7 @@ import { Button } from "../../components/button/Button";
 import AppIcon from "../../components/icons/Icon";
 import Input from "../../components/input/Input";
 import { Select } from "../../components/select/Select";
-import { durationType, primaryColor, secondaryColor } from "../../utils/data";
-import { Radio } from "../../components/radio/Radio";
-import TimePicker from "../../components/timePicker/timePicker";
+import { primaryColor, secondaryColor } from "../../utils/data";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
 import { axiosHandler } from "../../utils/axiosHandler";
@@ -29,7 +27,6 @@ const CreateGame = props => {
   const [gameConfig, setGameConfig] = useState({});
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const [propertyType, setPropertyType] = useState("fixed");
   const [prices, setPrices] = useState([{}]);
   const [gameType, setGameType] = useState("");
   const [activeGame, setActiveGame] = useState(null);

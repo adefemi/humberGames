@@ -17,6 +17,7 @@ import { Spinner } from "../spinner/Spinner";
 import { Notification } from "../notification/Notification";
 import { USER_ME_URL } from "../../utils/urls";
 import { setUserDetails } from "../../stateManagement/actions";
+import jwtDecode from "jwt-decode";
 
 function MainLayout(props) {
   const {
@@ -52,29 +53,13 @@ function MainLayout(props) {
       routeToLogin();
     }
     let token = localStorage.getItem(USERTOKEN);
+    const decoded = jwtDecode(token);
+
+    dispatch({ type: setUserDetails, payload: decoded.auth });
+    setLoading(false);
+    props.history.push(props.location.pathname + `?${props.location.search}`);
     // verify token
-    if (token) {
-      token = JSON.parse(token);
-      axiosHandler({
-        method: "get",
-        url: USER_ME_URL,
-        token: token.access,
-        clientID
-      }).then(
-        res => {
-          dispatch({ type: setUserDetails, payload: res.data.data });
-          setLoading(false);
-          props.history.push(
-            props.location.pathname + `?${props.location.search}`
-          );
-        },
-        _ => {
-          routeToLogin();
-        }
-      );
-    } else {
-      routeToLogin();
-    }
+    //
   }, []);
 
   const routeToLogin = () => {
@@ -171,10 +156,28 @@ const SideBar = () => {
           icon={<Icon name="controller" type="entypo" />}
         />
         <SideLinks
+          link={"/clients"}
+          title="Clients"
+          active={getActive("/clients")}
+          icon={<Icon name="ic_face" type="md" />}
+        />
+        <SideLinks
           link={"/sandbox"}
           title="Sandbox"
           active={getActive("sandbox")}
           icon={<Icon name="branch" type="entypo" />}
+        />
+        <SideLinks
+          link={"/campaigns"}
+          title="Campaigns"
+          active={getActive("campaigns")}
+          icon={<Icon name="volume1" type="feather" />}
+        />
+        <SideLinks
+          link={"/rewards"}
+          title="Rewards"
+          active={getActive("rewards")}
+          icon={<Icon name="award" type="feather" />}
         />
         <SideLinks
           link={"settings"}

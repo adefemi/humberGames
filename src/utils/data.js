@@ -20,8 +20,7 @@ export const durationSelector = [
 
 export const genderOptions = [
   { title: "male", value: "male" },
-  { title: "female", value: "female" },
-  { title: "prefer not to say", value: "prefer_not_to_say" }
+  { title: "female", value: "female" }
 ];
 
 export const gameTypeSort = [
@@ -71,6 +70,18 @@ export const gameModeSort = [
   { title: "Scheduled", value: "1" }
 ];
 
+export const campaignChannelOptions = [
+  { title: "IVR", value: "ivr" },
+  { title: "SMS", value: "sms" },
+  { title: "USSD", value: "ussd" }
+];
+
+export const campaignNetworkOptions = [
+  { title: "MTN", value: "mtn" },
+  { title: "GLO", value: "glo" },
+  { title: "9MOBILE", value: "9mobile" }
+];
+
 export const timeSortOption = [
   { title: "All", value: "" },
   { title: "Newest first", value: "createdAt,asc" },
@@ -89,11 +100,6 @@ export const countryCode = [
   { title: "+111", value: "111" }
 ];
 
-export const sizeOptions = [
-  { title: "SQM", value: "sqm" },
-  { title: "SQFT", value: "sqft" }
-];
-
 export const statusMode = [
   { title: "All", value: "all" },
   { title: "Active", value: "active" },
@@ -106,6 +112,91 @@ export const durationType = [
   { title: "Monthly", value: "monthly" }
 ];
 
+export const rewardRuleTypes = [
+  { title: "Client Customer Transaction", value: "ClientCustomerTransaction" },
+  { title: "Client Customer Enroll", value: "ClientCustomerEnroll" }
+];
+
+export const ageRangeOptions = [
+  { title: "0-17", value: "0-17" },
+  { title: "18-24", value: "18-24" },
+  { title: "25-34", value: "25-34" },
+  { title: "35-45", value: "35-45" },
+  { title: "46+", value: "46+" }
+];
+
+export const transactionTypeOptions = [
+  { title: "Deposit", value: "Deposit" },
+  { title: "Bill Payment", value: "BillPayment" },
+  { title: "Airtime", value: "Airtime" },
+  { title: "Fund Transfer", value: "Fund Transfer" }
+];
+
+export const transactionChannelOptions = [
+  { title: "ATM", value: "ATM" },
+  { title: "BANK", value: "BANK" },
+  { title: "POS", value: "POS" },
+  { title: "MOBILE", value: "MOBILE" },
+  { title: "USSD", value: "USSD" }
+];
+
+export const ccEnRules = [
+  { title: "Name", value: "name", type: "string" },
+  { title: "Phone", value: "phone", type: "string" },
+  { title: "DOB", value: "DOB", type: "date", format: "DD/MM" },
+  {
+    title: "Age Range",
+    value: "AgeRange",
+    type: "option",
+    optionList: ageRangeOptions
+  },
+  { title: "State", value: "State", type: "string" },
+  {
+    title: "Gender",
+    value: "Gender",
+    type: "option",
+    optionList: genderOptions
+  },
+  {
+    title: "Account Create Date",
+    value: "AccountCreateDate",
+    type: "date",
+    format: "YYYY-MM-DD"
+  },
+  {
+    title: "Last Transaction Date",
+    value: "LastTransactionDate",
+    type: "date",
+    format: "YYYY-MM-DD"
+  },
+  { title: "Balance", value: "Balance", type: "number" }
+];
+
+export const ccTRules = [
+  { title: "Transaction Count", value: "TransactionCount", type: "number" },
+  {
+    title: "Transaction Type",
+    value: "TransactionType",
+    type: "option",
+    optionList: transactionTypeOptions
+  },
+  {
+    title: "Transaction Timestamp",
+    value: "TransactionTimestamp",
+    type: "date",
+    format: "YYYY-MM-DD"
+  },
+  { title: "Transaction Amount", value: "TransactionAmount", type: "number" },
+  { title: "Transaction Channel", value: "TransactionChannel", type: "number" }
+];
+
+export const ccMainRules = [
+  { title: "Greater Than", value: "gt", optionTypes: ["date", "number"] },
+  { title: "Less Than", value: "lt", optionTypes: ["date", "number"] },
+  { title: "Equals", value: "eq", optionTypes: ["date", "number", "string"] },
+  { title: "Contains", value: "ct", optionTypes: ["string"] }
+];
+
 export const winningRules = [
   { title: "ODDS_1_IN_100", value: "ODDS_1_IN_100" },
   { title: "ODDS_5_IN_3000", value: "ODDS_5_IN_3000" },
@@ -114,37 +205,10 @@ export const winningRules = [
   { title: "ODDS_15_IN_25000", value: "ODDS_15_IN_25000" }
 ];
 
-export const currencyOptions = [
-  { title: "NGN", value: "NGN" },
-  { title: "USD", value: "USD" },
-  { title: "GBP", value: "GBP" }
-];
-
-export const propertyStatusOption = [
-  { title: "All", value: "" },
-  { title: "Sold", value: "sold" },
-  { title: "Rented", value: "rented" },
-  { title: "Pending", value: "pending" },
-  { title: "Published", value: "published" },
-  { title: "Unpublished", value: "unpublished" }
-];
-
-export const leaseSortOptions = [
-  { title: "All lease", value: "all" },
-  { title: "Active lease", value: "active" },
-  { title: "Pending lease", value: "pending" },
-  { title: "Annulled lease", value: "annulled" }
-];
-
-export const leaseChargeSortOptions = [
-  { title: "All Charge", value: "all" },
-  { title: "Paid Charge", value: "paid" },
-  { title: "Pending Charge", value: "pending" }
-];
-
-export const inspectionSortOptions = [
-  { title: "All", value: "all" },
-  { title: "Pending", value: "pending" },
-  { title: "Completed", value: "completed" },
-  { title: "Failed", value: "failed" }
+export const tempClientList = [
+  {
+    name: "Access",
+    client_id:
+      "staging_FyogPTOWjOOUDPh.TTb5xfWUUprCO.6eQuZIbFMs4HVL6HwYA66H4t5S3P92HBhElGYyh53yJeqAkwNsVEGwzrOpu-TZi1F._.Dn"
+  }
 ];

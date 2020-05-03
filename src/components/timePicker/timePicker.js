@@ -4,6 +4,7 @@ import "./timePicker.css";
 import proptype from "prop-types";
 import { Select } from "../select/Select";
 import { getArrayCount } from "../../utils/helper";
+import moment from "moment";
 
 function TimePicker(props) {
   const [hour, setHour] = useState("");
@@ -16,7 +17,9 @@ function TimePicker(props) {
         props.onChange({
           target: {
             name: props.name || "",
-            value: formatTime()
+            value: props.use24H
+              ? moment(formatTime(), "HH:mm a").format("HH:mm:ss")
+              : formatTime()
           }
         });
       }
@@ -74,10 +77,13 @@ function TimePicker(props) {
           value={section}
           onChange={e => setSection(e.target.value)}
         />
-        <img src={calenderSvg} alt="" />
       </div>
 
-      {hour && minute && <div className="timeFormat">{formatTime()}</div>}
+      {!props.use24H && (
+        <>
+          {hour && minute && <div className="timeFormat">{formatTime()}</div>}
+        </>
+      )}
     </div>
   );
 }
@@ -86,7 +92,8 @@ TimePicker.defaultProps = {};
 
 TimePicker.propType = {
   value: proptype.string,
-  onChange: proptype.func
+  onChange: proptype.func,
+  use24H: proptype.bool
 };
 
 export default TimePicker;

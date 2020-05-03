@@ -15,23 +15,27 @@ import { axiosHandler } from "../../utils/axiosHandler";
 import { LOGIN_URL } from "../../utils/urls";
 import { store } from "../../stateManagement/store";
 import { setUserDetails } from "../../stateManagement/actions";
-import { TextAreaField } from "../../components/textarea/TextAreaField";
 
 function Login(props) {
   const [loginData, setLoginData] = useState({});
-  const [clientID, setClientID] = useState("");
   const [loading, setLoading] = useState(false);
-  const { dispatch } = useContext(store);
+  const {
+    dispatch,
+    state: { activeClient }
+  } = useContext(store);
 
   useEffect(() => {
     if (localStorage.getItem(USERTOKEN)) {
       props.history.push("/");
+    } else if (!activeClient) {
+      props.history.push("/client/info");
     }
   }, []);
 
   const onSubmit = e => {
     e.preventDefault();
     setLoading(true);
+    const clientID = activeClient.clientId;
     axiosHandler({
       method: "post",
       url: LOGIN_URL,
@@ -98,14 +102,6 @@ function Login(props) {
             name="password"
             type="password"
             onChange={e => genericChangeSingle(e, setLoginData, loginData)}
-          />
-        </FormGroup>
-        <FormGroup label="Password">
-          <TextAreaField
-            placeholder={"Enter your clientID"}
-            value={clientID}
-            required
-            onChange={e => setClientID(e.target.value)}
           />
         </FormGroup>
         <br />

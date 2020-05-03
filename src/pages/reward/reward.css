@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
+.reward h3 {
+  font-size: 14px;
+}
+.reward .qualificationForm {
+  padding: 20px;
+  background-color: #fafafa;
+  margin-bottom: 20px;
+  position: relative;
+}
+.reward .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+.reward .close svg {
+  color: #ff652d;
+}
+.reward .singleConditions {
+  position: relative;
+}
+.reward .singleConditions .close {
+  top: -20px;
+  right: 0;
+}
+
+/*# sourceMappingURL=reward.css.map */

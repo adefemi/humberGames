@@ -253,3 +253,15 @@ a {
     display: none;
   }
 }
+.form-container-main{
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  grid-gap: 2em;
+
+  .main-container, .sub-container{
+    background-color: white;
+    padding: 20px;
+    border: 1px solid darken(white, 5%);
+    border-radius: 4px;
+  }
+}

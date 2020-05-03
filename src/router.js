@@ -11,6 +11,12 @@ const GameInstance = lazy(() => import("./pages/games/gameInstance"));
 const SandBox = lazy(() => import("./pages/games/sandBox"));
 const Settings = lazy(() => import("./pages/settings/settings"));
 const CreateGame = lazy(() => import("./pages/createGame/createGame"));
+const Campaign = lazy(() => import("./pages/campaign/campaign"));
+const NewCampaign = lazy(() => import("./pages/campaign/newCampaign"));
+const NewReward = lazy(() => import("./pages/reward/newReward"));
+const Reward = lazy(() => import("./pages/reward/reward"));
+const ClientDefinition = lazy(() => import("./pages/login/clientDefinition"));
+const Users = lazy(() => import("./pages/users/users"));
 
 const RouterMain = props => {
   return (
@@ -20,6 +26,16 @@ const RouterMain = props => {
         <Switch>
           <Route path="/logout" exact component={Logout} />
           <Route path="/login" exact component={Login} />
+          <Route
+            path="/client/:name"
+            exact
+            component={props => (
+              <Suspense fallback={() => <h2>Loading...</h2>}>
+                <ClientDefinition {...props} />
+              </Suspense>
+            )}
+          />
+
           <Route
             path="/"
             component={props => (
@@ -52,6 +68,15 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
+                  path="/clients"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Users {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
                   path="/games/:uuid/:label"
                   exact
                   component={props => (
@@ -67,6 +92,46 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <SandBox {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/campaigns"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Campaign {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/campaigns/new"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <NewCampaign {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/rewards"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Reward {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/rewards/new"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <NewReward {...props} />
                     </Suspense>
                   )}
                 />

@@ -18,7 +18,12 @@ export const Tabs = props => {
       <div className="heading">
         {heading.map((item, id) => (
           <div
-            onClick={() => setActiveIndex(id)}
+            onClick={() => {
+              if (props.onSwitch) {
+                props.onSwitch(id);
+              }
+              setActiveIndex(id);
+            }}
             className={`tab-item ${activeIndex === id ? "active" : ""}`}
             key={id}
           >

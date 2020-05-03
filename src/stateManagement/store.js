@@ -16,7 +16,9 @@ import {
   orderSummaryReducer,
   orderSummaryState,
   gameTypeReducer,
-  gameTypeState
+  gameTypeState,
+  activeClientReducer,
+  activeClientState
 } from "./reducers/genericReducer";
 
 const reduceReducers = (...reducers) => (prevState, value, ...args) =>
@@ -33,7 +35,8 @@ const combinedReducers = reduceReducers(
   globalLoaderReducer,
   reloadApplicationReducer,
   orderSummaryReducer,
-  gameTypeReducer
+  gameTypeReducer,
+  activeClientReducer
 );
 
 const initialState = {
@@ -44,7 +47,8 @@ const initialState = {
   ...globalLoaderState,
   ...reloadApplicationState,
   ...orderSummaryState,
-  ...gameTypeState
+  ...gameTypeState,
+  ...activeClientState
 };
 const store = createContext(initialState);
 const { Provider } = store;
