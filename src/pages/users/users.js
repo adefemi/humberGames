@@ -70,7 +70,7 @@ function Users(props) {
         <div>
           <div className="lease-search-box">
             <Input
-              placeholder="Search campaigns"
+              placeholder="Search users"
               iconRight={<AppIcon name="search" type="feather" />}
             />
           </div>
@@ -92,6 +92,7 @@ function Users(props) {
         values={formatClients(clients)}
         loading={fetching}
       />
+      <br/><br/>
     </div>
   );
 }

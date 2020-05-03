@@ -4,7 +4,7 @@ import TransactionTable from "../../components/transactionTable/transactionTable
 import { axiosHandler } from "../../utils/axiosHandler";
 import {
   errorHandler,
-  genericChangeSingle,
+  genericChangeSingle, getArrayCount,
   getClientId,
   getToken,
   numberWithCommas
@@ -24,7 +24,9 @@ import { Select } from "../../components/select/Select";
 import Input from "../../components/input/Input";
 import { Button } from "../../components/button/Button";
 import AppIcon from "../../components/icons/Icon";
-import { WINNING_CONDITION_URL } from "../../utils/urls";
+import {GAME_PRICE_URL, WINNING_CONDITION_URL} from "../../utils/urls";
+import CurrencyInput from "../../components/currencyInput/currencyInput";
+import Divider from "../../components/Divider/divider";
 
 function InstanceConfig(props) {
   const headings = ["label", "Amount", "Quantity", ""];
@@ -35,6 +37,7 @@ function InstanceConfig(props) {
   const [fetching, setFetching] = useState(true);
   const [activeInstance, setActiveInstance] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [modalState, setModalState] = useState(1);
   const [viewLoading, setViewLoading] = useState(false);
   const [winningRuleMain, setRules] = useState(null);
   const [winningConditionMain, setConditions] = useState([]);
@@ -116,8 +119,6 @@ function InstanceConfig(props) {
         setConditions(winningConditions.data._embedded.winningConditions);
         setShowModal(true);
         setViewLoading(false);
-        console.log(winningRules);
-        console.log(winningConditions);
       })
       .catch(err => {
         setViewLoading(true);
@@ -163,6 +164,13 @@ function InstanceConfig(props) {
       }
     );
   };
+
+  const closeModal = () =>{
+    setFetching(true)
+    getPrizes()
+    setModalState(1)
+    setShowModal(false)
+  }
 
   const formatWinningCondition = () => {
     const returnValue = [];
@@ -217,7 +225,15 @@ function InstanceConfig(props) {
 
       <br />
 
-      <Card heading="Prices">
+      <Card heading={
+        <div className="flex align-center justify-between">
+          <h3>Prizes</h3>
+          <Button onClick={() => {
+            setModalState(2);
+            setShowModal(true)
+          }}>Add Price</Button>
+        </div>
+      }>
         <TransactionTable
           keys={headings}
           values={formatPrize()}
@@ -226,105 +242,312 @@ function InstanceConfig(props) {
       </Card>
 
       <ContentModal visible={showModal} setVisible={setShowModal}>
-        <h4>Winning Rule</h4>
-        {winningRuleMain && (
-          <>
-            <div>
-              <span className="info">label:</span>&nbsp;&nbsp;&nbsp;
-              <span className="context">{winningRuleMain.label}</span>
-            </div>
-            <div>
-              <span className="info">type:</span>&nbsp;&nbsp;&nbsp;
-              <span className="context">{winningRuleMain.type}</span>
-            </div>
-          </>
-        )}
-        <br />
+        {modalState === 1 &&
+        <EditWinningConditions
+            winningRuleMain={winningRuleMain}
+            winningConditionMain={winningConditionMain}
+            conditionHeading={conditionHeading}
+            formatWinningCondition={formatWinningCondition}
+            viewLoading={viewLoading}
+            showNewCondition={showNewCondition}
+            setShowNewCondition={setShowNewCondition}
+            setConditionsData={setConditionsData}
+            winningConditionData={winningConditionData}
+            conditionSubmit={conditionSubmit}
+            onConditionSubmit={onConditionSubmit}
+        />
+        }
+        {modalState === 2 && <NewPrice gameInstance={props.activeInstance} gameLink={props.gameLink} closeModal={closeModal}/>}
+      </ContentModal>
 
-        <h4>Winning Conditions</h4>
-        {winningConditionMain && (
-          <TransactionTable
-            keys={conditionHeading}
-            values={formatWinningCondition()}
-            loading={viewLoading}
-          />
+    </div>
+  );
+}
+
+const NewPrice = props => {
+  const [prices, setPrices] = useState([{}]);
+  const [winningRules, setWinningRule] = useState([]);
+  const [gameType,setGameType] = useState(null)
+  const [loading,setLoading] = useState(false)
+
+  useEffect(() => {
+    axiosHandler({
+      method: "get",
+      url: props.gameLink,
+      token: getToken(),
+      clientID: getClientId()
+    }).then(res => {
+      setGameType(res.data.type)
+      axiosHandler({
+        method: "get",
+        url: res.data._links.winningRules.href,
+        token: getToken(),
+        clientID: getClientId()
+      }).then(res => {
+        setWinningRule(res.data._embedded.winningRules);
+      });
+    });
+  },[])
+
+  const formatWinningRules = () => {
+    const returnValue = [];
+    winningRules.map(item => {
+      returnValue.push({
+        title: item.label,
+        value: item._links.self.href
+      });
+      return null;
+    });
+    return returnValue;
+  };
+
+  const remove = key => {
+    setPrices(prices.filter((_, key2) => key2 !== key));
+  };
+  const change = (key, e) => {
+    const activeCharge = prices.filter((item, index) => index === key)[0];
+    activeCharge[e.target.name] = e.target.value;
+    if (e.target.currency) activeCharge.currency_type = e.target.currency;
+    if (e.target.rawValue) activeCharge[e.target.name] = e.target.rawValue;
+    const newChargeList = prices.map((item, index) => {
+      if (index === key) return activeCharge;
+      return item;
+    });
+
+    setPrices(newChargeList);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    setLoading(true)
+
+    Promise.all(prices.map(item => {
+      return axiosHandler({
+        method: "post",
+        url: GAME_PRICE_URL,
+        data: {
+          ...item,
+          winningRule: gameType && gameType.toLowerCase() !== "number" ? null : item.winningRule,
+          description: item.description | "",
+          gameInstance: props.gameInstance._links.self.href
+        },
+        token: getToken(),
+        clientID: getClientId()
+      })
+    })).then(
+        () => {
+          Notification.bubble({
+            type:"success",
+            content: "Prize added successfully"
+          })
+          props.closeModal()
+        },
+        err => {
+          Notification.bubble({
+            type:"error",
+            content: errorHandler(err)
+          })
+          setLoading(false)
+        }
+    )
+  }
+
+  return <div>
+    <h3>Add Prizes</h3>
+    <form action="" onSubmit={onSubmit}>
+      <div className="prices-lists">
+        {prices.map((item, key) => (
+            <>
+              <PricesConfig
+                  onRemove={() => remove(key)}
+                  gameData={item}
+                  key={key}
+                  winningList={formatWinningRules(winningRules)}
+                  canShow={prices.length > 1}
+                  gameType={gameType}
+                  onChange={e => change(key, e)}
+              />
+              {
+                prices.length > 1 && prices.length - 1 !== key && <Divider/>
+              }
+            </>
+        ))}
+
+      </div>
+      <p />
+      <div className="flex justify-end">
+        <div className="link" onClick={() => setPrices([...prices, {}])}>
+          Add More Prizes
+        </div>
+      </div>
+      <br />
+
+      <Button type="submit" loading={loading} disabled={loading}>
+        Save
+      </Button>
+    </form>
+  </div>
+}
+
+const PricesConfig = props => {
+  return (
+      <div className="prices-card">
+        {props.canShow && (
+            <div className="close" onClick={props.onRemove}>
+              <AppIcon name="x" type="feather" />
+            </div>
         )}
-        <br />
-        {!showNewCondition && (
-          <div className="flex justify-end">
-            <span className="link" onClick={() => setShowNewCondition(true)}>
+
+        <div className="grid grid-2 grid-gap-h-2">
+          <FormGroup label="Label">
+            <Input
+                name="label"
+                onChange={props.onChange}
+                value={props.gameData.label || ""}
+                required
+                placeholder="Give price a label"
+            />
+          </FormGroup>
+          <FormGroup label="Amount">
+            <CurrencyInput
+                onChange={props.onChange}
+                value={props.gameData.amount || 0}
+                name={"amount"}
+                required
+                defaultCurrencyOption={{
+                  title: "NGN",
+                  value: "NGN"
+                }}
+            />
+          </FormGroup>
+          {props.gameType && props.gameType.toLowerCase() === "number" && <FormGroup label="Winning Rule">
+            <Select
+                onChange={props.onChange}
+                name={"winningRule"}
+                placeholder="--select a winning rule--"
+                optionList={props.winningList}
+                required
+            />
+          </FormGroup>}
+          <FormGroup label="Quantity">
+            <Select
+                onChange={props.onChange}
+                value={props.gameData.quantity || ""}
+                name={"quantity"}
+                placeholder="--choose quantify--"
+                optionList={getArrayCount({ start: 1, count: 20 }).map(item => {
+                  return {
+                    title: item,
+                    value: item
+                  };
+                })}
+                required
+            />
+          </FormGroup>
+        </div>
+      </div>
+  );
+};
+
+const EditWinningConditions = props => {
+  return <div>
+    <h4>Winning Rule</h4>
+    {props.winningRuleMain && (
+        <>
+          <div>
+            <span className="info">label:</span>&nbsp;&nbsp;&nbsp;
+            <span className="context">{props.winningRuleMain.label}</span>
+          </div>
+          <div>
+            <span className="info">type:</span>&nbsp;&nbsp;&nbsp;
+            <span className="context">{props.winningRuleMain.type}</span>
+          </div>
+        </>
+    )}
+    <br />
+
+    <h4>Winning Conditions</h4>
+    {props.winningConditionMain && (
+        <TransactionTable
+            keys={props.conditionHeading}
+            values={props.formatWinningCondition()}
+            loading={props.viewLoading}
+        />
+    )}
+    <br />
+    {!props.showNewCondition && (
+        <div className="flex justify-end">
+            <span className="link" onClick={() => props.setShowNewCondition(true)}>
               Add new condition
             </span>
-          </div>
-        )}
-        {showNewCondition && (
-          <form action="" onSubmit={onConditionSubmit}>
-            <div className="flex align-center justify-between">
-              <h4>Create new condition</h4>
-              <span className="link" onClick={() => setShowNewCondition(false)}>
+        </div>
+    )}
+    {props.showNewCondition && (
+        <form action="" onSubmit={props.onConditionSubmit}>
+          <div className="flex align-center justify-between">
+            <h4>Create new condition</h4>
+            <span className="link" onClick={() => props.setShowNewCondition(false)}>
                 <AppIcon name="x" type="feather" />
               </span>
-            </div>
-            <div className="grid grid-3 grid-gap-2">
-              <FormGroup label="Condition">
-                <Select
+          </div>
+          <div className="grid grid-3 grid-gap-2">
+            <FormGroup label="Condition">
+              <Select
                   onChange={e =>
-                    genericChangeSingle(
-                      e,
-                      setConditionsData,
-                      winningConditionData
-                    )
+                      genericChangeSingle(
+                          e,
+                          props.setConditionsData,
+                          props.winningConditionData
+                      )
                   }
                   optionList={conditionSort}
                   required
                   placeholder="--select condition--"
                   name="condition"
-                />
-              </FormGroup>
-              <FormGroup label="Operator">
-                <Select
+              />
+            </FormGroup>
+            <FormGroup label="Operator">
+              <Select
                   onChange={e =>
-                    genericChangeSingle(
-                      e,
-                      setConditionsData,
-                      winningConditionData
-                    )
+                      genericChangeSingle(
+                          e,
+                          props.setConditionsData,
+                          props.winningConditionData
+                      )
                   }
                   optionList={operatorSort}
                   required
                   placeholder="--select operator--"
                   name="operator"
-                />
-              </FormGroup>
-              <FormGroup label="operand">
-                <Input
+              />
+            </FormGroup>
+            <FormGroup label="operand">
+              <Input
                   type="number"
                   onChange={e =>
-                    genericChangeSingle(
-                      e,
-                      setConditionsData,
-                      winningConditionData
-                    )
+                      genericChangeSingle(
+                          e,
+                          props.setConditionsData,
+                          props.winningConditionData
+                      )
                   }
                   required
-                  value={winningConditionData.operand}
+                  value={props.winningConditionData.operand}
                   name="operand"
-                />
-              </FormGroup>
-            </div>
-            <br />
-            <Button
+              />
+            </FormGroup>
+          </div>
+          <br />
+          <Button
               type="submit"
-              disabled={conditionSubmit}
-              loading={conditionSubmit}
-            >
-              Submit
-            </Button>
-          </form>
-        )}
-      </ContentModal>
-    </div>
-  );
+              disabled={props.conditionSubmit}
+              loading={props.conditionSubmit}
+          >
+            Submit
+          </Button>
+        </form>
+    )}
+  </div>
 }
 
 export default InstanceConfig;

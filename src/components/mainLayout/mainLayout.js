@@ -53,6 +53,10 @@ function MainLayout(props) {
       routeToLogin();
     }
     let token = localStorage.getItem(USERTOKEN);
+    if(!token){
+      routeToLogin();
+      return
+    }
     const decoded = jwtDecode(token);
 
     dispatch({ type: setUserDetails, payload: decoded.auth });
@@ -158,7 +162,7 @@ const SideBar = () => {
         <SideLinks
           link={"/clients"}
           title="Clients"
-          active={getActive("/clients")}
+          active={getActive("clients")}
           icon={<Icon name="ic_face" type="md" />}
         />
         <SideLinks
