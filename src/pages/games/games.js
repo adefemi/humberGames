@@ -41,7 +41,9 @@ function Games(props) {
 
     axiosHandler({
       method: "get",
-      url: GAME_LICENSE_URL + `?projection=licenseWithGame&${extra}`,
+      url:
+        GAME_LICENSE_URL +
+        `?projection=licenseWithGame&${extra}&clientId=${getClientId()}`,
       token: getToken(),
       clientID: getClientId()
     }).then(res => {

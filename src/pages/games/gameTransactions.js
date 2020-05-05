@@ -21,7 +21,8 @@ function GameTransactions(props) {
     "Status",
     "Game Token",
     "User Input",
-    "Draw TIme"
+    "Draw TIme",
+    ""
   ];
   const [transactions, setTransaction] = useState([]);
   const [fetching, setFetching] = useState(true);
@@ -86,6 +87,9 @@ function GameTransactions(props) {
               "..."}`
           : "N/A",
         moment(new Date(item.createdAt)).fromNow(),
+        <span className="link">
+          {item.status && item.status.toLowerCase() === "won" && "pay"}
+        </span>,
         item
       ]);
       return null;

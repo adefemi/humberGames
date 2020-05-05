@@ -21,21 +21,21 @@ function Dashboard(props) {
         <Card heading="Total GamePlays">
           <div className="contentCard">
             <center>
-              <h1>200</h1>
+              <h1>0</h1>
             </center>
           </div>
         </Card>
         <Card heading="Total Winnings">
           <div className="contentCard">
             <center>
-              <h1>10</h1>
+              <h1>0</h1>
             </center>
           </div>
         </Card>
         <Card heading="Winning Ration">
           <div className="contentCard">
             <center>
-              <h1>0.5</h1>
+              <h1>0</h1>
             </center>
           </div>
         </Card>
@@ -58,22 +58,22 @@ function Dashboard(props) {
         </div>
       </Card>
       <br />
-      <Card heading="Revenue Income/Expense vs Time">
-        <div className="contentCard">
-          <div className="graph-container">
-            <div className="">
-              <Graph
-                options={OPTIONS2}
-                labels={DATA2.labels}
-                datasets={DATA2.datasets}
-                height={300}
-                width={1000}
-                className="transaction-graph"
-              />
-            </div>
-          </div>
-        </div>
-      </Card>
+      {/*<Card heading="Revenue Income/Expense vs Time">*/}
+      {/*  <div className="contentCard">*/}
+      {/*    <div className="graph-container">*/}
+      {/*      <div className="">*/}
+      {/*        <Graph*/}
+      {/*          options={OPTIONS2}*/}
+      {/*          labels={DATA2.labels}*/}
+      {/*          datasets={DATA2.datasets}*/}
+      {/*          height={300}*/}
+      {/*          width={1000}*/}
+      {/*          className="transaction-graph"*/}
+      {/*        />*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</Card>*/}
       <br />
       <br />
     </div>

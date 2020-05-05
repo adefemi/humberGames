@@ -11,13 +11,13 @@ export const DATA = {
   datasets: [
     {
       label: "GamePlays",
-      data: [20000, 15000, 21000, 20500, 22220, 30000, 10000],
+      data: [0, 0, 0, 0, 0, 0, 0],
       fill: false,
       borderColor: "#EB008A"
     },
     {
       label: "Winnings",
-      data: [15, 2, 6, 31, 62, 2, 30],
+      data: [0, 0, 0, 0, 0, 0, 0],
       fill: false,
       borderColor: "#0094D8"
     }

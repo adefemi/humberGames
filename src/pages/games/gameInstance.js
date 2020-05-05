@@ -188,9 +188,9 @@ function Games(props) {
               <br />
               <div className="section-header">Quick Summary</div>
               <p />
-              <SummaryCard type={"gamesplays"} total={"2"} />
-              <SummaryCard type={"games"} total={"1,589"} />
-              <SummaryCard type={"wins"} total={"15"} />
+              <SummaryCard type={"gamesplays"} total={"0"} />
+              <SummaryCard type={"games"} total={"0"} />
+              <SummaryCard type={"wins"} total={"0"} />
             </>
           </Affixed>
         </div>
