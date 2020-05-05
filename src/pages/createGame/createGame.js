@@ -31,7 +31,6 @@ const CreateGame = props => {
   const [gameType, setGameType] = useState("");
   const [activeGame, setActiveGame] = useState(null);
 
-
   const {
     dispatch,
     state: { userDetails }
@@ -55,7 +54,6 @@ const CreateGame = props => {
       setActiveGame(res.data._embedded.games[0]);
       setGameType(res.data._embedded.games[0].type);
       setFetching(false);
-
     });
   };
 
@@ -118,11 +116,11 @@ const CreateGame = props => {
         <form onSubmit={onSubmit} className="main-container">
           <FormGroup label="Game Label">
             <Input
-                onChange={e => genericChangeSingle(e, setGameData, gameData)}
-                value={gameData.label || ""}
-                name={"label"}
-                placeholder="Specify game label"
-                required
+              onChange={e => genericChangeSingle(e, setGameData, gameData)}
+              value={gameData.label || ""}
+              name={"label"}
+              placeholder="Specify game label"
+              required
             />
           </FormGroup>
           {/*<FormGroup label="Cost Type">*/}
@@ -170,25 +168,25 @@ const CreateGame = props => {
           <div className="grid grid-2 grid-gap-2">
             <FormGroup label="Amount">
               <CurrencyInput
-                  onChange={e =>
-                      genericChangeSingle(e, setGameData, gameData, true)
-                  }
-                  value={gameData.amount || 0}
-                  name={"amount"}
-                  required
-                  defaultCurrencyOption={{
-                    title: "NGN",
-                    value: "NGN"
-                  }}
+                onChange={e =>
+                  genericChangeSingle(e, setGameData, gameData, true)
+                }
+                value={gameData.amount || 0}
+                name={"amount"}
+                required
+                defaultCurrencyOption={{
+                  title: "NGN",
+                  value: "NGN"
+                }}
               />
             </FormGroup>
             <FormGroup label="End Date">
               <DatePicker
-                  id={1}
-                  onChange={e => genericChangeSingle(e, setGameData, gameData)}
-                  name={"endDate"}
-                  required
-                  disablePastDate
+                id={1}
+                onChange={e => genericChangeSingle(e, setGameData, gameData)}
+                name={"endDate"}
+                required
+                disablePastDate
               />
             </FormGroup>
           </div>
@@ -248,32 +246,32 @@ const CreateGame = props => {
           {/*  </>*/}
           {/*)}*/}
           {activeGame.requiredGameConfig.length > 0 && (
-              <>
-                <h3>Game Configurations</h3>
-                <br />
-               <div className="grid grid-2 grid-gap-h-2">
-                 {activeGame.requiredGameConfig.map((item, key) => {
-                   return (
-                       <FormGroup key={key} label={item}>
-                         <Input
-                             required
-                             name={item}
-                             value={gameConfig[item]}
-                             onChange={e =>
-                                 genericChangeSingle(e, setGameConfig, gameConfig)
-                             }
-                         />
-                       </FormGroup>
-                   );
-                 })}
-               </div>
-              </>
+            <>
+              <h3>Game Configurations</h3>
+              <br />
+              <div className="grid grid-2 grid-gap-h-2">
+                {activeGame.requiredGameConfig.map((item, key) => {
+                  return (
+                    <FormGroup key={key} label={item}>
+                      <Input
+                        required
+                        name={item}
+                        value={gameConfig[item]}
+                        onChange={e =>
+                          genericChangeSingle(e, setGameConfig, gameConfig)
+                        }
+                      />
+                    </FormGroup>
+                  );
+                })}
+              </div>
+            </>
           )}
           <Button
-              loading={loading}
-              disabled={loading}
-              type="submit"
-              className="createButton"
+            loading={loading}
+            disabled={loading}
+            type="submit"
+            className="createButton"
           >
             Submit
           </Button>

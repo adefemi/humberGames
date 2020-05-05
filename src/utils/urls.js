@@ -1,4 +1,6 @@
-export const USER_BASE_URL = "http://api.humbergames.com/users/v1/";
+export const BASE_URL = "http://api.humbergames.com/";
+export const USER_BASE_URL = BASE_URL + "users/v1/";
+export const CAMPAIGN_BASE_URL = BASE_URL + "campaigns/v1";
 export const GAME_BASE_URL = "https://hgameservice.herokuapp.com/";
 
 export const LOGIN_URL = USER_BASE_URL + "auths/login";
@@ -19,3 +21,4 @@ export const WINNING_CONDITION_URL = GAME_BASE_URL + "winningConditions";
 export const GAME_LICENSE_URL = GAME_BASE_URL + "gameLicenses";
 export const GAME_PLAY_URL = GAME_BASE_URL + "play/";
 export const REWARDS_URL = GAME_BASE_URL + "rewards";
+export const CAMPAIGN_URL = CAMPAIGN_BASE_URL;

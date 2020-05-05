@@ -53,9 +53,9 @@ function MainLayout(props) {
       routeToLogin();
     }
     let token = localStorage.getItem(USERTOKEN);
-    if(!token){
+    if (!token) {
       routeToLogin();
-      return
+      return;
     }
     const decoded = jwtDecode(token);
 
@@ -160,9 +160,9 @@ const SideBar = () => {
           icon={<Icon name="controller" type="entypo" />}
         />
         <SideLinks
-          link={"/clients"}
-          title="Clients"
-          active={getActive("clients")}
+          link={"/users"}
+          title="Users"
+          active={getActive("users")}
           icon={<Icon name="ic_face" type="md" />}
         />
         <SideLinks

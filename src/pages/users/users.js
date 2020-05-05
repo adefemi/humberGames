@@ -18,7 +18,7 @@ function Users(props) {
   const [clients, setClients] = useState([]);
 
   useEffect(() => {
-    dispatch({ type: setPageTitleAction, payload: "Clients" });
+    dispatch({ type: setPageTitleAction, payload: "Users" });
     getClients();
   }, []);
 
@@ -92,7 +92,8 @@ function Users(props) {
         values={formatClients(clients)}
         loading={fetching}
       />
-      <br/><br/>
+      <br />
+      <br />
     </div>
   );
 }

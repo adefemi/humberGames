@@ -21,6 +21,7 @@ function Games(props) {
   const [transactionLink, setTransactionLink] = useState("");
   const [prizesLink, setPrizesLink] = useState("");
   const [drawsLink, setDrawsLink] = useState("");
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     dispatch({
@@ -81,7 +82,12 @@ function Games(props) {
         <h4>Back</h4>
       </div>
 
-      <Tabs heading={heading} body={bodies} />
+      <Tabs
+        heading={heading}
+        body={bodies}
+        activeIndex={activeTab}
+        onSwitch={setActiveTab}
+      />
     </div>
   );
 }

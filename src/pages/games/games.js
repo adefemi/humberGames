@@ -10,7 +10,7 @@ import { genericChangeSingle, getClientId, getToken } from "../../utils/helper";
 import Input from "../../components/input/Input";
 import qs from "querystring";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { GAME_URL } from "../../utils/urls";
+import { GAME_LICENSE_URL, GAME_URL } from "../../utils/urls";
 import Skeleton from "react-loading-skeleton";
 import Result from "../../components/Result/result";
 import Pagination from "../../components/Pagination/pagination";
@@ -41,14 +41,23 @@ function Games(props) {
 
     axiosHandler({
       method: "get",
-      url: GAME_URL + `?${extra}`,
+      url: GAME_LICENSE_URL + `?projection=licenseWithGame&${extra}`,
       token: getToken(),
       clientID: getClientId()
     }).then(res => {
-      setGames(res.data._embedded.games);
+      setGames(formatGames(res.data._embedded.gameLicenses));
       setPageInfo(res.data.page);
       setFetching(false);
     });
+  };
+
+  const formatGames = license => {
+    const result = [];
+    license.map(item => {
+      result.push(item.game);
+      return null;
+    });
+    return result;
   };
 
   const setGame = (link, game) => {

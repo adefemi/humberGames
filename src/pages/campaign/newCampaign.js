@@ -19,11 +19,21 @@ import { Tabs } from "../../components/tabs/tabs";
 import "./campaign.css";
 import { Notification } from "../../components/notification/Notification";
 import AppIcon from "../../components/icons/Icon";
+import {
+  errorHandler,
+  genericChangeSingle,
+  getClientId,
+  getToken
+} from "../../utils/helper";
+import { axiosHandler } from "../../utils/axiosHandler";
+import { CAMPAIGN_URL } from "../../utils/urls";
 
 function NewCampaign(props) {
   const [active, setActive] = useState("sms");
   const [submit, setSubmit] = useState(false);
-  const [receptType, setRecieptType] = useState(1);
+  const [receptType, setRecieptType] = useState(0);
+  const [scheduleData, setScheduleData] = useState({});
+  const [recipientData, setRecipientData] = useState({});
   const [payload, setPayload] = useState({
     message: "",
     title: ""
@@ -40,31 +50,87 @@ function NewCampaign(props) {
     setPayload({ ...payload, [e.target.name]: e.target.value });
   };
   const onChangeFile = e => {
-    setPayload({ ...payload, [e.target.name]: e.target.files[0] });
+    setRecipientData({ ...recipientData, [e.target.name]: e.target.files[0] });
   };
 
-  const onSubmit = () => {
+  const onSubmit = e => {
+    e.preventDefault();
     setSubmit(true);
-    const contentData = payload;
+    let contentData = payload;
     delete contentData["campaignId"];
 
-    if (!contentData.phoneNumbers) {
+    if (!scheduleData.date || !scheduleData.time) {
       Notification.bubble({
         type: "error",
-        content: "Provide Recipients..."
+        content: "Specify schedule date and time"
       });
       setSubmit(false);
       return;
     }
+    contentData.schedule = `${scheduleData.date} ${scheduleData.time}`;
+    contentData.recipientContentType =
+      receptType === 0 ? "url" : receptType === 1 ? "file" : "array";
 
-    setTimeout(() => {
+    if (receptType === 0) {
       Notification.bubble({
-        type: "success",
-        content: "Campaign created successfully"
+        type: "info",
+        content: "Not Ready"
       });
       setSubmit(false);
       props.history.push("/campaigns");
-    }, 2000);
+    } else if (receptType === 1) {
+      if (!recipientData.file) {
+        Notification.bubble({
+          type: "error",
+          content: "Specify recipients CSV file"
+        });
+        setSubmit(false);
+        return;
+      }
+      contentData.recipients = recipientData.file;
+    } else {
+      if (!recipientData.phoneNumbers) {
+        Notification.bubble({
+          type: "error",
+          content: "Specify recipients, separate them with a comma"
+        });
+        setSubmit(false);
+        return;
+      }
+      contentData.recipients = recipientData.phoneNumbers
+        .split(",")
+        .map(item => item.trim());
+    }
+
+    if (receptType === 0 || receptType === 1) {
+      let tempData = new FormData();
+      for (var key in contentData) {
+        tempData.append(key, contentData[key]);
+      }
+      contentData = tempData;
+    }
+    axiosHandler({
+      method: "post",
+      clientID: getClientId(),
+      token: getToken(),
+      data: contentData,
+      url: CAMPAIGN_URL + "/sms"
+    }).then(
+      res => {
+        Notification.bubble({
+          type: "success",
+          content: "Campaign added successfully"
+        });
+        props.history.push("/campaigns");
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+        setSubmit(false);
+      }
+    );
   };
 
   const fileChanged = e => {
@@ -90,11 +156,12 @@ function NewCampaign(props) {
         <form onSubmit={onSubmit} className="main-container">
           <div className="grid grid-2 grid-gap-2">
             <FormGroup label="Campaign type">
-              <Select
-                placeholder="--choose campaign type"
-                optionList={campaignChannelOptions}
-                onChange={e => setActive(e.target.value)}
-              />
+              {/*<Select*/}
+              {/*  placeholder="--choose campaign type"*/}
+              {/*  optionList={campaignChannelOptions}*/}
+              {/*  onChange={e => setActive(e.target.value)}*/}
+              {/*/>*/}
+              <Input disabled value="SMS" />
             </FormGroup>
             <FormGroup label="Title">
               <Input
@@ -128,67 +195,73 @@ function NewCampaign(props) {
             </div>
           )}
           <div className="grid grid-2 grid-gap-2">
-            <FormGroup label="Network">
-              <Select
-                name="network"
-                required
-                placeholder="--select network--"
-                optionList={campaignNetworkOptions}
-                onChange={onChange}
-              />
-            </FormGroup>
-            <FormGroup label="Sender ID (optional)">
+            {/*<FormGroup label="Network">*/}
+            {/*  <Select*/}
+            {/*    name="network"*/}
+            {/*    required*/}
+            {/*    placeholder="--select network--"*/}
+            {/*    optionList={campaignNetworkOptions}*/}
+            {/*    onChange={onChange}*/}
+            {/*  />*/}
+            {/*</FormGroup>*/}
+            <FormGroup label="Sender (optional)">
               <Input
-                name="senderId"
-                value={payload.senderId || ""}
+                name="sender"
+                value={payload.sender || ""}
                 onChange={onChange}
               />
             </FormGroup>
           </div>
-          <br />
-          <div className="grid grid-2 grid-gap-2">
-            <FormGroup label="Reward">
-              <Select
-                optionList={[{ title: "Winning Bowl", value: "1" }]}
-                placeholder="--choose a reward--"
-              />
-            </FormGroup>
-          </div>
-          <br />
-          <Checkbox
-            id={1}
-            checked={scheduleStatus}
-            onChange={e => {
-              setScheduleStatus(e.target.checked);
-            }}
-            label="Schedule (Date/Time)"
-          />
-          <br />
-          <br />
-          {scheduleStatus && (
+          {/*<br />*/}
+          {/*<Checkbox*/}
+          {/*  id={1}*/}
+          {/*  checked={scheduleStatus}*/}
+          {/*  onChange={e => {*/}
+          {/*    setScheduleStatus(e.target.checked);*/}
+          {/*  }}*/}
+          {/*  label="Schedule (Date/Time)"*/}
+          {/*/>*/}
+          {/*<br />*/}
+          {/*<br />*/}
+          <FormGroup label="Schedule">
             <div className="grid grid-2 grid-gap-2">
-              <DatePicker />
-              <TimePicker use24H />
+              <DatePicker
+                disablePastDate
+                name="date"
+                onChange={e =>
+                  genericChangeSingle(e, setScheduleData, scheduleData)
+                }
+              />
+              <TimePicker
+                name="time"
+                onChange={e =>
+                  genericChangeSingle(e, setScheduleData, scheduleData)
+                }
+                use24H
+              />
             </div>
-          )}
+          </FormGroup>
           <br />
           <Tabs
             activeIndex={receptType}
             onSwitch={setRecieptType}
             heading={[
+              <span>Reward</span>,
               <span>Upload CSV file</span>,
               <span>Enter Phone Numbers</span>
             ]}
             body={[
+              <FormGroup label="Reward">
+                <Select
+                  optionList={[{ title: "Winning Bowl", value: "1" }]}
+                  placeholder="--choose a reward--"
+                />
+              </FormGroup>,
               <>
                 <h3>Recipients</h3>
                 <div>
                   <FormGroup title="">
-                    <input
-                      type="file"
-                      onChange={onChangeFile}
-                      name="phoneNumbers"
-                    />
+                    <input type="file" onChange={onChangeFile} name="file" />
                   </FormGroup>
                   <div className="info input-small-top">
                     Supported types includes: CSV
@@ -196,13 +269,18 @@ function NewCampaign(props) {
                 </div>
               </>,
               <>
-                <h3>Recipients</h3>
+                <h3>
+                  Recipients{" "}
+                  <small>(separate each recipients with a comma)</small>
+                </h3>
                 <FormGroup>
                   <TextAreaField
                     placeholder="e.g: 0909390303030, 090302039930, 09018393939 ..."
                     name="phoneNumbers"
-                    value={payload.phoneNumbers || ""}
-                    onChange={onChange}
+                    value={recipientData.phoneNumbers || ""}
+                    onChange={e =>
+                      genericChangeSingle(e, setRecipientData, recipientData)
+                    }
                   />
                 </FormGroup>
               </>

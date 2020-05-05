@@ -56,7 +56,8 @@ export const ruleTypeSort = [
 export const conditionSort = [
   { title: "GamePlay", value: "0" },
   { title: "Time", value: "1" },
-  { title: "Revenue", value: "2" }
+  { title: "Revenue", value: "2" },
+  { title: "PrizeQuantity", value: "3" }
 ];
 
 export const operatorSort = [

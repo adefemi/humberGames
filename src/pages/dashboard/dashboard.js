@@ -3,63 +3,40 @@ import "./dashboard.css";
 import { Card } from "../../components/card/Card";
 import { DATA, OPTIONS, DATA2, OPTIONS2 } from "./transactionGraphData";
 import Graph from "../../components/graph/Graph";
+import DatePicker from "../../components/DatePicker/datePicker";
 
 function Dashboard(props) {
   return (
     <div className="dashboard">
+      <div className="flex align-center">
+        <DatePicker rangePicker />
+        <h3 className="link">
+          &nbsp;&nbsp;Showing data between 2020-12-20 to 2021-10-22
+        </h3>
+      </div>
+      <br />
+      <br />
+
       <div className="computes">
         <Card heading="Total GamePlays">
           <div className="contentCard">
-            <div className="flex align-center justify-between">
-              <div className="info">Today</div>
-              <div className="context">58</div>
-            </div>
-            <br />
-            <div className="flex align-center justify-between">
-              <div className="info">7 days</div>
-              <div className="context">1,200</div>
-            </div>
-            <br />
-            <div className="flex align-center justify-between">
-              <div className="info">30 days</div>
-              <div className="context">14,800</div>
-            </div>
+            <center>
+              <h1>200</h1>
+            </center>
           </div>
         </Card>
         <Card heading="Total Winnings">
           <div className="contentCard">
-            <div className="flex align-center justify-between">
-              <div className="info">Today</div>
-              <div className="context">2</div>
-            </div>
-            <br />
-            <div className="flex align-center justify-between">
-              <div className="info">7 days</div>
-              <div className="context">5</div>
-            </div>
-            <br />
-            <div className="flex align-center justify-between">
-              <div className="info">30 days</div>
-              <div className="context">15</div>
-            </div>
+            <center>
+              <h1>10</h1>
+            </center>
           </div>
         </Card>
         <Card heading="Winning Ration">
           <div className="contentCard">
-            <div className="flex align-center justify-between">
-              <div className="info">Today</div>
-              <div className="context">0.5</div>
-            </div>
-            <br />
-            <div className="flex align-center justify-between">
-              <div className="info">7 days</div>
-              <div className="context">0.3</div>
-            </div>
-            <br />
-            <div className="flex align-center justify-between">
-              <div className="info">30 days</div>
-              <div className="context">0.25</div>
-            </div>
+            <center>
+              <h1>0.5</h1>
+            </center>
           </div>
         </Card>
       </div>

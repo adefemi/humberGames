@@ -13,6 +13,7 @@ const Settings = lazy(() => import("./pages/settings/settings"));
 const CreateGame = lazy(() => import("./pages/createGame/createGame"));
 const Campaign = lazy(() => import("./pages/campaign/campaign"));
 const NewCampaign = lazy(() => import("./pages/campaign/newCampaign"));
+const SingleCampaign = lazy(() => import("./pages/campaign/singleCampaign"));
 const NewReward = lazy(() => import("./pages/reward/newReward"));
 const Reward = lazy(() => import("./pages/reward/reward"));
 const ClientDefinition = lazy(() => import("./pages/login/clientDefinition"));
@@ -68,7 +69,7 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
-                  path="/clients"
+                  path="/users"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
@@ -102,6 +103,16 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <Campaign {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/campaigns/:uuid/active"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <SingleCampaign {...props} />
                     </Suspense>
                   )}
                 />
