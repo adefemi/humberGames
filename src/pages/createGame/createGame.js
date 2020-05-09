@@ -6,7 +6,6 @@ import CurrencyInput from "../../components/currencyInput/currencyInput";
 import {
   errorHandler,
   genericChangeSingle,
-  getArrayCount,
   getClientId,
   getToken
 } from "../../utils/helper";
@@ -14,13 +13,13 @@ import DatePicker from "../../components/DatePicker/datePicker";
 import { Button } from "../../components/button/Button";
 import AppIcon from "../../components/icons/Icon";
 import Input from "../../components/input/Input";
-import { Select } from "../../components/select/Select";
-import { primaryColor, secondaryColor } from "../../utils/data";
+import { secondaryColor } from "../../utils/data";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { GAME_INSTANCE_URL, GAME_PRICE_URL, GAME_URL } from "../../utils/urls";
+import { GAME_INSTANCE_URL, GAME_URL } from "../../utils/urls";
 import { Spinner } from "../../components/spinner/Spinner";
+import moment from "moment";
 
 const CreateGame = props => {
   const [gameData, setGameData] = useState({});
@@ -33,7 +32,7 @@ const CreateGame = props => {
 
   const {
     dispatch,
-    state: { userDetails }
+    state: { userDetails, activeClient }
   } = useContext(store);
 
   useEffect(() => {
@@ -41,18 +40,66 @@ const CreateGame = props => {
       type: setPageTitleAction,
       payload: props.match.params.label.toUpperCase()
     });
-    getActiveGame();
+    if (props.update) {
+      getActiveInstance();
+    } else {
+      getActiveGame();
+    }
   }, []);
 
-  const getActiveGame = () => {
+  const getActiveInstance = () => {
     axiosHandler({
       method: "get",
-      url: GAME_URL + `?id=${props.match.params.uuid}`,
+      url: GAME_INSTANCE_URL + `?id=${props.match.params.uuid}`,
+      token: getToken(),
+      clientID: getClientId()
+    }).then(
+      res => {
+        const activeGameInstance = res.data._embedded.gameInstances[0];
+        if (!activeGameInstance) {
+          Notification.bubble({
+            type: "error",
+            content: "Not Found"
+          });
+          return;
+        }
+        console.log(activeGameInstance);
+        setGameData({
+          ...activeGameInstance,
+          label: activeGameInstance.label,
+          amount: activeGameInstance.amount.toString(),
+          endDate: moment(
+            activeGameInstance.endDate,
+            "YYYY-MM-DD HH:mm:ss"
+          ).format("YYYY-MM-DD")
+        });
+        setGameConfig(activeGameInstance.gameConfig);
+        getActiveGame(activeGameInstance._links.game.href);
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+      }
+    );
+  };
+
+  const getActiveGame = link => {
+    axiosHandler({
+      method: "get",
+      url: link ? link : GAME_URL + `?id=${props.match.params.uuid}`,
       token: getToken(),
       clientID: getClientId()
     }).then(res => {
-      setActiveGame(res.data._embedded.games[0]);
-      setGameType(res.data._embedded.games[0].type);
+      let activeGame;
+      if (link) {
+        activeGame = res.data;
+      } else {
+        activeGame = res.data._embedded.games[0];
+      }
+      setActiveGame(activeGame);
+      setGameType(activeGame.type);
       setFetching(false);
     });
   };
@@ -67,13 +114,19 @@ const CreateGame = props => {
       gameConfig: gameConfig,
       game: activeGame._links.self.href,
       userId: userDetails.userId,
-      clientId: getClientId(),
+      clientId: activeClient.id,
       startDate: gameData.endDate + " 00:00:00",
       endDate: gameData.endDate + " 00:00:00"
     };
+    let method = "post";
+    let url = GAME_INSTANCE_URL;
+    if (props.update) {
+      method = "put";
+      url = url + `/${data.id}`;
+    }
     axiosHandler({
-      method: "post",
-      url: GAME_INSTANCE_URL,
+      method,
+      url,
       data,
       token: getToken(),
       clientID: getClientId()
@@ -81,7 +134,9 @@ const CreateGame = props => {
       .then(res => {
         Notification.bubble({
           type: "success",
-          content: "Game instance created successfully"
+          content: `Game instance ${
+            props.update ? "updated" : "created"
+          } successfully`
         });
         props.history.goBack();
       })
@@ -186,6 +241,7 @@ const CreateGame = props => {
                 onChange={e => genericChangeSingle(e, setGameData, gameData)}
                 name={"endDate"}
                 required
+                defaultValue={props.update ? gameData.endDate : null}
                 disablePastDate
               />
             </FormGroup>
@@ -273,7 +329,7 @@ const CreateGame = props => {
             type="submit"
             className="createButton"
           >
-            Submit
+            {props.update ? "Update" : "Submit"}
           </Button>
         </form>
         <div>

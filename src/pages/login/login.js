@@ -41,18 +41,17 @@ function Login(props) {
       url: LOGIN_URL,
       data: loginData,
       clientID
-    }).then(
-      res => {
+    })
+      .then(res => {
         login(res.data.data);
-      },
-      err => {
+      })
+      .catch(err => {
         Notification.bubble({
           type: "error",
           content: errorHandler(err)
         });
         setLoading(false);
-      }
-    );
+      });
   };
 
   const login = data => {

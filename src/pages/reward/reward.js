@@ -5,7 +5,7 @@ import TransactionTable from "../../components/transactionTable/transactionTable
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
 import { Select } from "../../components/select/Select";
-import { statusMode } from "../../utils/data";
+import { secondaryColor, statusMode } from "../../utils/data";
 import { Button } from "../../components/button/Button";
 import "./reward.css";
 import { axiosHandler } from "../../utils/axiosHandler";
@@ -13,11 +13,13 @@ import { REWARDS_URL } from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
+import { Spinner } from "../../components/spinner/Spinner";
 
 function Reward(props) {
   const { dispatch } = useContext(store);
   const [fetching, setFetching] = useState(true);
   const [rewards, setRewards] = useState([]);
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Rewards" });
@@ -45,32 +47,66 @@ function Reward(props) {
     );
   };
 
+  const viewGame = reward => {
+    setLoading(reward.id);
+    axiosHandler({
+      method: "get",
+      url: reward._links.gameInstance.href,
+      token: getToken(),
+      clientID: getClientId()
+    }).then(
+      res => {
+        props.history.push(`/instance/${res.data.id}/${res.data.label}`);
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+        setLoading(null);
+      }
+    );
+  };
+
   const formatRewards = rewards => {
     let result = [];
     rewards.map(item => {
       result.push([
         item.title,
-        item.drawFrequenceInHours,
-        item.cutOffTimeInHours,
-        moment(item.nextdrawTime, "YYYY-MM-DD HH:mm:ss").fromNow(),
+        // item.drawFrequenceInHours,
+        // item.cutOffTimeInHours,
+        // moment(item.nextdrawTime, "YYYY-MM-DD HH:mm:ss").fromNow(),
         moment(new Date(item.createdAt)).fromNow(),
-        <span className="link" onClick={() => props.history.push(`/reward/id`)}>
-          View Reward
-        </span>
+        <div className="flex align-center">
+          <span
+            className="link"
+            onClick={() => props.history.push(`/reward/${item.id}`)}
+          >
+            View Reward
+          </span>{" "}
+          &nbsp; | &nbsp;
+          {loading === item.id ? (
+            <Spinner color={secondaryColor} />
+          ) : (
+            <span className="link" onClick={() => viewGame(item)}>
+              View Game Instance
+            </span>
+          )}{" "}
+          &nbsp; | &nbsp;{" "}
+          <span
+            className="link"
+            onClick={() => props.history.push(`/reward/update/${item.id}`)}
+          >
+            Update Reward
+          </span>
+        </div>
       ]);
       return null;
     });
     return result;
   };
 
-  const headings = [
-    "Title",
-    "Draw Frequency (in hours)",
-    "Cutoff Time (in hours)",
-    "Next Draw Time",
-    "Created at",
-    ""
-  ];
+  const headings = ["Title", "Created at", ""];
 
   return (
     <div>
@@ -78,7 +114,7 @@ function Reward(props) {
         <div>
           <div className="lease-search-box">
             <Input
-              placeholder="Search campaigns"
+              placeholder="Search rewards"
               iconRight={<AppIcon name="search" type="feather" />}
             />
           </div>

@@ -19,34 +19,91 @@ import {
   ccEnRules,
   ccMainRules,
   ccTRules,
-  rewardRuleTypes
+  rewardRuleTypes,
+  secondaryColor
 } from "../../utils/data";
 import AppIcon from "../../components/icons/Icon";
 import { Notification } from "../../components/notification/Notification";
 import { axiosHandler } from "../../utils/axiosHandler";
 import { GAME_INSTANCE_URL, REWARDS_URL } from "../../utils/urls";
+import ms from "microseconds";
+import { Spinner } from "../../components/spinner/Spinner";
+
+const getDefaultInstance = (InstanceList, activeInstanceLink) => {
+  const activeInstance = InstanceList.filter(
+    item => item.value === activeInstanceLink
+  );
+  return activeInstance[0];
+};
 
 function NewReward(props) {
-  const { dispatch } = useContext(store);
+  const {
+    dispatch,
+    state: { activeClient }
+  } = useContext(store);
   const [rewardData, setRewardData] = useState({});
-  const [nextDrawInfo, setNextDrawInfo] = useState({});
   const [qualificationRules, setQualificationRules] = useState([]);
   const [targetDemographyRules, setTargetDemographyRules] = useState([]);
   const [gameInstance, setGameInstance] = useState([]);
   const [fetchingInstance, setfetchingInstance] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(!!props.update);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "New Reward" });
     getGameInstances();
+    if (props.update) {
+      getActiveReward();
+    }
   }, []);
+
+  const getActiveReward = () => {
+    axiosHandler({
+      method: "get",
+      token: getToken(),
+      clientID: getClientId(),
+      url: REWARDS_URL + `?id=${props.match.params.uuid}`
+    }).then(
+      res => {
+        const activeReward = res.data._embedded.rewards[0];
+        axiosHandler({
+          method: "get",
+          token: getToken(),
+          clientID: getClientId(),
+          url: activeReward._links.gameInstance.href
+        }).then(
+          res => {
+            setRewardData({
+              ...activeReward,
+              gameInstance: res.data._links.self.href
+            });
+            setQualificationRules(activeReward.qualificationRules);
+            setTargetDemographyRules(activeReward.targetDemographyRules);
+            setFetching(false);
+          },
+          err => {
+            Notification.bubble({
+              type: "error",
+              content: errorHandler(err)
+            });
+          }
+        );
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+      }
+    );
+  };
 
   const getGameInstances = () => {
     axiosHandler({
       method: "get",
       token: getToken(),
       clientID: getClientId(),
-      url: GAME_INSTANCE_URL
+      url: GAME_INSTANCE_URL + `?clientId=${activeClient.id}`
     }).then(
       res => {
         if (res.data._embedded && res.data._embedded.gameInstances) {
@@ -73,7 +130,6 @@ function NewReward(props) {
 
   const onRuleChange = (ruleType, e, index) => {
     if (ruleType === "qrules") {
-      // console.log(ruleData);
       const activeCharge = qualificationRules.filter(
         (item, ind) => ind === index
       )[0];
@@ -98,32 +154,32 @@ function NewReward(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    if (!nextDrawInfo.nextdrawDate || !nextDrawInfo.nextdrawTime) {
-      Notification.bubble({
-        type: "info",
-        content: "Specify Next Draw date and time"
-      });
-      return;
-    }
-
     const newData = {
       ...rewardData,
       qualificationRules,
       targetDemographyRules,
-      nextdrawTime: `${nextDrawInfo.nextdrawDate} ${nextDrawInfo.nextdrawTime}`
+      clientId: activeClient.id
     };
     setLoading(true);
+
+    let method = "post";
+    let url = REWARDS_URL;
+    if (props.update) {
+      method = "put";
+      url = url + `/${newData.id}`;
+    }
+
     axiosHandler({
-      method: "post",
-      url: REWARDS_URL,
+      method,
+      url,
       clientID: getClientId(),
       token: getToken(),
       data: newData
     }).then(
-      res => {
+      _ => {
         Notification.bubble({
           type: "success",
-          content: "Reward Added Successfully"
+          content: `Reward ${props.update ? "Update" : "Added"} Successfully`
         });
         props.history.push("/rewards");
       },
@@ -135,8 +191,13 @@ function NewReward(props) {
         setLoading(false);
       }
     );
-    console.log(newData);
   };
+
+  if (props.update) {
+    if (fetching) {
+      return <Spinner color={secondaryColor} />;
+    }
+  }
 
   return (
     <div className="reward">
@@ -145,7 +206,7 @@ function NewReward(props) {
           <AppIcon name="arrowLeft" type="feather" />{" "}
         </span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <h3>Add Reward</h3>
+        <h3>{props.update ? "Update" : "Add"} Reward</h3>
       </div>
 
       <div className="form-container-main">
@@ -159,19 +220,22 @@ function NewReward(props) {
               onChange={e => genericChangeSingle(e, setRewardData, rewardData)}
             />
           </FormGroup>
+          {/*<div className="">*/}
+          {/*<FormGroup label="Draw Frequency (in hours)">*/}
+          {/*  <Input*/}
+          {/*    placeholder="Specify frequency"*/}
+          {/*    name="drawFrequenceInHours"*/}
+          {/*    type="number"*/}
+          {/*    required*/}
+          {/*    value={rewardData.drawFrequenceInHours || ""}*/}
+          {/*    onChange={e =>*/}
+          {/*      genericChangeSingle(e, setRewardData, rewardData)*/}
+          {/*    }*/}
+          {/*  />*/}
+          {/*</FormGroup>*/}
+
+          {/*</div>*/}
           <div className="grid grid-2 grid-gap-2">
-            <FormGroup label="Draw Frequency (in hours)">
-              <Input
-                placeholder="Specify frequency"
-                name="drawFrequenceInHours"
-                type="number"
-                required
-                value={rewardData.drawFrequenceInHours || ""}
-                onChange={e =>
-                  genericChangeSingle(e, setRewardData, rewardData)
-                }
-              />
-            </FormGroup>
             <FormGroup label="Game Instance">
               <Select
                 placeholder={
@@ -184,43 +248,46 @@ function NewReward(props) {
                 onChange={e =>
                   genericChangeSingle(e, setRewardData, rewardData)
                 }
+                defaultOption={
+                  props.update &&
+                  !fetchingInstance &&
+                  getDefaultInstance(gameInstance, rewardData.gameInstance)
+                }
                 optionList={gameInstance}
               />
             </FormGroup>
-          </div>
-          <div className="grid grid-2 grid-gap-2">
-            <FormGroup label="Cutoff Time (in hours)">
+            <FormGroup label="Cutoff Time (in minutes)">
               <Input
                 placeholder="Specify cutoff time"
-                name="cutOffTimeInHours"
+                name="cutOffTimeInMins"
                 type="number"
                 required
-                value={rewardData.cutOffTimeInHours || ""}
+                value={rewardData.cutOffTimeInMins || ""}
                 onChange={e =>
                   genericChangeSingle(e, setRewardData, rewardData)
                 }
               />
             </FormGroup>
           </div>
-          <FormGroup label="Next Draw Time">
-            <div className="grid grid-2 grid-gap-2">
-              <DatePicker
-                id={1}
-                name="nextdrawDate"
-                required
-                onChange={e =>
-                  genericChangeSingle(e, setNextDrawInfo, nextDrawInfo)
-                }
-              />
-              <TimePicker
-                use24H
-                name="nextdrawTime"
-                onChange={e =>
-                  genericChangeSingle(e, setNextDrawInfo, nextDrawInfo)
-                }
-              />
-            </div>
-          </FormGroup>
+          {/*<FormGroup label="Next Draw Time">*/}
+          {/*  <div className="grid grid-2 grid-gap-2">*/}
+          {/*    <DatePicker*/}
+          {/*      id={1}*/}
+          {/*      name="nextdrawDate"*/}
+          {/*      required*/}
+          {/*      onChange={e =>*/}
+          {/*        genericChangeSingle(e, setNextDrawInfo, nextDrawInfo)*/}
+          {/*      }*/}
+          {/*    />*/}
+          {/*    <TimePicker*/}
+          {/*      use24H*/}
+          {/*      name="nextdrawTime"*/}
+          {/*      onChange={e =>*/}
+          {/*        genericChangeSingle(e, setNextDrawInfo, nextDrawInfo)*/}
+          {/*      }*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*</FormGroup>*/}
           <br />
           <h3>Qualification Rules</h3>
           {qualificationRules.map((item, index) => {
@@ -230,6 +297,7 @@ function NewReward(props) {
                 data={item}
                 key={index}
                 index={index}
+                update={props.update}
                 onConditionChange={e =>
                   onRuleChange(
                     "qrules",
@@ -265,6 +333,7 @@ function NewReward(props) {
                 data={item}
                 key={index}
                 index={index}
+                update={props.update}
                 onConditionChange={e =>
                   onRuleChange(
                     "trules",
@@ -302,7 +371,7 @@ function NewReward(props) {
               loading={loading}
               disabled={loading}
             >
-              Create Reward
+              {props.update ? "Update" : "Create"} Reward
             </Button>
           </div>
         </form>
@@ -344,6 +413,7 @@ const getRuleConditions = (type, optType, index, onChange, data) => {
         name="condType"
         onChange={e => onChange(e, index)}
         required
+        defaultOption={getDefaultInstance(options, data.condType)}
       />
     );
   } else {
@@ -364,7 +434,7 @@ const getRuleConditions = (type, optType, index, onChange, data) => {
   } else if (typeFromList.type === "date") {
     result.push(
       <DatePicker
-        id={`cod-${index}`}
+        id={ms.now()}
         name="condValue"
         onChange={e => onChange(e, index, options.length < 1)}
         required
@@ -395,7 +465,26 @@ const formatConditions = condition => {
 };
 
 const QualificationRuleForm = props => {
-  const [conditions, setCondition] = useState([{}]);
+  const getConditions = () => {
+    const conds = [];
+    for (let key in props.data.condition) {
+      if (props.data.condition.hasOwnProperty(key)) {
+        conds.push({
+          condType: key,
+          condValue: props.data.condition[key]
+        });
+      }
+    }
+    if (conds.length < 1) {
+      return [{}];
+    }
+    return conds;
+  };
+
+  const [conditions, setCondition] = useState(
+    props.update ? getConditions() : [{}]
+  );
+
   const removeCondition = index => {
     setCondition(conditions.filter((_, key) => key !== index));
   };
@@ -430,6 +519,10 @@ const QualificationRuleForm = props => {
             optionList={rewardRuleTypes}
             name="dataHead"
             onChange={props.onChange}
+            defaultOption={
+              props.update &&
+              getDefaultInstance(rewardRuleTypes, props.data.dataHead)
+            }
             required
           />
         </FormGroup>
@@ -439,8 +532,14 @@ const QualificationRuleForm = props => {
               placeholder="--choose rule file--"
               optionList={getRuleFields(props.data.dataHead)}
               name="field"
+              defaultOption={
+                props.update &&
+                getDefaultInstance(
+                  getRuleFields(props.data.dataHead),
+                  props.data.field
+                )
+              }
               onChange={props.onChange}
-              required
             />
           </FormGroup>
         )}

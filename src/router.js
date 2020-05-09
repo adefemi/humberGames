@@ -16,8 +16,11 @@ const NewCampaign = lazy(() => import("./pages/campaign/newCampaign"));
 const SingleCampaign = lazy(() => import("./pages/campaign/singleCampaign"));
 const NewReward = lazy(() => import("./pages/reward/newReward"));
 const Reward = lazy(() => import("./pages/reward/reward"));
+const SingleReward = lazy(() => import("./pages/reward/singleReward"));
 const ClientDefinition = lazy(() => import("./pages/login/clientDefinition"));
+const SingleDraw = lazy(() => import("./pages/games/singleDraw"));
 const Users = lazy(() => import("./pages/users/users"));
+const SingleUser = lazy(() => import("./pages/users/singleUser"));
 
 const RouterMain = props => {
   return (
@@ -69,11 +72,38 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
+                  path="/games/update/:uuid/:label"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <CreateGame {...props} update />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/instance/draw/:uuid/:label"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <SingleDraw {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
                   path="/users"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <Users {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/users/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <SingleUser {...props} />
                     </Suspense>
                   )}
                 />
@@ -138,11 +168,31 @@ const RouterMain = props => {
                 />
 
                 <Route
+                  path="/reward/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <SingleReward {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
                   path="/rewards/new"
                   exact
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <NewReward {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/reward/update/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <NewReward {...props} update />
                     </Suspense>
                   )}
                 />

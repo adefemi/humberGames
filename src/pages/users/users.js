@@ -52,7 +52,7 @@ function Users(props) {
         moment(new Date(item.createdAt)).fromNow(),
         <span
           className="link"
-          onClick={() => props.history.push(`/clients/id`)}
+          onClick={() => props.history.push(`/users/${item.userId}`)}
         >
           View User
         </span>

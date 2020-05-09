@@ -142,58 +142,75 @@ export const transactionChannelOptions = [
 ];
 
 export const ccEnRules = [
+  { title: "Account type", value: "accounttype", type: "string" },
   { title: "Name", value: "name", type: "string" },
   { title: "Phone", value: "phone", type: "string" },
-  { title: "DOB", value: "DOB", type: "date", format: "DD/MM" },
+  { title: "DOB", value: "dob", type: "string", format: "DD/MM" },
   {
     title: "Age Range",
-    value: "AgeRange",
-    type: "option",
+    value: "agerange",
+    type: "string",
     optionList: ageRangeOptions
   },
   { title: "State", value: "State", type: "string" },
   {
     title: "Gender",
-    value: "Gender",
-    type: "option",
+    value: "gender",
+    type: "string",
     optionList: genderOptions
   },
   {
     title: "Account Create Date",
-    value: "AccountCreateDate",
-    type: "date",
+    value: "accountcreatedate",
+    type: "string",
     format: "YYYY-MM-DD"
   },
   {
     title: "Last Transaction Date",
-    value: "LastTransactionDate",
-    type: "date",
+    value: "lasttransactiondate",
+    type: "string",
     format: "YYYY-MM-DD"
   },
-  { title: "Balance", value: "Balance", type: "number" }
+  { title: "Balance", value: "balance", type: "string" },
+  { title: "Account token", value: "accounttoken", type: "string" }
 ];
 
 export const ccTRules = [
-  { title: "Transaction Count", value: "TransactionCount", type: "number" },
+  { title: "Account token", value: "accounttoken", type: "string" },
+  { title: "Count", value: "count", type: "string" },
+  {
+    title: "Transaction direction",
+    value: "transactiondirection",
+    type: "string"
+  },
   {
     title: "Transaction Type",
-    value: "TransactionType",
-    type: "option",
+    value: "transactiontype",
+    type: "string",
     optionList: transactionTypeOptions
   },
   {
     title: "Transaction Timestamp",
-    value: "TransactionTimestamp",
+    value: "transactiontimestamp",
     type: "date",
     format: "YYYY-MM-DD"
   },
-  { title: "Transaction Amount", value: "TransactionAmount", type: "number" },
-  { title: "Transaction Channel", value: "TransactionChannel", type: "number" }
+  { title: "Transaction Amount", value: "transactionamount", type: "string" },
+  { title: "Transaction Channel", value: "transactionchannel", type: "string" },
+  { title: "Transaction ID", value: "transactionid", type: "string" }
 ];
 
 export const ccMainRules = [
-  { title: "Greater Than", value: "gt", optionTypes: ["date", "number"] },
-  { title: "Less Than", value: "lt", optionTypes: ["date", "number"] },
+  {
+    title: "Greater Than",
+    value: "gt",
+    optionTypes: ["date", "number", "string"]
+  },
+  {
+    title: "Less Than",
+    value: "lt",
+    optionTypes: ["date", "number", "string"]
+  },
   { title: "Equals", value: "eq", optionTypes: ["date", "number", "string"] },
   { title: "Contains", value: "ct", optionTypes: ["string"] }
 ];

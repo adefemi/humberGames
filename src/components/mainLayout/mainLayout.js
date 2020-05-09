@@ -6,6 +6,7 @@ import { Icon } from "../icons";
 import {
   addClass,
   checkExpiration,
+  getToken,
   hasClass,
   removeClass,
   updateExpiration
@@ -15,8 +16,8 @@ import { clientID, secondaryColor, USERTOKEN } from "../../utils/data";
 import { axiosHandler } from "../../utils/axiosHandler";
 import { Spinner } from "../spinner/Spinner";
 import { Notification } from "../notification/Notification";
-import { USER_ME_URL } from "../../utils/urls";
-import { setUserDetails } from "../../stateManagement/actions";
+import { CLIENT_FETCH_URL, USER_ME_URL } from "../../utils/urls";
+import { setActiveClient, setUserDetails } from "../../stateManagement/actions";
 import jwtDecode from "jwt-decode";
 
 function MainLayout(props) {
@@ -58,10 +59,17 @@ function MainLayout(props) {
       return;
     }
     const decoded = jwtDecode(token);
-
-    dispatch({ type: setUserDetails, payload: decoded.auth });
-    setLoading(false);
-    props.history.push(props.location.pathname + `?${props.location.search}`);
+    axiosHandler({
+      method: "get",
+      clientID: "default",
+      token: getToken(),
+      url: CLIENT_FETCH_URL + `?clientId=${decoded.auth.clientId}`
+    }).then(res => {
+      dispatch({ type: setUserDetails, payload: decoded.auth });
+      dispatch({ type: setActiveClient, payload: res.data.data[0] });
+      setLoading(false);
+      props.history.push(props.location.pathname + `?${props.location.search}`);
+    });
     // verify token
     //
   }, []);
@@ -160,16 +168,10 @@ const SideBar = () => {
           icon={<Icon name="controller" type="entypo" />}
         />
         <SideLinks
-          link={"/users"}
-          title="Users"
-          active={getActive("users")}
-          icon={<Icon name="ic_face" type="md" />}
-        />
-        <SideLinks
-          link={"/sandbox"}
-          title="Sandbox"
-          active={getActive("sandbox")}
-          icon={<Icon name="branch" type="entypo" />}
+          link={"/rewards"}
+          title="Rewards"
+          active={getActive("rewards")}
+          icon={<Icon name="award" type="feather" />}
         />
         <SideLinks
           link={"/campaigns"}
@@ -178,10 +180,16 @@ const SideBar = () => {
           icon={<Icon name="volume1" type="feather" />}
         />
         <SideLinks
-          link={"/rewards"}
-          title="Rewards"
-          active={getActive("rewards")}
-          icon={<Icon name="award" type="feather" />}
+          link={"/sandbox"}
+          title="Sandbox"
+          active={getActive("sandbox")}
+          icon={<Icon name="branch" type="entypo" />}
+        />
+        <SideLinks
+          link={"/users"}
+          title="Users"
+          active={getActive("users")}
+          icon={<Icon name="ic_face" type="md" />}
         />
         <SideLinks
           link={"settings"}

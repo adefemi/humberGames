@@ -220,41 +220,78 @@ function InstanceConfig(props) {
     return returnValue;
   };
 
+  const getGameConfigs = configs => {
+    const results = [];
+    for (let key in configs) {
+      if (configs.hasOwnProperty(key)) {
+        results.push(
+          <div>
+            <div className="info">{key}</div>{" "}
+            <div className="content">{configs[key]}</div>
+          </div>
+        );
+      }
+    }
+    return results;
+  };
+
   return (
     <div>
-      <Card heading="Game Settings">
-        {!activeInstance && <Spinner color={secondaryColor} />}
-        {activeInstance && (
-          <>
-            <div className="contentCard">
-              <span className="info">Game label:</span>{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span className="content">{activeInstance.label}</span>
+      <Card
+        heading={
+          <div className="flex align-center justify-between">
+            <div>Game Settings</div>
+            <div
+              className="link"
+              onClick={_ =>
+                props.history.push(
+                  `/games/update/${activeInstance.id}/${activeInstance.label}`
+                )
+              }
+            >
+              Update Instance
             </div>
-            <div className="contentCard">
-              <span className="info">Amount:</span>{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span className="content">NGN {activeInstance.amount}</span>
-            </div>
-            <div className="contentCard">
-              <span className="info">Start Date:</span>{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span className="content">{activeInstance.startDate}</span>
-            </div>
-            <div className="contentCard">
-              <span className="info">End Date:</span>{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span className="content">{activeInstance.endData}</span>
-            </div>
-            <div className="contentCard">
-              <span className="info">Created At</span>{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span className="content">
-                {moment(new Date(activeInstance.createdAt)).fromNow()}
-              </span>
-            </div>
-          </>
-        )}
+          </div>
+        }
+      >
+        <div className="padding-20">
+          {!activeInstance && <Spinner color={secondaryColor} />}
+          {activeInstance && (
+            <>
+              <div className="grid grid-2 grid-gap-2">
+                <div>
+                  <div className="info">Game label:</div>{" "}
+                  <div className="content">{activeInstance.label}</div>
+                </div>
+                <div>
+                  <div className="info">Amount:</div>
+                  <div className="content">NGN {activeInstance.amount}</div>
+                </div>
+                <div>
+                  <div className="info">Start Date:</div>
+                  <div className="content">{activeInstance.startDate}</div>
+                </div>
+                <div>
+                  <div className="info">End Date:</div>
+                  <div className="content">
+                    {activeInstance.endData || "Not Defined"}
+                  </div>
+                </div>
+                <div>
+                  <div className="info">Created At</div>
+                  <div className="content">
+                    {moment(new Date(activeInstance.createdAt)).fromNow()}
+                  </div>
+                </div>
+              </div>
+              <br />
+              <h3>Game Instance Configs</h3>
+              <div className="grid grid-2 grid-gap-2">
+                {getGameConfigs(activeInstance.gameConfig)}
+              </div>
+            </>
+          )}
+        </div>
       </Card>
 
       <br />

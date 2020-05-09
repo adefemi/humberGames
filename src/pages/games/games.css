@@ -30,6 +30,9 @@
   color: #5B68A4;
 }
 
+.singleGames h3 {
+  font-size: 14px;
+}
 .singleGames .gridMain {
   display: grid;
   grid-template-columns: 6fr 2fr;
@@ -57,6 +60,10 @@
   position: relative;
   transition: 0.3s ease;
   max-width: 300px;
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .instanceCard:hover {
   transform: scale(1.01);
@@ -64,6 +71,10 @@
 .instanceCard h3 {
   margin: 0;
   font-size: 14px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .instanceCard small {
   font-size: 10px;
@@ -79,7 +90,6 @@
   font-size: 12px;
 }
 .instanceCard .amount {
-  margin-top: 50px;
   color: #ff683c;
   font-weight: bold;
 }

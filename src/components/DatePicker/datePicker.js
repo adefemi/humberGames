@@ -316,6 +316,9 @@ function DatePicker(props) {
     if (visibility) {
       setPosition();
     }
+    if (props.defaultValue) {
+      setActiveValue(props.defaultValue);
+    }
   }, [visibility]);
 
   const setPosition = () => {

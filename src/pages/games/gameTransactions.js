@@ -140,7 +140,7 @@ function GameTransactions(props) {
   );
 }
 
-const TransactionDetails = props => {
+export const TransactionDetails = props => {
   return (
     <div>
       <h4>Transaction details</h4>

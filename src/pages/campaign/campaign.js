@@ -12,6 +12,7 @@ import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { CAMPAIGN_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
+import Badge from "../../components/Badge/badge";
 
 function Campaign(props) {
   const { dispatch } = useContext(store);
@@ -63,8 +64,21 @@ function Campaign(props) {
           {item.campaignId.substring(0, 10)}
           {item.campaignId.length > 10 && "..."}
         </span>,
-        item.title,
-        item.status,
+        <span>
+          {item.title.substring(0, 15)}
+          {item.title.length > 15 && "..."}
+        </span>,
+        <Badge
+          status={
+            item.status === "sent"
+              ? "success"
+              : item.status === "pending"
+              ? "processing"
+              : "error"
+          }
+        >
+          {item.status}
+        </Badge>,
         item.recipientCount,
         item.schedule,
         moment(new Date(item.createdAt)).fromNow(),

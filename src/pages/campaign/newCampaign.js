@@ -26,13 +26,22 @@ import {
   getToken
 } from "../../utils/helper";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { CAMPAIGN_URL } from "../../utils/urls";
+import {
+  CAMPAIGN_URL,
+  ETL_BASE_URL,
+  ETL_FILTER_URL,
+  GAME_BASE_URL,
+  REWARDS_URL
+} from "../../utils/urls";
 
 function NewCampaign(props) {
   const [active, setActive] = useState("sms");
   const [submit, setSubmit] = useState(false);
+  const [fetchingReward, setFetching] = useState(true);
   const [receptType, setRecieptType] = useState(0);
   const [scheduleData, setScheduleData] = useState({});
+  const [rewards, setRewards] = useState([]);
+  const [selectedReward, setSelectedReward] = useState(null);
   const [recipientData, setRecipientData] = useState({});
   const [payload, setPayload] = useState({
     message: "",
@@ -40,10 +49,14 @@ function NewCampaign(props) {
   });
   const [loadingIVR, setLoadingIVR] = useState(false);
   const [scheduleStatus, setScheduleStatus] = useState(true);
-  const { dispatch } = useContext(store);
+  const {
+    dispatch,
+    state: { activeClient }
+  } = useContext(store);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "New Campaign" });
+    getRewards();
   }, []);
 
   const onChange = e => {
@@ -53,31 +66,77 @@ function NewCampaign(props) {
     setRecipientData({ ...recipientData, [e.target.name]: e.target.files[0] });
   };
 
+  const getRewards = () => {
+    axiosHandler({
+      method: "get",
+      token: getToken(),
+      clientID: getClientId(),
+      url: REWARDS_URL + `?clientId=${activeClient.id}`
+    }).then(res => {
+      setRewards(res.data._embedded.rewards);
+      setFetching(false);
+    });
+  };
+
   const onSubmit = e => {
     e.preventDefault();
     setSubmit(true);
     let contentData = payload;
     delete contentData["campaignId"];
-
-    if (!scheduleData.date || !scheduleData.time) {
-      Notification.bubble({
-        type: "error",
-        content: "Specify schedule date and time"
-      });
-      setSubmit(false);
-      return;
+    if (scheduleStatus) {
+      if (!scheduleData.date || !scheduleData.time) {
+        Notification.bubble({
+          type: "error",
+          content: "Specify schedule date and time"
+        });
+        setSubmit(false);
+        return;
+      }
+      contentData.schedule = `${scheduleData.date} ${scheduleData.time}`;
     }
-    contentData.schedule = `${scheduleData.date} ${scheduleData.time}`;
-    contentData.recipientContentType =
-      receptType === 0 ? "url" : receptType === 1 ? "file" : "array";
+
+    contentData.recipientContentType = receptType === 1 ? "file" : "array";
 
     if (receptType === 0) {
-      Notification.bubble({
-        type: "info",
-        content: "Not Ready"
+      if (!selectedReward) {
+        Notification.bubble({
+          type: "info",
+          content: "Select a reward first"
+        });
+        setSubmit(false);
+        return;
+      }
+      let newData = {
+        returnFields: ["phone"]
+      };
+      if (selectedReward.targetDemographyRules.length < 1) {
+        Notification.bubble({
+          type: "info",
+          content: "There is no campaign for selected reward!!!"
+        });
+        setSubmit(false);
+        return;
+      }
+
+      newData.rule = selectedReward.targetDemographyRules;
+      axiosHandler({
+        method: "post",
+        clientID: getClientId(),
+        token: getToken(),
+        url: `${GAME_BASE_URL}etl/proxy`,
+        data: newData
+      }).then(res => {
+        if (res.data.length < 1) {
+          Notification.bubble({
+            type: "info",
+            content: "There is no campaign for selected reward!!!"
+          });
+          setSubmit(false);
+          return;
+        }
+        contentData.recipients = res.data.map(item => item.phone);
+        saveData(contentData);
       });
-      setSubmit(false);
-      props.history.push("/campaigns");
     } else if (receptType === 1) {
       if (!recipientData.file) {
         Notification.bubble({
@@ -87,7 +146,17 @@ function NewCampaign(props) {
         setSubmit(false);
         return;
       }
+      let fileSplit = recipientData.file.type.split("/");
+      if (fileSplit[fileSplit.length - 1].toLowerCase() !== "csv") {
+        Notification.bubble({
+          type: "error",
+          content: "Only CSV file is allowed"
+        });
+        setSubmit(false);
+        return;
+      }
       contentData.recipients = recipientData.file;
+      saveData(contentData);
     } else {
       if (!recipientData.phoneNumbers) {
         Notification.bubble({
@@ -100,11 +169,14 @@ function NewCampaign(props) {
       contentData.recipients = recipientData.phoneNumbers
         .split(",")
         .map(item => item.trim());
+      saveData(contentData);
     }
+  };
 
-    if (receptType === 0 || receptType === 1) {
+  const saveData = contentData => {
+    if (receptType === 1) {
       let tempData = new FormData();
-      for (var key in contentData) {
+      for (let key in contentData) {
         tempData.append(key, contentData[key]);
       }
       contentData = tempData;
@@ -138,6 +210,18 @@ function NewCampaign(props) {
     payload.append("file_url", e.target.files[0]);
     setLoadingIVR(true);
     // axiosFunc("post", fileUpload, payload, "yes", onSaveMain);
+  };
+
+  const formatRewards = () => {
+    const result = [];
+    rewards.map(item => {
+      result.push({
+        title: item.title,
+        value: item
+      });
+      return null;
+    });
+    return result;
   };
 
   useEffect(() => {}, []);
@@ -212,35 +296,37 @@ function NewCampaign(props) {
               />
             </FormGroup>
           </div>
-          {/*<br />*/}
-          {/*<Checkbox*/}
-          {/*  id={1}*/}
-          {/*  checked={scheduleStatus}*/}
-          {/*  onChange={e => {*/}
-          {/*    setScheduleStatus(e.target.checked);*/}
-          {/*  }}*/}
-          {/*  label="Schedule (Date/Time)"*/}
-          {/*/>*/}
-          {/*<br />*/}
-          {/*<br />*/}
-          <FormGroup label="Schedule">
-            <div className="grid grid-2 grid-gap-2">
-              <DatePicker
-                disablePastDate
-                name="date"
-                onChange={e =>
-                  genericChangeSingle(e, setScheduleData, scheduleData)
-                }
-              />
-              <TimePicker
-                name="time"
-                onChange={e =>
-                  genericChangeSingle(e, setScheduleData, scheduleData)
-                }
-                use24H
-              />
-            </div>
-          </FormGroup>
+          <br />
+          <Checkbox
+            id={1}
+            checked={scheduleStatus}
+            onChange={e => {
+              setScheduleStatus(e.target.checked);
+            }}
+            label="Schedule (Date/Time)"
+          />
+          <br />
+          <br />
+          {scheduleStatus && (
+            <FormGroup label="Schedule">
+              <div className="grid grid-2 grid-gap-2">
+                <DatePicker
+                  disablePastDate
+                  name="date"
+                  onChange={e =>
+                    genericChangeSingle(e, setScheduleData, scheduleData)
+                  }
+                />
+                <TimePicker
+                  name="time"
+                  onChange={e =>
+                    genericChangeSingle(e, setScheduleData, scheduleData)
+                  }
+                  use24H
+                />
+              </div>
+            </FormGroup>
+          )}
           <br />
           <Tabs
             activeIndex={receptType}
@@ -253,8 +339,13 @@ function NewCampaign(props) {
             body={[
               <FormGroup label="Reward">
                 <Select
-                  optionList={[{ title: "Winning Bowl", value: "1" }]}
-                  placeholder="--choose a reward--"
+                  optionList={formatRewards()}
+                  placeholder={
+                    fetchingReward
+                      ? "fetching rewards please wait..."
+                      : "--choose a reward--"
+                  }
+                  onChange={e => setSelectedReward(e.target.value)}
                 />
               </FormGroup>,
               <>

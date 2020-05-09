@@ -7,16 +7,8 @@ import SummaryCard from "../../components/property/SummaryCard";
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
 import { Select } from "../../components/select/Select";
-import {
-  gameStatusSort,
-  gameTypeSort,
-  statusMode,
-  timeSortOption
-} from "../../utils/data";
-import TransactionTable from "../../components/transactionTable/transactionTable";
+import { gameStatusSort, timeSortOption } from "../../utils/data";
 import { Button } from "../../components/button/Button";
-import { Link } from "react-router-dom";
-import Badge from "../../components/Badge/badge";
 import Pagination from "../../components/Pagination/pagination";
 import {
   errorHandler,
@@ -140,19 +132,21 @@ function Games(props) {
                     props.history.push(`/instance/${item.id}/${item.label}`)
                   }
                 >
-                  <h3>{item.label}</h3>
-                  <small>
-                    created {moment(new Date(item.createdAt)).fromNow()}
-                  </small>
                   <div>
-                    <span className="info">start date:</span>
-                    <span className="context">{item.startDate}</span>
+                    <h3>{item.label}</h3>
+                    <small>
+                      created {moment(new Date(item.createdAt)).fromNow()}
+                    </small>
+                    <div>
+                      <span className="info">start date:</span>
+                      <span className="context">{item.startDate}</span>
+                    </div>
+                    <div>
+                      <span className="info">end date:</span>
+                      <span className="context">{item.endDate}</span>
+                    </div>
+                    <div className={`status active`} />
                   </div>
-                  <div>
-                    <span className="info">end date:</span>
-                    <span className="context">{item.endDate}</span>
-                  </div>
-                  <div className={`status active`} />
                   <div className="amount">N{numberWithCommas(item.amount)}</div>
                 </div>
               ))}

@@ -12,6 +12,7 @@ import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import AppIcon from "../../components/icons/Icon";
 import { primaryColor } from "../../utils/data";
+import GameDraws from "./drawsInfo";
 
 function Games(props) {
   const { dispatch } = useContext(store);
@@ -56,9 +57,17 @@ function Games(props) {
   };
 
   const bodies = [
-    <Dashboard />,
-    <GameTransactions transactionLink={transactionLink} />,
+    <Dashboard {...props} />,
+    <GameDraws
+      {...props}
+      gameLink={gameLink}
+      activeInstance={activeInstance}
+      prizesLink={prizesLink}
+      fetching={fetching}
+    />,
+    <GameTransactions {...props} transactionLink={transactionLink} />,
     <InstanceConfig
+      {...props}
       gameLink={gameLink}
       activeInstance={activeInstance}
       prizesLink={prizesLink}
@@ -66,7 +75,12 @@ function Games(props) {
     />
   ];
 
-  const heading = ["Performance Report", "GamePlays", "Configuration"];
+  const heading = [
+    "Performance Report",
+    "Draw Info",
+    "GamePlays",
+    "Configuration"
+  ];
 
   return (
     <div className="singleGames">

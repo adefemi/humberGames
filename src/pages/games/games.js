@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import "./games.css";
 import { store } from "../../stateManagement/store";
 import { setGameType, setPageTitleAction } from "../../stateManagement/actions";
-import { Link } from "react-router-dom";
 import AppIcon from "../../components/icons/Icon";
 import { Select } from "../../components/select/Select";
 import { gameTypeSort, timeSortOption } from "../../utils/data";
@@ -10,13 +9,16 @@ import { genericChangeSingle, getClientId, getToken } from "../../utils/helper";
 import Input from "../../components/input/Input";
 import qs from "querystring";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { GAME_LICENSE_URL, GAME_URL } from "../../utils/urls";
+import { GAME_LICENSE_URL } from "../../utils/urls";
 import Skeleton from "react-loading-skeleton";
 import Result from "../../components/Result/result";
 import Pagination from "../../components/Pagination/pagination";
 
 function Games(props) {
-  const { dispatch } = useContext(store);
+  const {
+    dispatch,
+    state: { activeClient }
+  } = useContext(store);
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({});
   const [search, setSearch] = useState("");
@@ -29,21 +31,21 @@ function Games(props) {
   }, []);
 
   useEffect(() => {
+    if (!activeClient) return;
     let extra = `page=${currentPage - 1}`;
     extra += `&${qs.stringify(queryParams)}`;
     getGames(extra);
-  }, [search, queryParams, currentPage]);
+  }, [search, queryParams, currentPage, activeClient]);
 
   const getGames = (extra = "") => {
     if (!fetching) {
       setFetching(true);
     }
-
     axiosHandler({
       method: "get",
       url:
         GAME_LICENSE_URL +
-        `?projection=licenseWithGame&${extra}&clientId=${getClientId()}`,
+        `?projection=licenseWithGame&${extra}&clientId=${activeClient.id}`,
       token: getToken(),
       clientID: getClientId()
     }).then(res => {
@@ -152,6 +154,7 @@ function Games(props) {
                   )
                 }
               >
+                {console.log(item.type)}
                 <div className="game-card">
                   <div
                     className="img-con"
@@ -159,13 +162,15 @@ function Games(props) {
                       backgroundImage: `url("${
                         item.type.toLowerCase() === "number"
                           ? "https://construct-static.com/images/v780/uploads/articleuploadobject/0/images/16795/starting-screen.fw.png"
+                          : item.type.toLowerCase() === "instant_draw"
+                          ? "https://images.ctfassets.net/d6o62jwe1jlr/5VCRTLLJTSD35aDtC4XVAq/64766b1d9ad9fec6669807ab21161198/438x274_GamesLobby_GameTile_321Draw_Responsive_OnSiteCRM.jpg"
                           : "https://image.shutterstock.com/image-vector/internet-raffle-roulette-fortune-banner-260nw-1377405632.jpg"
                       }")`
                     }}
                   />
                   <div className="flex column justify-between conMain">
                     <div className="title">{item.label}</div>
-                    <div className="flex justify-between">
+                    <div>
                       <div className="subTitle">
                         <div className="info">type:</div>
                         <div className="context">{item.type}</div>
