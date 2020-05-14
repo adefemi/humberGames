@@ -33,8 +33,8 @@ export const gameTypeSort = [
 
 export const gameStatusSort = [
   { title: "All", value: "" },
-  { title: "Active", value: "active" },
-  { title: "Inactive", value: "inactive" }
+  { title: "Active", value: "true" },
+  { title: "Inactive", value: "false" }
 ];
 
 export const gameTypeMainSort = [
@@ -107,6 +107,13 @@ export const statusMode = [
   { title: "Inactive", value: "inactive" }
 ];
 
+export const statusModeCampaign = [
+  { title: "All", value: "" },
+  { title: "Scheduled", value: "active" },
+  { title: "Sent", value: "inactive" },
+  { title: "Failed", value: "inactive" }
+];
+
 export const durationType = [
   { title: "Daily", value: "daily" },
   { title: "Weekly", value: "weekly" },
@@ -172,12 +179,12 @@ export const ccEnRules = [
     format: "YYYY-MM-DD"
   },
   { title: "Balance", value: "balance", type: "string" },
-  { title: "Account token", value: "accounttoken", type: "string" }
+  { title: "Account token", value: "accounttoken", type: "string" },
+  { title: "Accessed Channels", value: "accessedchannels", type: "string" }
 ];
 
 export const ccTRules = [
   { title: "Account token", value: "accounttoken", type: "string" },
-  { title: "Count", value: "count", type: "string" },
   {
     title: "Transaction direction",
     value: "transactiondirection",
@@ -197,7 +204,12 @@ export const ccTRules = [
   },
   { title: "Transaction Amount", value: "transactionamount", type: "string" },
   { title: "Transaction Channel", value: "transactionchannel", type: "string" },
-  { title: "Transaction ID", value: "transactionid", type: "string" }
+  { title: "Transaction ID", value: "transactionid", type: "string" },
+  { title: "Minimum Balance", value: "minBalance", type: "string" },
+  { title: "Hourly Count", value: "hourlyCount", type: "string" },
+  { title: "Daily Count", value: "dailyCount", type: "string" },
+  { title: "Monthly Count", value: "monthlyCount", type: "string" },
+  { title: "Balance", value: "balance", type: "string" }
 ];
 
 export const ccMainRules = [

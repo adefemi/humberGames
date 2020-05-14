@@ -10,7 +10,7 @@ import {
 } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
-import { secondaryColor, statusMode } from "../../utils/data";
+import { primaryColor, secondaryColor, statusMode } from "../../utils/data";
 import { Tabs } from "../../components/tabs/tabs";
 import Badge from "../../components/Badge/badge";
 import moment from "moment";
@@ -23,6 +23,7 @@ import ContentModal from "../../components/contentModal/contentModal";
 import { TransactionDetails } from "./gameTransactions";
 import { Card } from "../../components/card/Card";
 import { Button } from "../../components/button/Button";
+import { Modal } from "../../components/modal/Modal";
 
 function SingleDraw(props) {
   const {
@@ -112,6 +113,17 @@ function SingleDraw(props) {
 
   return (
     <div>
+      <div className="flex align-center">
+        <div onClick={() => props.history.goBack()}>
+          <AppIcon
+            name="arrowLeft"
+            type="icomoon"
+            style={{ color: primaryColor, cursor: "pointer" }}
+          />
+        </div>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <h4>Back</h4>
+      </div>
       <Tabs
         activeIndex={activeTab}
         onSwitch={setActiveTab}
@@ -132,7 +144,7 @@ const DrawOverview = props => {
     "Status",
     "Game Token",
     "User Input",
-    "Draw TIme",
+    "Game Play Time",
     ""
   ];
   const formatTransactions = () => {
@@ -230,7 +242,7 @@ const DrawOperations = props => {
     const currentTime = moment(new Date());
     let drawEndTime = new Date(props.activeDraw.endTime);
     drawEndTime = drawEndTime.setMinutes(
-      props.activeInstance.gameConfig.durationInMins
+      drawEndTime.getMinutes() + props.activeInstance.gameConfig.durationInMins
     );
     drawEndTime = moment(drawEndTime);
     const timeDiff = drawEndTime.diff(currentTime, "seconds");
@@ -238,13 +250,20 @@ const DrawOperations = props => {
       return (
         <Button
           onClick={() =>
-            executeDraw(
-              {
-                drawId: props.activeDraw.id,
-                actorId: props.userDetails.userId
-              },
-              "draw"
-            )
+            Modal.confirm({
+              title: "Confirmation to execute operation!",
+              content: "Click proceed to continue with this operation",
+              okText: "Proceed",
+              onOK: () => {
+                executeDraw(
+                  {
+                    drawId: props.activeDraw.id,
+                    actorId: props.userDetails.userId
+                  },
+                  "draw"
+                );
+              }
+            })
           }
           disabled={loading === "draw"}
           loading={loading === "draw"}
@@ -271,14 +290,21 @@ const DrawOperations = props => {
       return (
         <Button
           onClick={() =>
-            executeDraw(
-              {
-                drawId: props.activeDraw.id,
-                actorId: props.userDetails.userId,
-                rewardId: reward.id
-              },
-              "qualify"
-            )
+            Modal.confirm({
+              title: "Confirmation to execute operation!",
+              content: "Click proceed to continue with this operation",
+              okText: "Proceed",
+              onOK: () => {
+                executeDraw(
+                  {
+                    drawId: props.activeDraw.id,
+                    actorId: props.userDetails.userId,
+                    rewardId: reward.id
+                  },
+                  "qualify"
+                );
+              }
+            })
           }
           disabled={loading === "qualify"}
           loading={loading === "qualify"}
@@ -338,6 +364,10 @@ const DrawOperations = props => {
   }, []);
   return (
     <div>
+      <div className="flex align-center justify-end">
+        <Button color="success">Export Draw</Button>
+      </div>
+      <br />
       <Card heading="Qualification">
         <div className="padding-20 ">
           {fetching ? (

@@ -11,21 +11,33 @@ import { CLIENT_FETCH_URL, USER_FETCH_URL } from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
+import Pagination from "../../components/Pagination/pagination";
 
 function Users(props) {
   const { dispatch } = useContext(store);
   const [fetching, setFetching] = useState(true);
   const [clients, setClients] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [queryParams, setQueryParams] = useState({});
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Users" });
-    getClients();
   }, []);
 
-  const getClients = () => {
+  useEffect(() => {
+    let extra = `page=${currentPage}`;
+    // extra += `&${qs.stringify(queryParams)}`;
+    getClients(extra);
+  }, [search, queryParams, currentPage]);
+
+  const getClients = (extra = "") => {
+    if (!fetching) {
+      setFetching(fetching);
+    }
     axiosHandler({
       method: "get",
-      url: USER_FETCH_URL,
+      url: USER_FETCH_URL, // + `?limit=5&page=${currentPage}`,
       token: getToken(),
       clientID: getClientId()
     }).then(
@@ -93,6 +105,14 @@ function Users(props) {
         loading={fetching}
       />
       <br />
+      {!fetching && (
+        <Pagination
+          counter={clients.limit}
+          total={clients.total}
+          current={currentPage}
+          onChange={setCurrentPage}
+        />
+      )}
       <br />
     </div>
   );

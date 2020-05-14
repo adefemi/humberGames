@@ -25,8 +25,11 @@ import Skeleton from "react-loading-skeleton";
 import moment from "moment";
 import Result from "../../components/Result/result";
 
-function Games(props) {
-  const { dispatch } = useContext(store);
+function GameInstances(props) {
+  const {
+    dispatch,
+    state: { activeClient }
+  } = useContext(store);
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({});
   const [search, setSearch] = useState("");
@@ -35,10 +38,12 @@ function Games(props) {
   const [pageInfo, setPageInfo] = useState(null);
 
   useEffect(() => {
-    dispatch({
-      type: setPageTitleAction,
-      payload: props.match.params.label.toUpperCase()
-    });
+    if (!props.embedded) {
+      dispatch({
+        type: setPageTitleAction,
+        payload: props.match.params.label.toUpperCase()
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -48,37 +53,53 @@ function Games(props) {
   }, [search, queryParams, currentPage]);
 
   const getInstance = (extra = "") => {
-    axiosHandler({
-      method: "get",
-      url: GAME_URL + `?id=${props.match.params.uuid}`,
-      clientID: getClientId(),
-      token: getToken()
-    })
-      .then(rep => {
-        console.log(rep);
-        axiosHandler({
-          method: "get",
-          url: rep.data._embedded.games[0]._links.gameInstances.href,
-          clientID: getClientId(),
-          token: getToken()
-        }).then(res => {
-          setGameInstance(res.data._embedded.gameInstances);
-          setPageInfo(res.data.page);
-          setFetching(false);
-        });
+    if (!fetching) {
+      setFetching(true);
+    }
+    if (!props.embedded) {
+      axiosHandler({
+        method: "get",
+        url: GAME_URL + `?id=${props.match.params.uuid}`,
+        clientID: getClientId(),
+        token: getToken()
       })
-      .catch(err => {
-        Notification.bubble({
-          type: "error",
-          content: errorHandler(err, true)
+        .then(rep => {
+          axiosHandler({
+            method: "get",
+            url: rep.data._embedded.games[0]._links.gameInstances.href,
+            clientID: getClientId(),
+            token: getToken()
+          }).then(res => {
+            setGameInstance(res.data._embedded.gameInstances);
+            setPageInfo(res.data.page);
+            setFetching(false);
+          });
+        })
+        .catch(err => {
+          Notification.bubble({
+            type: "error",
+            content: errorHandler(err, true)
+          });
         });
+    } else {
+      axiosHandler({
+        method: "get",
+        url:
+          GAME_INSTANCE_URL + `?clientId=${activeClient.id}&size=10&${extra}`,
+        clientID: getClientId(),
+        token: getToken()
+      }).then(res => {
+        setGameInstance(res.data._embedded.gameInstances);
+        setPageInfo(res.data.page);
+        setFetching(false);
       });
+    }
   };
 
   return (
     <div className="singleGames">
       <br />
-      <div className="gridMain">
+      <div className={`gridMain ${props.embedded ? "embedded" : ""}`}>
         <div className="left-nav">
           <section className="search-section">
             <div className="flex justify-between">
@@ -99,7 +120,7 @@ function Games(props) {
                 <Select
                   optionList={gameStatusSort}
                   placeholder="-- filter by --"
-                  name="status"
+                  name="isActive"
                   onChange={e =>
                     genericChangeSingle(e, setQueryParams, queryParams)
                   }
@@ -145,15 +166,23 @@ function Games(props) {
                       <span className="info">end date:</span>
                       <span className="context">{item.endDate}</span>
                     </div>
-                    <div className={`status active`} />
+                    <div
+                      className={`status ${item.isActive ? "active" : ""}`}
+                    />
                   </div>
                   <div className="amount">N{numberWithCommas(item.amount)}</div>
                 </div>
               ))}
           </div>
           <br />
+
           {!fetching && gameInstances.length > 0 && (
-            <Pagination total={1} current={1} />
+            <Pagination
+              counter={pageInfo.size}
+              total={pageInfo.totalElements}
+              current={currentPage}
+              onChange={setCurrentPage}
+            />
           )}
           {!fetching && gameInstances.length < 1 && (
             <Result
@@ -164,33 +193,35 @@ function Games(props) {
           <br />
           <br />
         </div>
-        <div className="right-nav">
-          <Affixed offset={50}>
-            <>
-              <Button
-                color="success"
-                block
-                onClick={() =>
-                  props.history.push(
-                    `/games/create/${props.match.params.uuid}/${props.match.params.label}`
-                  )
-                }
-              >
-                Create Game Instance
-              </Button>
-              <br />
-              <br />
-              <div className="section-header">Quick Summary</div>
-              <p />
-              <SummaryCard type={"gamesplays"} total={"0"} />
-              <SummaryCard type={"games"} total={"0"} />
-              <SummaryCard type={"wins"} total={"0"} />
-            </>
-          </Affixed>
-        </div>
+        {!props.embedded && (
+          <div className="right-nav">
+            <Affixed offset={50}>
+              <>
+                <Button
+                  color="success"
+                  block
+                  onClick={() =>
+                    props.history.push(
+                      `/games/create/${props.match.params.uuid}/${props.match.params.label}`
+                    )
+                  }
+                >
+                  Create Game Instance
+                </Button>
+                <br />
+                <br />
+                <div className="section-header">Quick Summary</div>
+                <p />
+                <SummaryCard type={"gamesplays"} total={"0"} />
+                <SummaryCard type={"games"} total={"0"} />
+                <SummaryCard type={"wins"} total={"0"} />
+              </>
+            </Affixed>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export default Games;
+export default GameInstances;

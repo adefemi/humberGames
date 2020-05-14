@@ -5,34 +5,51 @@ import TransactionTable from "../../components/transactionTable/transactionTable
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
 import { Select } from "../../components/select/Select";
-import { statusMode } from "../../utils/data";
+import { statusMode, statusModeCampaign } from "../../utils/data";
 import { Button } from "../../components/button/Button";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { errorHandler, getClientId, getToken } from "../../utils/helper";
+import {
+  errorHandler,
+  genericChangeSingle,
+  getClientId,
+  getToken
+} from "../../utils/helper";
 import { CAMPAIGN_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
 import Badge from "../../components/Badge/badge";
+import qs from "querystring";
+import Pagination from "../../components/Pagination/pagination";
 
 function Campaign(props) {
   const { dispatch } = useContext(store);
   const [campaigns, setCampaigns] = useState({});
   const [fetching, setFetching] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [queryParams, setQueryParams] = useState({});
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Campaigns" });
-    getCampaigns();
   }, []);
 
+  useEffect(() => {
+    let extra = `page=${currentPage}`;
+    // extra += `&${qs.stringify(queryParams)}`;
+    getCampaigns(extra);
+  }, [search, queryParams, currentPage]);
+
   const getCampaigns = (extra = "") => {
+    if (!fetching) {
+      setFetching(fetching);
+    }
     axiosHandler({
       method: "get",
       clientID: getClientId(),
       token: getToken(),
-      url: CAMPAIGN_URL + "/sms?page=1&limit=10"
+      url: CAMPAIGN_URL + `/sms?limit=20&${extra}&clientId=${getClientId()}`
     }).then(
       res => {
-        console.log(res.data);
         setCampaigns(res.data);
         setFetching(false);
       },
@@ -72,7 +89,7 @@ function Campaign(props) {
           status={
             item.status === "sent"
               ? "success"
-              : item.status === "pending"
+              : item.status === "pending" || item.status === "scheduled"
               ? "processing"
               : "error"
           }
@@ -111,8 +128,10 @@ function Campaign(props) {
           &nbsp;
           <Select
             className="lease-search-box"
-            defaultOption={statusMode[0]}
-            optionList={statusMode}
+            defaultOption={statusModeCampaign[0]}
+            optionList={statusModeCampaign}
+            name="status"
+            onChange={e => genericChangeSingle(e, setQueryParams, queryParams)}
           />
           &nbsp; &nbsp; &nbsp;
           <Button onClick={() => props.history.push("/campaigns/new")}>
@@ -127,6 +146,16 @@ function Campaign(props) {
         loading={fetching}
         values={formatCampaigns()}
       />
+      <br />
+      {!fetching && (
+        <Pagination
+          counter={campaigns.limit}
+          total={campaigns.total}
+          current={currentPage}
+          onChange={setCurrentPage}
+        />
+      )}
+      <br />
     </div>
   );
 }

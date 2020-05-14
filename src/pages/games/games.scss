@@ -1,5 +1,9 @@
 @import "../../styles/theme";
 
+h3{
+  font-size: 14px;
+}
+
 .game-card{
   height: 200px;
   background-color: white;
@@ -43,6 +47,10 @@
     display: grid;
     grid-template-columns: 6fr 2fr;
     grid-gap: 2em;
+
+    &.embedded{
+      grid-template-columns: 1fr;
+    }
   }
 
   .contentCard{
@@ -126,7 +134,7 @@
     border-radius: 50%;
     background-color: $danger-color;
 
-    &:active{
+    &.active{
       background-color: $success-color;
     }
   }

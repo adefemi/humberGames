@@ -88,9 +88,9 @@ function GameTransactions(props) {
           : "N/A",
         moment(new Date(item.createdAt)).fromNow(),
         <span className="link">
-          {item.status && item.status.toLowerCase() === "won" && "pay"}
+          {item.status && item.status.toLowerCase() === "won" && "pay"} |
         </span>,
-        item
+        <span className="link">View Transaction</span>
       ]);
       return null;
     });
@@ -123,16 +123,9 @@ function GameTransactions(props) {
         keys={headings}
         values={formatTransactions()}
         loading={fetching}
-        canClick
-        onClick={e => {
-          setActiveTransaction(e);
-          setModalShow(true);
-        }}
       />
       <br />
       <Pagination total={1} current={1} />
-      <br />
-      <br />
       <ContentModal visible={modalShow} setVisible={setModalShow}>
         <TransactionDetails activeTrans={activeTransaction} />
       </ContentModal>

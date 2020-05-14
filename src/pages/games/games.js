@@ -13,6 +13,7 @@ import { GAME_LICENSE_URL } from "../../utils/urls";
 import Skeleton from "react-loading-skeleton";
 import Result from "../../components/Result/result";
 import Pagination from "../../components/Pagination/pagination";
+import GameInstances from "./gameInstance";
 
 function Games(props) {
   const {
@@ -45,7 +46,7 @@ function Games(props) {
       method: "get",
       url:
         GAME_LICENSE_URL +
-        `?projection=licenseWithGame&${extra}&clientId=${activeClient.id}`,
+        `?projection=licenseWithGame&${extra}&clientId=${activeClient.id}&size=3`,
       token: getToken(),
       clientID: getClientId()
     }).then(res => {
@@ -199,7 +200,18 @@ function Games(props) {
         )}
       </div>
       <br />
-      {!fetching && games.length > 0 && <Pagination total={1} current={1} />}
+      {!fetching && games.length > 0 && (
+        <Pagination
+          counter={pageInfo.size}
+          total={pageInfo.totalElements}
+          current={currentPage}
+          onChange={setCurrentPage}
+        />
+      )}
+      <br />
+      <br />
+      <h3>Game Instances</h3>
+      <GameInstances {...props} embedded />
     </div>
   );
 }

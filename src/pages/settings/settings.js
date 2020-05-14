@@ -12,7 +12,10 @@ import { Button } from "../../components/button/Button";
 import { Notification } from "../../components/notification/Notification";
 
 function Settings(props) {
-  const { dispatch } = useContext(store);
+  const {
+    dispatch,
+    state: { userDetails, activeClient }
+  } = useContext(store);
   const [profileData, setProfileData] = useState({
     compName: "Access Bank PLC",
     compEmail: "info@accessbank.com",
@@ -41,14 +44,17 @@ function Settings(props) {
   }, []);
   return (
     <div className="settings">
+      {console.log(userDetails)}
+      {console.log(activeClient)}
       <br />
       <Card heading="Profile">
         <form className="contentCard" onSubmit={onSubmit}>
           <div className="grid grid-2 grid-gap-2">
             <FormGroup label="Company Name">
               <Input
-                value={profileData.compName}
+                value={activeClient.name}
                 name="compName"
+                disabled
                 onChange={e =>
                   genericChangeSingle(e, setProfileData, profileData)
                 }
@@ -69,11 +75,12 @@ function Settings(props) {
           <div className="grid grid-2 grid-gap-2">
             <FormGroup label="Company Email">
               <Input
-                value={profileData.compEmail}
+                value={userDetails.email}
                 name="compEmail"
                 onChange={e =>
                   genericChangeSingle(e, setProfileData, profileData)
                 }
+                disabled
               />
             </FormGroup>
 
@@ -93,13 +100,14 @@ function Settings(props) {
                 name="phone_number"
                 isCurrency={false}
                 required
+                disabled
                 type="number"
-                value={profileData.phone_number || ""}
+                value={userDetails.phoneNumber || ""}
               />
             </FormGroup>
           </div>
           <br />
-          <Button type="submit" loading={loading} disabled={loading}>
+          <Button type="submit" loading={loading} disabled>
             Update
           </Button>
         </form>
@@ -109,13 +117,13 @@ function Settings(props) {
       <Card heading="API Keys">
         <div className="contentCard">
           <div>
-            <span className="info">Public Key:&nbsp;&nbsp;&nbsp;&nbsp; </span>
-            <span className="context">jsdkj8934832893u.32io3oms-32823823</span>
+            <div className="info">Public Key </div>
+            <div className="context">{activeClient.clientId}</div>
           </div>
           <br />
           <div>
-            <span className="info">Secret Key:&nbsp;&nbsp;&nbsp;&nbsp; </span>
-            <span className="context">jsdkj8934832893u.32io3oms-32823823</span>
+            <div className="info">Secret Key </div>
+            <div className="context">{activeClient.secret}</div>
           </div>
         </div>
       </Card>

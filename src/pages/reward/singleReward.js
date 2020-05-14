@@ -105,6 +105,7 @@ function SingleReward(props) {
         loading={fetching}
       />
       <br />
+      <br />
     </div>
   );
 }

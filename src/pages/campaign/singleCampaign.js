@@ -22,14 +22,7 @@ import Pagination from "../../components/Pagination/pagination";
 
 const newDate = new Date();
 
-const columns = [
-  "Recipient",
-  "Message",
-  "Message ID",
-  "Sent at",
-  "Status",
-  "Created At"
-];
+const columns = ["Recipient", "Message", "Sent at", "Status", "Created At"];
 
 function SingleCampaign(props) {
   const [campaign, setCampaign] = useState({ content: null, fetching: true });
@@ -86,7 +79,9 @@ function SingleCampaign(props) {
       method: "get",
       clientID: getClientId(),
       token: getToken(),
-      url: NOTIFICATION_LOGS_URL + `?limit=20&page=${activePage}`
+      url:
+        NOTIFICATION_LOGS_URL +
+        `?limit=20&page=${activePage}&campaignId=${props.match.params.uuid}`
     })
       .then(res => {
         setLogs(res.data.data);
@@ -107,10 +102,6 @@ function SingleCampaign(props) {
         results.push([
           item.recipient,
           <div className="messages">{item.message}</div>,
-          <span>
-            {item.messageId.substring(0, 15)}
-            {item.messageId.length > 15 && "..."}
-          </span>,
           moment.unix(item.sentAt).fromNow(),
           <Badge
             status={

@@ -160,8 +160,6 @@ function Dashboard(props) {
       {/*    </div>*/}
       {/*  </div>*/}
       {/*</Card>*/}
-      <br />
-      <br />
     </div>
   );
 }

@@ -68,6 +68,7 @@ function SelectInput(props) {
           value={inputValue}
           name={props.name}
           type={props.type}
+          disabled={props.disabled}
           required={props.required}
           onChange={onChange}
         />

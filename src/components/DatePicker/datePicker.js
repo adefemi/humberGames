@@ -91,6 +91,10 @@ function DatePicker(props) {
 
     const checkPast = val => {
       let today = getToday().getDate();
+      if (props.showToday) {
+        today = getToday().setDate(getToday().getDate() - 1);
+        today = new Date(today).getDate();
+      }
       let month = getToday().getMonth() + 1;
       let year = getToday().getFullYear();
 
@@ -466,7 +470,8 @@ DatePicker.propType = {
   onChange: proptype.func,
   translated: proptype.bool,
   translationWidth: proptype.number,
-  disablePastDate: proptype.bool
+  disablePastDate: proptype.bool,
+  showToday: proptype.bool
 };
 
 DatePicker.defaultProps = {

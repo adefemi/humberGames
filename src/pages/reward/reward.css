@@ -2,6 +2,12 @@
 .reward h3 {
   font-size: 14px;
 }
+.reward .modal-bubble-fixed {
+  max-width: 1200px !important;
+}
+.reward .modal-bubble-fixed .title {
+  font-size: 14px !important;
+}
 .reward .qualificationForm {
   padding: 20px;
   background-color: #fafafa;

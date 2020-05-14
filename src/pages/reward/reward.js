@@ -14,28 +14,42 @@ import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
 import { Spinner } from "../../components/spinner/Spinner";
+import qs from "querystring";
+import Pagination from "../../components/Pagination/pagination";
 
 function Reward(props) {
   const { dispatch } = useContext(store);
   const [fetching, setFetching] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [rewards, setRewards] = useState([]);
   const [loading, setLoading] = useState(null);
+  const [queryParams, setQueryParams] = useState({});
+  const [search, setSearch] = useState("");
+  const [pageInfo, setPageInfo] = useState(null);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Rewards" });
-    getRewards();
   }, []);
 
-  const getRewards = () => {
+  useEffect(() => {
+    let extra = `page=${currentPage - 1}`;
+    extra += `&${qs.stringify(queryParams)}`;
+    getRewards(extra);
+  }, [search, queryParams, currentPage]);
+
+  const getRewards = (extra = "") => {
+    if (!fetching) {
+      setFetching(true);
+    }
     axiosHandler({
       method: "get",
-      url: REWARDS_URL,
+      url: REWARDS_URL + `?${extra}&size=20`,
       token: getToken(),
       clientID: getClientId()
     }).then(
       res => {
         setRewards(res.data._embedded.rewards);
-
+        setPageInfo(res.data.page);
         setFetching(false);
       },
       err => {
@@ -139,6 +153,16 @@ function Reward(props) {
         values={formatRewards(rewards)}
         loading={fetching}
       />
+      <br />
+      {!fetching && rewards.length > 0 && (
+        <Pagination
+          counter={pageInfo.size}
+          total={pageInfo.totalElements}
+          current={currentPage}
+          onChange={setCurrentPage}
+        />
+      )}
+      <br />
     </div>
   );
 }

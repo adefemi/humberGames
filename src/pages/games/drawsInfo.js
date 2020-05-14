@@ -102,8 +102,6 @@ function GameDraws(props) {
       />
       <br />
       <Pagination total={1} current={1} />
-      <br />
-      <br />
     </div>
   );
 }

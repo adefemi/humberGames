@@ -192,7 +192,7 @@ const SideBar = () => {
           icon={<Icon name="ic_face" type="md" />}
         />
         <SideLinks
-          link={"settings"}
+          link={"/settings"}
           title="Settings"
           active={getActive("settings")}
           icon={<Icon name="cog" type="entypo" />}

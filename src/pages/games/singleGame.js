@@ -102,6 +102,8 @@ function Games(props) {
         activeIndex={activeTab}
         onSwitch={setActiveTab}
       />
+      <br />
+      <br />
     </div>
   );
 }

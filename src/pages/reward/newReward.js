@@ -28,6 +28,7 @@ import { axiosHandler } from "../../utils/axiosHandler";
 import { GAME_INSTANCE_URL, REWARDS_URL } from "../../utils/urls";
 import ms from "microseconds";
 import { Spinner } from "../../components/spinner/Spinner";
+import { Modal } from "../../components/modal/Modal";
 
 const getDefaultInstance = (InstanceList, activeInstanceLink) => {
   const activeInstance = InstanceList.filter(
@@ -48,9 +49,14 @@ function NewReward(props) {
   const [fetchingInstance, setfetchingInstance] = useState(true);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(!!props.update);
+  const [showModal, setShowModal] = useState(false);
+  const [activeData, setActiveData] = useState(null);
 
   useEffect(() => {
-    dispatch({ type: setPageTitleAction, payload: "New Reward" });
+    dispatch({
+      type: setPageTitleAction,
+      payload: props ? "Update Reward" : "New Reward"
+    });
     getGameInstances();
     if (props.update) {
       getActiveReward();
@@ -161,20 +167,24 @@ function NewReward(props) {
       clientId: activeClient.id
     };
     setLoading(true);
+    setActiveData(newData);
+    setShowModal(true);
+  };
 
+  const completeSave = () => {
+    setShowModal(false);
     let method = "post";
     let url = REWARDS_URL;
     if (props.update) {
       method = "put";
-      url = url + `/${newData.id}`;
+      url = url + `/${activeData.id}`;
     }
-
     axiosHandler({
       method,
       url,
       clientID: getClientId(),
       token: getToken(),
-      data: newData
+      data: activeData
     }).then(
       _ => {
         Notification.bubble({
@@ -201,6 +211,19 @@ function NewReward(props) {
 
   return (
     <div className="reward">
+      <Modal
+        onClose={() => {
+          setShowModal(false);
+          setLoading(false);
+        }}
+        visible={showModal}
+        title="Verify Data"
+        okText="Submit"
+        onOK={completeSave}
+        footer
+      >
+        <pre>{JSON.stringify(activeData, null, 2)}</pre>
+      </Modal>
       <div className="flex align-center">
         <span onClick={() => props.history.goBack()} className="link">
           <AppIcon name="arrowLeft" type="feather" />{" "}
@@ -402,6 +425,7 @@ const getRuleConditions = (type, optType, index, onChange, data) => {
     typeFromList = ccTRules.filter(item => item.value === type);
   }
   typeFromList = typeFromList[0];
+  if (!typeFromList) return;
   const options = ccMainRules.filter(item =>
     item.optionTypes.includes(typeFromList.type)
   );

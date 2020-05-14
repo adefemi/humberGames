@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
+h3 {
+  font-size: 14px;
+}
+
 .game-card {
   height: 200px;
   background-color: white;
@@ -37,6 +41,9 @@
   display: grid;
   grid-template-columns: 6fr 2fr;
   grid-gap: 2em;
+}
+.singleGames .gridMain.embedded {
+  grid-template-columns: 1fr;
 }
 .singleGames .contentCard {
   padding: 20px;
@@ -110,7 +117,7 @@
   border-radius: 50%;
   background-color: #ff652d;
 }
-.instanceCard .status:active {
+.instanceCard .status.active {
   background-color: #3dd89a;
 }
 

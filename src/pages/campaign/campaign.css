@@ -1,6 +1,12 @@
 .newCampaign h3 {
   font-size: 14px;
 }
+.newCampaign .modal-bubble-fixed {
+  max-width: 1200px !important;
+}
+.newCampaign .modal-bubble-fixed .title {
+  font-size: 14px !important;
+}
 
 .productCardInfo .title {
   font-size: 14px;

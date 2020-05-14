@@ -33,6 +33,7 @@ import {
   GAME_BASE_URL,
   REWARDS_URL
 } from "../../utils/urls";
+import { Modal } from "../../components/modal/Modal";
 
 function NewCampaign(props) {
   const [active, setActive] = useState("sms");
@@ -53,6 +54,8 @@ function NewCampaign(props) {
     dispatch,
     state: { activeClient }
   } = useContext(store);
+  const [showModal, setShowModal] = useState(false);
+  const [activeData, setActiveData] = useState(null);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "New Campaign" });
@@ -107,7 +110,8 @@ function NewCampaign(props) {
         return;
       }
       let newData = {
-        returnFields: ["phone"]
+        returnFields: ["phone"],
+        distinctOn: ["phone"]
       };
       if (selectedReward.targetDemographyRules.length < 1) {
         Notification.bubble({
@@ -181,11 +185,18 @@ function NewCampaign(props) {
       }
       contentData = tempData;
     }
+    setSubmit(true);
+    setActiveData(contentData);
+    setShowModal(true);
+  };
+
+  const completeSave = () => {
+    setShowModal(false);
     axiosHandler({
       method: "post",
       clientID: getClientId(),
       token: getToken(),
-      data: contentData,
+      data: activeData,
       url: CAMPAIGN_URL + "/sms"
     }).then(
       res => {
@@ -228,6 +239,19 @@ function NewCampaign(props) {
 
   return (
     <div className="newCampaign">
+      <Modal
+        onClose={() => {
+          setShowModal(false);
+          setSubmit(false);
+        }}
+        visible={showModal}
+        title="Verify Data"
+        okText="Submit"
+        onOK={completeSave}
+        footer
+      >
+        <pre>{JSON.stringify(activeData, null, 2)}</pre>
+      </Modal>
       <div className="flex align-center">
         <span onClick={() => props.history.goBack()} className="link">
           <AppIcon name="arrowLeft" type="feather" />{" "}
@@ -313,6 +337,7 @@ function NewCampaign(props) {
                 <DatePicker
                   disablePastDate
                   name="date"
+                  showToday
                   onChange={e =>
                     genericChangeSingle(e, setScheduleData, scheduleData)
                   }

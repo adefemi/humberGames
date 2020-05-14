@@ -28,10 +28,17 @@ import AppIcon from "../../components/icons/Icon";
 import { GAME_PRICE_URL, WINNING_CONDITION_URL } from "../../utils/urls";
 import CurrencyInput from "../../components/currencyInput/currencyInput";
 import Divider from "../../components/Divider/divider";
+import { Modal } from "../../components/modal/Modal";
 
 function InstanceConfig(props) {
-  const headings = ["label", "Amount", "Quantity", ""];
-  const conditionHeading = ["Condition", "Operator", "Operand", "Created At"];
+  const headings = ["label", "Amount", ""];
+  const conditionHeading = [
+    "Condition",
+    "Operator",
+    "Operand",
+    "Created At",
+    ""
+  ];
 
   const [prize, setPrizes] = useState([]);
 
@@ -88,20 +95,32 @@ function InstanceConfig(props) {
       returnValue.push([
         item.label,
         `NGN ${numberWithCommas(item.amount)}`,
-        item.quantity,
-        viewLoading === key ? (
-          <Spinner color={secondaryColor} size={12} />
-        ) : (
+        <span>
+          {viewLoading === key ? (
+            <Spinner color={secondaryColor} size={12} />
+          ) : (
+            <span
+              className="link"
+              onClick={() => {
+                setActivePrize(item);
+                showPriceInfo(item._links, key);
+              }}
+            >
+              View Winning Conditions
+            </span>
+          )}{" "}
+          |{" "}
           <span
             className="link"
             onClick={() => {
+              setModalState(3);
               setActivePrize(item);
-              showPriceInfo(item._links, key);
+              setShowModal(true);
             }}
           >
-            View
+            Edit Prize
           </span>
-        )
+        </span>
       ]);
       return null;
     });
@@ -213,11 +232,34 @@ function InstanceConfig(props) {
         item.condition,
         item.operator,
         item.operand,
-        moment(new Date(item.createdAt)).fromNow()
+        moment(new Date(item.createdAt)).fromNow(),
+        <span
+          className="link"
+          onClick={() => confirmWinningConditionDelete(item)}
+        >
+          Delete
+        </span>
       ]);
       return null;
     });
     return returnValue;
+  };
+
+  const confirmWinningConditionDelete = condition => {
+    Modal.confirm({
+      title: "Delete Confirmation",
+      onOK: () => {
+        axiosHandler({
+          method: "delete",
+          url: WINNING_CONDITION_URL + `/${condition.id}`,
+          clientID: getClientId(),
+          token: getToken()
+        });
+        setConditions(
+          winningConditionMain.filter(item => item.id !== condition.id)
+        );
+      }
+    });
   };
 
   const getGameConfigs = configs => {
@@ -306,7 +348,7 @@ function InstanceConfig(props) {
                 setShowModal(true);
               }}
             >
-              Add Price
+              Add Prize
             </Button>
           </div>
         }
@@ -335,11 +377,13 @@ function InstanceConfig(props) {
             onConditionSubmit={onConditionSubmit}
           />
         )}
-        {modalState === 2 && (
+        {(modalState === 2 || modalState === 3) && (
           <NewPrice
             gameInstance={props.activeInstance}
             gameLink={props.gameLink}
             activeGame={activeGame}
+            edit={modalState === 3}
+            activePrize={activePrize}
             closeModal={closeModal}
           />
         )}
@@ -349,7 +393,7 @@ function InstanceConfig(props) {
 }
 
 const NewPrice = props => {
-  const [prices, setPrices] = useState([{}]);
+  const [prices, setPrices] = useState(props.edit ? [props.activePrize] : [{}]);
   const [winningRules, setWinningRule] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -400,11 +444,17 @@ const NewPrice = props => {
   const onSubmit = e => {
     e.preventDefault();
     setLoading(true);
+    let method = "post";
+    let url = GAME_PRICE_URL;
+    if (props.edit) {
+      method = "put";
+      url = url + `/${props.activePrize.id}`;
+    }
     Promise.all(
       prices.map(item => {
         return axiosHandler({
-          method: "post",
-          url: GAME_PRICE_URL,
+          method,
+          url,
           data: {
             ...item,
             winningRule:
@@ -457,16 +507,21 @@ const NewPrice = props => {
             </>
           ))}
         </div>
-        <p />
-        <div className="flex justify-end">
-          <div className="link" onClick={() => setPrices([...prices, {}])}>
-            Add More Prizes
-          </div>
-        </div>
+
+        {!props.edit && (
+          <>
+            <p />
+            <div className="flex justify-end">
+              <div className="link" onClick={() => setPrices([...prices, {}])}>
+                Add More Prizes
+              </div>
+            </div>
+          </>
+        )}
         <br />
 
         <Button type="submit" loading={loading} disabled={loading}>
-          Save
+          {!props.edit ? "Save" : "Update"}
         </Button>
       </form>
     </div>
