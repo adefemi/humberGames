@@ -16,6 +16,7 @@ import moment from "moment";
 import { Spinner } from "../../components/spinner/Spinner";
 import qs from "querystring";
 import Pagination from "../../components/Pagination/pagination";
+import Badge from "../../components/Badge/badge";
 
 function Reward(props) {
   const { dispatch } = useContext(store);
@@ -91,7 +92,10 @@ function Reward(props) {
         // item.cutOffTimeInHours,
         // moment(item.nextdrawTime, "YYYY-MM-DD HH:mm:ss").fromNow(),
         moment(new Date(item.createdAt)).fromNow(),
-        <div className="flex align-center">
+        <div>
+          <Badge>{item.status}</Badge>
+        </div>,
+        <div>
           <span
             className="link"
             onClick={() => props.history.push(`/reward/${item.id}`)}
@@ -113,6 +117,13 @@ function Reward(props) {
           >
             Update Reward
           </span>
+          &nbsp; | &nbsp;{" "}
+          <span
+            className="link"
+            onClick={() => props.history.push(`/reward/update/${item.id}`)}
+          >
+            View Campaign
+          </span>
         </div>
       ]);
       return null;
@@ -120,7 +131,7 @@ function Reward(props) {
     return result;
   };
 
-  const headings = ["Title", "Created at", ""];
+  const headings = ["Title", "Created at", "Status", ""];
 
   return (
     <div>

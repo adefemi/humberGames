@@ -11,8 +11,11 @@ import { GAME_INSTANCE_URL } from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import AppIcon from "../../components/icons/Icon";
-import { primaryColor } from "../../utils/data";
+import { primaryColor, secondaryColor } from "../../utils/data";
 import GameDraws from "./drawsInfo";
+import { Toggle } from "../../components/toggle/Toggle";
+import { Modal } from "../../components/modal/Modal";
+import { Spinner } from "../../components/spinner/Spinner";
 
 function Games(props) {
   const { dispatch } = useContext(store);
@@ -23,6 +26,7 @@ function Games(props) {
   const [prizesLink, setPrizesLink] = useState("");
   const [drawsLink, setDrawsLink] = useState("");
   const [activeTab, setActiveTab] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch({
@@ -82,18 +86,73 @@ function Games(props) {
     "Configuration"
   ];
 
+  const toggleGameInstance = () => {
+    const title = activeInstance.isActive
+      ? "Want to deactivate Game Instance?"
+      : "Want to Activate Game Instance?";
+    Modal.confirm({
+      title,
+      content: "Click on the Proceed button to complete your operation",
+      okText: "Proceed",
+      onOK: () => {
+        setLoading(true);
+        axiosHandler({
+          method: "put",
+          url: GAME_INSTANCE_URL + `/${activeInstance.id}`,
+          clientID: getClientId(),
+          token: getToken(),
+          data: {
+            ...activeInstance,
+            isActive: !activeInstance.isActive
+          }
+        }).then(
+          _ => {
+            Notification.bubble({
+              type: "success",
+              content: "Operation Completed"
+            });
+            setActiveInstance({
+              ...activeInstance,
+              isActive: !activeInstance.isActive
+            });
+            setLoading(false);
+          },
+          err => {
+            Notification.bubble({
+              type: "error",
+              content: errorHandler(err)
+            });
+          }
+        );
+      }
+    });
+  };
+
   return (
     <div className="singleGames">
-      <div className="flex align-center">
-        <div onClick={() => props.history.goBack()}>
-          <AppIcon
-            name="arrowLeft"
-            type="icomoon"
-            style={{ color: primaryColor, cursor: "pointer" }}
-          />
+      <div className="flex align-center justify-between">
+        <div className="flex align-center">
+          <div onClick={() => props.history.goBack()}>
+            <AppIcon
+              name="arrowLeft"
+              type="icomoon"
+              style={{ color: primaryColor, cursor: "pointer" }}
+            />
+          </div>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+          <h4>Back</h4>
         </div>
-        &nbsp; &nbsp; &nbsp; &nbsp;
-        <h4>Back</h4>
+        {activeInstance && (
+          <div className="flex align-center">
+            <Toggle
+              toggleStatus={activeInstance.isActive}
+              onClick={toggleGameInstance}
+              handleToggle={() => null}
+            />
+            &nbsp;
+            {loading && <Spinner color={secondaryColor} size={9} />}
+          </div>
+        )}
       </div>
 
       <Tabs

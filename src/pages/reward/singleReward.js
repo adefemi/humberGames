@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { REWARDS_URL } from "../../utils/urls";
+import { GAME_INSTANCE_URL, REWARDS_URL } from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
@@ -13,10 +13,13 @@ import "./reward.css";
 import Divider from "../../components/Divider/divider";
 import AppIcon from "../../components/icons/Icon";
 import { Card } from "../../components/card/Card";
+import { Toggle } from "../../components/toggle/Toggle";
+import { Modal } from "../../components/modal/Modal";
 
 function SingleReward(props) {
   const { dispatch } = useContext(store);
   const [fetching, setFetching] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [reward, setReward] = useState([]);
 
   useEffect(() => {
@@ -64,12 +67,68 @@ function SingleReward(props) {
     return result;
   };
 
+  const toggleReward = () => {
+    const title = reward.isActive
+      ? "Want to deactivate Game Instance?"
+      : "Want to Activate Game Instance?";
+    Modal.confirm({
+      title,
+      content: "Click on the Proceed button to complete your operation",
+      okText: "Proceed",
+      onOK: () => {
+        setLoading(true);
+        axiosHandler({
+          method: "put",
+          url: GAME_INSTANCE_URL + `/${reward.id}`,
+          clientID: getClientId(),
+          token: getToken(),
+          data: {
+            ...reward,
+            isActive: !reward.isActive
+          }
+        }).then(
+          _ => {
+            Notification.bubble({
+              type: "success",
+              content: "Operation Completed"
+            });
+            setReward({
+              ...reward,
+              isActive: !reward.isActive
+            });
+            setLoading(false);
+          },
+          err => {
+            Notification.bubble({
+              type: "error",
+              content: errorHandler(err)
+            });
+          }
+        );
+      }
+    });
+  };
+
   return (
     <div className="reward">
-      <div className="flex align-center">
-        <span onClick={() => props.history.goBack()} className="link">
-          <AppIcon name="arrowLeft" type="feather" />{" "}
-        </span>
+      <div className="flex align-center justify-between">
+        <div className="flex align-center">
+          <span onClick={() => props.history.goBack()} className="link">
+            <AppIcon name="arrowLeft" type="feather" />{" "}
+          </span>
+        </div>
+        {console.log(reward)}
+        {reward && (
+          <div className="flex align-center">
+            <Toggle
+              toggleStatus={reward.isActive}
+              onClick={toggleReward}
+              handleToggle={() => null}
+            />
+            &nbsp;
+            {loading && <Spinner color={secondaryColor} size={9} />}
+          </div>
+        )}
       </div>
       <br />
       <Card className="padding-20">
