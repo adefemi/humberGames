@@ -10,6 +10,8 @@ import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { DRAWS_URL } from "../../utils/urls";
+import qs from "querystring";
 
 function GameDraws(props) {
   const headings = [
@@ -21,30 +23,43 @@ function GameDraws(props) {
     ""
   ];
   const [fetching, setFetching] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
   const [draws, setDraws] = useState([]);
   const [pageInfo, setPageInfo] = useState(null);
 
   useEffect(() => {
     if (!props.fetching) {
-      axiosHandler({
-        method: "get",
-        url: props.activeInstance._links.draws.href,
-        clientID: getClientId(),
-        token: getToken()
-      }).then(
-        res => {
-          setDraws(res.data._embedded.draws);
-          setFetching(false);
-        },
-        err => {
-          Notification.bubble({
-            type: "error",
-            content: errorHandler(err)
-          });
-        }
-      );
+      let extra = `page=${currentPage - 1}`;
+      getDrawInfo(extra);
     }
-  }, [props.fetching]);
+  }, [props.fetching, search, currentPage]);
+
+  const getDrawInfo = (extra = "") => {
+    if (!fetching) {
+      setFetching(true);
+    }
+    axiosHandler({
+      method: "get",
+      url:
+        DRAWS_URL +
+        `?gameInstance_id=${props.match.params.uuid}&${extra}&size=20`,
+      clientID: getClientId(),
+      token: getToken()
+    }).then(
+      res => {
+        setDraws(res.data._embedded.draws);
+        setPageInfo(res.data.page);
+        setFetching(false);
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+      }
+    );
+  };
 
   const formatDraws = () => {
     const results = [];
@@ -84,14 +99,6 @@ function GameDraws(props) {
             />
           </div>
         </div>
-        <div className="flex align-center props">
-          &nbsp;
-          <Select
-            className="lease-search-box"
-            defaultOption={statusMode[0]}
-            optionList={statusMode}
-          />
-        </div>
       </div>
       <br />
       <br />
@@ -101,7 +108,15 @@ function GameDraws(props) {
         loading={fetching}
       />
       <br />
-      <Pagination total={1} current={1} />
+      {!fetching && draws.length > 0 && (
+        <Pagination
+          counter={pageInfo.size}
+          total={pageInfo.totalElements}
+          current={currentPage}
+          onChange={setCurrentPage}
+        />
+      )}
+      <br />
     </div>
   );
 }

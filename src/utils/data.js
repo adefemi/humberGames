@@ -102,9 +102,15 @@ export const countryCode = [
 ];
 
 export const statusMode = [
-  { title: "All", value: "all" },
+  { title: "All", value: "" },
   { title: "Active", value: "active" },
   { title: "Inactive", value: "inactive" }
+];
+
+export const statusModeTransaction = [
+  { title: "All", value: "" },
+  { title: "Won", value: "WON" },
+  { title: "Lose", value: "LOSE" }
 ];
 
 export const statusModeCampaign = [

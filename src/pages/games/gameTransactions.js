@@ -2,16 +2,23 @@ import React, { useEffect, useState } from "react";
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
 import { Select } from "../../components/select/Select";
-import { statusMode } from "../../utils/data";
+import { statusMode, statusModeTransaction } from "../../utils/data";
 import TransactionTable from "../../components/transactionTable/transactionTable";
 import Pagination from "../../components/Pagination/pagination";
 import Badge from "../../components/Badge/badge";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { errorHandler, getClientId, getToken } from "../../utils/helper";
+import {
+  errorHandler,
+  genericChangeSingle,
+  getClientId,
+  getToken
+} from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
 import ContentModal from "../../components/contentModal/contentModal";
 import FormGroup from "../../components/formGroup/formGroup";
+import qs from "querystring";
+import { GAME_TRANSACTION_URL } from "../../utils/urls";
 
 function GameTransactions(props) {
   const headings = [
@@ -29,28 +36,42 @@ function GameTransactions(props) {
   const [modalShow, setModalShow] = useState(false);
   const [activeTransaction, setActiveTransaction] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [queryParams, setQueryParams] = useState({});
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (props.transactionLink) {
-      axiosHandler({
-        method: "get",
-        url: props.transactionLink,
-        clientID: getClientId(),
-        token: getToken()
-      })
-        .then(res => {
-          console.log(res.data._embedded.gameTransactions);
-          setTransaction(res.data._embedded.gameTransactions);
-          setFetching(false);
-        })
-        .catch(err => {
-          Notification.bubble({
-            type: "error",
-            content: errorHandler(err, true)
-          });
-        });
+    let extra = `page=${currentPage - 1}`;
+    extra += `&${qs.stringify(queryParams)}`;
+    getTransactions(extra);
+  }, [search, queryParams, currentPage]);
+
+  const getTransactions = (extra = "") => {
+    if (!fetching) {
+      setFetching(true);
     }
-  }, [props.transactionLink]);
+    axiosHandler({
+      method: "get",
+      url:
+        GAME_TRANSACTION_URL +
+        `?${
+          props.user ? "user_id" : props.draw ? "draw_id" : "gameInstance_id"
+        }=${props.match.params.uuid}&size=20&${extra}`,
+      clientID: getClientId(),
+      token: getToken()
+    })
+      .then(res => {
+        setTransaction(res.data._embedded.gameTransactions);
+        setPageInfo(res.data.page);
+        setFetching(false);
+      })
+      .catch(err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err, true)
+        });
+      });
+  };
 
   const formatTransactions = () => {
     const returnValue = [];
@@ -87,10 +108,18 @@ function GameTransactions(props) {
               "..."}`
           : "N/A",
         moment(new Date(item.createdAt)).fromNow(),
-        <span className="link">
-          {item.status && item.status.toLowerCase() === "won" && "pay"} |
-        </span>,
-        <span className="link">View Transaction</span>
+        // <span className="link">
+        //   {item.status && item.status.toLowerCase() === "won" && "pay"} |
+        // </span>,
+        <span
+          className="link"
+          onClick={() => {
+            setActiveTransaction(item);
+            setModalShow(true);
+          }}
+        >
+          View Transaction
+        </span>
       ]);
       return null;
     });
@@ -112,8 +141,10 @@ function GameTransactions(props) {
           &nbsp;
           <Select
             className="lease-search-box"
-            defaultOption={statusMode[0]}
-            optionList={statusMode}
+            name="status"
+            defaultOption={statusModeTransaction[0]}
+            optionList={statusModeTransaction}
+            onChange={e => genericChangeSingle(e, setQueryParams, queryParams)}
           />
         </div>
       </div>
@@ -125,7 +156,15 @@ function GameTransactions(props) {
         loading={fetching}
       />
       <br />
-      <Pagination total={1} current={1} />
+      {!fetching && transactions.length > 0 && (
+        <Pagination
+          counter={pageInfo.size}
+          total={pageInfo.totalElements}
+          current={currentPage}
+          onChange={setCurrentPage}
+        />
+      )}
+      <br />
       <ContentModal visible={modalShow} setVisible={setModalShow}>
         <TransactionDetails activeTrans={activeTransaction} />
       </ContentModal>

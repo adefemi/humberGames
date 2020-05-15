@@ -12,6 +12,7 @@ import moment from "moment";
 import "./users.css";
 import Divider from "../../components/Divider/divider";
 import AppIcon from "../../components/icons/Icon";
+import GameTransactions from "../games/gameTransactions";
 
 function SingleUser(props) {
   const { dispatch } = useContext(store);
@@ -106,6 +107,12 @@ function SingleUser(props) {
           </div>
         )}
       </Card>
+      <br />
+      <h3>User Transactions</h3>
+      <br />
+      <GameTransactions {...props} user />
+      <br />
+      <br />
     </>
   );
 }

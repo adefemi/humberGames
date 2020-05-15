@@ -20,7 +20,7 @@ import { Select } from "../../components/select/Select";
 import TransactionTable from "../../components/transactionTable/transactionTable";
 import Pagination from "../../components/Pagination/pagination";
 import ContentModal from "../../components/contentModal/contentModal";
-import { TransactionDetails } from "./gameTransactions";
+import GameTransactions, { TransactionDetails } from "./gameTransactions";
 import { Card } from "../../components/card/Card";
 import { Button } from "../../components/button/Button";
 import { Modal } from "../../components/modal/Modal";
@@ -103,7 +103,7 @@ function SingleDraw(props) {
   const heading = ["Overview", "Operations"];
 
   const body = [
-    <DrawOverview transactions={transactions} />,
+    <GameTransactions {...props} draw />,
     <DrawOperations
       activeInstance={activeGameInstance}
       activeDraw={activeDraw}
@@ -133,105 +133,6 @@ function SingleDraw(props) {
     </div>
   );
 }
-
-const DrawOverview = props => {
-  const [modalShow, setModalShow] = useState(false);
-  const [activeTransaction, setActiveTransaction] = useState(null);
-  const headings = [
-    "ID",
-    "Transaction Ref",
-    "User ID",
-    "Status",
-    "Game Token",
-    "User Input",
-    "Game Play Time",
-    ""
-  ];
-  const formatTransactions = () => {
-    const returnValue = [];
-    props.transactions.map(item => {
-      returnValue.push([
-        `${item.id.substring(0, 10)}${item.id.length > 10 && "..."}`,
-        `${item.transactionRef.substring(0, 10)}${
-          item.transactionRef.length > 10 ? "..." : ""
-        }`,
-        item.userId
-          ? `${item.userId.substring(0, 10)}${item.userId.length > 10 && "..."}`
-          : "N/A",
-        item.status ? (
-          <Badge
-            status={
-              item.status.toLowerCase() === "won"
-                ? "success"
-                : item.status.toLowerCase() === "lost"
-                ? "error"
-                : "processing"
-            }
-          >
-            {item.status}
-          </Badge>
-        ) : (
-          "N/A"
-        ),
-        item.gameToken
-          ? `${item.gameToken.substring(0, 10)}${item.gameToken.length > 10 &&
-              "..."}`
-          : "N/A",
-        item.userInput
-          ? `${item.userInput.substring(0, 10)}${item.userInput.length > 10 &&
-              "..."}`
-          : "N/A",
-        moment(new Date(item.createdAt)).fromNow(),
-        <span className="link">
-          {item.status && item.status.toLowerCase() === "won" && "pay"}
-        </span>,
-        item
-      ]);
-      return null;
-    });
-    return returnValue;
-  };
-  return (
-    <div>
-      <div className="flex align-center justify-between">
-        <div>
-          <div className="lease-search-box">
-            <Input
-              placeholder="Search ID"
-              iconRight={<AppIcon name="search" type="feather" />}
-            />
-          </div>
-        </div>
-        <div className="flex align-center props">
-          &nbsp;
-          <Select
-            className="lease-search-box"
-            defaultOption={statusMode[0]}
-            optionList={statusMode}
-          />
-        </div>
-      </div>
-      <br />
-      <br />
-      <TransactionTable
-        keys={headings}
-        values={formatTransactions()}
-        canClick
-        onClick={e => {
-          setActiveTransaction(e);
-          setModalShow(true);
-        }}
-      />
-      <br />
-      <Pagination total={1} current={1} />
-      <br />
-      <br />
-      <ContentModal visible={modalShow} setVisible={setModalShow}>
-        <TransactionDetails activeTrans={activeTransaction} />
-      </ContentModal>
-    </div>
-  );
-};
 
 const DrawOperations = props => {
   const [rewards, setRewards] = useState(null);
