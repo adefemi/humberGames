@@ -59,28 +59,14 @@ function GameInstances(props) {
     if (!props.embedded) {
       axiosHandler({
         method: "get",
-        url: GAME_URL + `?id=${props.match.params.uuid}`,
+        url: GAME_INSTANCE_URL + `?gameId=${props.match.params.uuid}`,
         clientID: getClientId(),
         token: getToken()
-      })
-        .then(rep => {
-          axiosHandler({
-            method: "get",
-            url: rep.data._embedded.games[0]._links.gameInstances.href,
-            clientID: getClientId(),
-            token: getToken()
-          }).then(res => {
-            setGameInstance(res.data._embedded.gameInstances);
-            setPageInfo(res.data.page);
-            setFetching(false);
-          });
-        })
-        .catch(err => {
-          Notification.bubble({
-            type: "error",
-            content: errorHandler(err, true)
-          });
-        });
+      }).then(res => {
+        setGameInstance(res.data._embedded.gameInstances);
+        setPageInfo(res.data.page);
+        setFetching(false);
+      });
     } else {
       axiosHandler({
         method: "get",

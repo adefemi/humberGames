@@ -54,9 +54,9 @@ function GameTransactions(props) {
       method: "get",
       url:
         GAME_TRANSACTION_URL +
-        `?${
-          props.user ? "user_id" : props.draw ? "draw_id" : "gameInstance_id"
-        }=${props.match.params.uuid}&size=20&${extra}`,
+        `?${props.user ? "userId" : props.draw ? "draw" : "gameInstance"}=${
+          props.match.params.uuid
+        }&size=20&${extra}`,
       clientID: getClientId(),
       token: getToken()
     })

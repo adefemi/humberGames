@@ -1,9 +1,10 @@
-export const BASE_URL = "http://api.humbergames.com/";
+export const BASE_URL = "http://api-ingress.production.93.115.21.184.xip.io/";
 export const USER_BASE_URL = BASE_URL + "users/v1/";
 export const CAMPAIGN_BASE_URL = BASE_URL + "campaigns/v1";
 export const ETL_BASE_URL = BASE_URL + "etl-filter/";
 export const NOTIFICATION_BASE_URL = BASE_URL + "notifications/v1/";
-export const GAME_BASE_URL = "https://hgameservice.herokuapp.com/";
+export const GAME_BASE_URL =
+  "http://gaming-service-ingress.production.93.115.21.184.xip.io/";
 
 export const LOGIN_URL = USER_BASE_URL + "auths/login";
 export const ROLES_URL = USER_BASE_URL + "roles";
@@ -27,7 +28,7 @@ export const REWARDS_URL = GAME_BASE_URL + "rewards";
 export const ANALYTICS_KPI_URL = GAME_BASE_URL + "analytics/kpi/";
 export const ANALYTICS_GRAPH_URL = GAME_BASE_URL + "analytics/graph/";
 export const CAMPAIGN_URL = CAMPAIGN_BASE_URL;
-export const ETL_FILTER_URL = ETL_BASE_URL + "filter";
+export const ETL_FILTER_URL = GAME_BASE_URL + "etl/proxy";
 export const NOTIFICATION_LOGS_URL = NOTIFICATION_BASE_URL + "sms/logs";
 export const DRAWS_URL = GAME_BASE_URL + "draws";
 export const DRAW_EXECUTE_DRAW_URL = GAME_BASE_URL + "execute/draw/";

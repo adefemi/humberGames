@@ -127,7 +127,7 @@ function NewCampaign(props) {
         method: "post",
         clientID: getClientId(),
         token: getToken(),
-        url: `${GAME_BASE_URL}etl/proxy`,
+        url: ETL_FILTER_URL,
         data: newData
       }).then(res => {
         if (res.data.length < 1) {

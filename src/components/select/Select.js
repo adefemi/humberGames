@@ -94,7 +94,7 @@ export const Select = props => {
       li.classList.add("select-li");
       li.innerHTML = item.title;
       li.onclick = e => {
-        setSelection(e.target.innerHTML);
+        setSelection(e.target.innerText);
       };
       ul.appendChild(li);
       return null;
