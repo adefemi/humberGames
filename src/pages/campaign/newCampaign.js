@@ -11,7 +11,10 @@ import { TextAreaField } from "../../components/textarea/TextAreaField";
 import { Spinner } from "../../components/spinner/Spinner";
 import { Checkbox } from "../../components/checkbox/Checkbox";
 import { Button } from "../../components/button/Button";
-import { setPageTitleAction } from "../../stateManagement/actions";
+import {
+  setGlobalLoader,
+  setPageTitleAction
+} from "../../stateManagement/actions";
 import { store } from "../../stateManagement/store";
 import DatePicker from "../../components/DatePicker/datePicker";
 import TimePicker from "../../components/timePicker/timePicker";
@@ -123,24 +126,54 @@ function NewCampaign(props) {
       }
 
       newData.rule = selectedReward.targetDemographyRules;
+      dispatch({
+        type: setGlobalLoader,
+        payload: {
+          status: true,
+          content: "Processing Request, this may take a while, Please wait..."
+        }
+      });
       axiosHandler({
         method: "post",
         clientID: getClientId(),
         token: getToken(),
         url: ETL_FILTER_URL,
         data: newData
-      }).then(res => {
-        if (res.data.length < 1) {
+      }).then(
+        res => {
+          if (res.data.length < 1) {
+            Notification.bubble({
+              type: "info",
+              content: "There is no campaign for selected reward!!!"
+            });
+            setSubmit(false);
+            return;
+          }
+          contentData.recipients = res.data.map(item => item.phone);
+          saveData(contentData);
+          dispatch({
+            type: setGlobalLoader,
+            payload: {
+              status: false,
+              content: ""
+            }
+          });
+        },
+        err => {
           Notification.bubble({
-            type: "info",
-            content: "There is no campaign for selected reward!!!"
+            type: "error",
+            content: errorHandler(err)
+          });
+          dispatch({
+            type: setGlobalLoader,
+            payload: {
+              status: false,
+              content: ""
+            }
           });
           setSubmit(false);
-          return;
         }
-        contentData.recipients = res.data.map(item => item.phone);
-        saveData(contentData);
-      });
+      );
     } else if (receptType === 1) {
       if (!recipientData.file) {
         Notification.bubble({
@@ -250,7 +283,50 @@ function NewCampaign(props) {
         onOK={completeSave}
         footer
       >
-        <pre>{JSON.stringify(activeData, null, 2)}</pre>
+        {activeData && (
+          <>
+            <FormGroup>
+              <div className="grid grid-2 grid-gap-2">
+                <div>
+                  <div className="info">Type</div>
+                  <div className="context">SMS</div>
+                </div>
+                <div>
+                  <div className="info">Title</div>
+                  <div className="context">{activeData.title}</div>
+                </div>
+              </div>
+            </FormGroup>
+            <FormGroup>
+              <div>
+                <div className="info">Message</div>
+                <div className="context">{activeData.message}</div>
+              </div>
+            </FormGroup>
+            <FormGroup>
+              <div className="grid grid-2 grid-gap-2">
+                {activeData.sender && (
+                  <div>
+                    <div className="info">Sender ID</div>
+                    <div className="context">{activeData.sender}</div>
+                  </div>
+                )}
+                <div>
+                  <div className="info">Schedule</div>
+                  <div className="context">{activeData.schedule}</div>
+                </div>
+                {receptType !== 1 && (
+                  <div>
+                    <div className="info">Total Recipients</div>
+                    <div className="context">
+                      {activeData.recipients.length}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </FormGroup>
+          </>
+        )}
       </Modal>
       <div className="flex align-center">
         <span onClick={() => props.history.goBack()} className="link">

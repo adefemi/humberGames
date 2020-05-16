@@ -140,14 +140,13 @@ const DrawOperations = props => {
   const [loading, setLoading] = useState(null);
 
   const getDrawButton = () => {
-    const currentTime = moment(new Date());
+    const currentTime = moment(new Date()).unix();
     let drawEndTime = new Date(props.activeDraw.endTime);
     drawEndTime = drawEndTime.setMinutes(
       drawEndTime.getMinutes() + props.activeInstance.gameConfig.durationInMins
     );
-    drawEndTime = moment(drawEndTime);
-    const timeDiff = drawEndTime.diff(currentTime, "seconds");
-    if (timeDiff > 0) {
+    drawEndTime = moment(drawEndTime).unix();
+    if (currentTime > drawEndTime) {
       return (
         <Button
           onClick={() =>
@@ -178,16 +177,20 @@ const DrawOperations = props => {
   };
 
   const getQualifyButton = reward => {
-    const currentTime = moment(new Date());
+    const currentTime = moment(new Date()).unix();
     let cutoffTimeInMins = reward.cutOffTimeInMins;
     let drawEndTime = new Date(props.activeDraw.endTime);
+    let drawTime2 = drawEndTime.setMinutes(
+      drawEndTime.getMinutes() + props.activeInstance.gameConfig.durationInMins
+    );
     drawEndTime = drawEndTime.setMinutes(
       drawEndTime.getMinutes() +
         (props.activeInstance.gameConfig.durationInMins - cutoffTimeInMins)
     );
-    drawEndTime = moment(drawEndTime);
-    const timeDiff = drawEndTime.diff(currentTime, "seconds");
-    if (timeDiff > 0) {
+
+    drawEndTime = moment(drawEndTime).unix();
+    drawTime2 = moment(drawTime2).unix();
+    if (currentTime > drawEndTime && currentTime < drawTime2) {
       return (
         <Button
           onClick={() =>
