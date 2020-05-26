@@ -12,6 +12,17 @@ function TimePicker(props) {
   const [section, setSection] = useState("PM");
 
   useEffect(() => {
+    if (props.defaultValue) {
+      const time = moment(props.defaultValue, "HH:mm:ss")
+        .format("hh:mm:a")
+        .split(":");
+      setHour(time[0]);
+      setMinute(time[1]);
+      setSection(time[2].toUpperCase());
+    }
+  }, []);
+
+  useEffect(() => {
     if (hour && minute) {
       if (props.onChange) {
         props.onChange({
@@ -63,11 +74,13 @@ function TimePicker(props) {
     <div className="adx-timepicker">
       <div className="input-field">
         <Select
+          value={hour}
           optionList={getHour()}
           onChange={e => setHour(e.target.value)}
           placeholder="Hour"
         />
         <Select
+          value={minute}
           optionList={getMinute()}
           onChange={e => setMinute(e.target.value)}
           placeholder="Minute"
@@ -91,7 +104,7 @@ function TimePicker(props) {
 TimePicker.defaultProps = {};
 
 TimePicker.propType = {
-  value: proptype.string,
+  defaultValue: proptype.string,
   onChange: proptype.func,
   use24H: proptype.bool
 };

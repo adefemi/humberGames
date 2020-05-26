@@ -17,6 +17,7 @@ import { Spinner } from "../../components/spinner/Spinner";
 import qs from "querystring";
 import Pagination from "../../components/Pagination/pagination";
 import Badge from "../../components/Badge/badge";
+import { cleanParameters } from "../campaign/campaign";
 
 function Reward(props) {
   const { dispatch } = useContext(store);
@@ -34,7 +35,7 @@ function Reward(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
-    extra += `&${qs.stringify(queryParams)}`;
+    extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getRewards(extra);
   }, [search, queryParams, currentPage]);
 
@@ -87,7 +88,9 @@ function Reward(props) {
     let result = [];
     rewards.map(item => {
       result.push([
-        item.title,
+        <span>
+          {item.title.substring(0, 30)} {item.title.length > 30 && "..."}
+        </span>,
         // item.drawFrequenceInHours,
         // item.cutOffTimeInHours,
         // moment(item.nextdrawTime, "YYYY-MM-DD HH:mm:ss").fromNow(),

@@ -110,14 +110,14 @@ export const statusMode = [
 export const statusModeTransaction = [
   { title: "All", value: "" },
   { title: "Won", value: "WON" },
-  { title: "Lose", value: "LOSE" }
+  { title: "Lost", value: "LOST" }
 ];
 
 export const statusModeCampaign = [
   { title: "All", value: "" },
-  { title: "Scheduled", value: "active" },
-  { title: "Sent", value: "inactive" },
-  { title: "Failed", value: "inactive" }
+  { title: "Scheduled", value: "scheduled" },
+  { title: "Sent", value: "sent" },
+  { title: "Failed", value: "failed" }
 ];
 
 export const durationType = [
@@ -194,6 +194,11 @@ export const ccTRules = [
   {
     title: "Transaction direction",
     value: "transactiondirection",
+    type: "string"
+  },
+  {
+    title: "Weekly Count",
+    value: "weeklyCount",
     type: "string"
   },
   {

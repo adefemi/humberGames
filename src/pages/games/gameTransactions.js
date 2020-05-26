@@ -19,6 +19,7 @@ import ContentModal from "../../components/contentModal/contentModal";
 import FormGroup from "../../components/formGroup/formGroup";
 import qs from "querystring";
 import { GAME_TRANSACTION_URL } from "../../utils/urls";
+import { cleanParameters } from "../campaign/campaign";
 
 function GameTransactions(props) {
   const headings = [
@@ -42,7 +43,7 @@ function GameTransactions(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
-    extra += `&${qs.stringify(queryParams)}`;
+    extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getTransactions(extra);
   }, [search, queryParams, currentPage]);
 

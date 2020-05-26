@@ -12,7 +12,6 @@ import {
 } from "../../utils/helper";
 import { Select } from "../../components/select/Select";
 import DatePicker from "../../components/DatePicker/datePicker";
-import TimePicker from "../../components/timePicker/timePicker";
 import Divider from "../../components/Divider/divider";
 import { Button } from "../../components/button/Button";
 import {
@@ -559,7 +558,7 @@ const formatConditions = condition => {
   return result;
 };
 
-const QualificationRuleForm = props => {
+export const QualificationRuleForm = props => {
   const getConditions = () => {
     const conds = [];
     for (let key in props.data.condition) {

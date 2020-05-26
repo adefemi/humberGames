@@ -4,14 +4,15 @@ import { store } from "../../stateManagement/store";
 import TransactionTable from "../../components/transactionTable/transactionTable";
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
-import { Button } from "../../components/button/Button";
 import "./users.css";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { CLIENT_FETCH_URL, USER_FETCH_URL } from "../../utils/urls";
+import { USER_FETCH_URL } from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
 import Pagination from "../../components/Pagination/pagination";
+import qs from "query-string";
+import { cleanParameters } from "../campaign/campaign";
 
 function Users(props) {
   const { dispatch } = useContext(store);
@@ -27,7 +28,9 @@ function Users(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage}`;
-    // extra += `&${qs.stringify(queryParams)}`;
+    extra += `&${qs.stringify(
+      cleanParameters({ ...queryParams, keyword: search })
+    )}`;
     getClients(extra);
   }, [search, queryParams, currentPage]);
 
@@ -37,12 +40,12 @@ function Users(props) {
     }
     axiosHandler({
       method: "get",
-      url: USER_FETCH_URL, // + `?limit=5&page=${currentPage}`,
+      url: USER_FETCH_URL + `?limit=5&page=${currentPage}`,
       token: getToken(),
       clientID: getClientId()
     }).then(
       res => {
-        setClients(res.data.data);
+        setClients(res.data);
 
         setFetching(false);
       },
@@ -56,6 +59,7 @@ function Users(props) {
   };
 
   const formatClients = clients => {
+    if (fetching) return;
     let result = [];
     clients.map(item => {
       result.push([
@@ -84,6 +88,8 @@ function Users(props) {
             <Input
               placeholder="Search users"
               iconRight={<AppIcon name="search" type="feather" />}
+              debounce
+              onChange={e => setSearch(e.target.value)}
             />
           </div>
         </div>
@@ -101,7 +107,7 @@ function Users(props) {
       <br />
       <TransactionTable
         keys={headings}
-        values={formatClients(clients)}
+        values={formatClients(clients.data)}
         loading={fetching}
       />
       <br />

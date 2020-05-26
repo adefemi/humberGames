@@ -14,6 +14,7 @@ import Skeleton from "react-loading-skeleton";
 import Result from "../../components/Result/result";
 import Pagination from "../../components/Pagination/pagination";
 import GameInstances from "./gameInstance";
+import { cleanParameters } from "../campaign/campaign";
 
 function Games(props) {
   const {
@@ -34,7 +35,7 @@ function Games(props) {
   useEffect(() => {
     if (!activeClient) return;
     let extra = `page=${currentPage - 1}`;
-    extra += `&${qs.stringify(queryParams)}`;
+    extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getGames(extra);
   }, [search, queryParams, currentPage, activeClient]);
 

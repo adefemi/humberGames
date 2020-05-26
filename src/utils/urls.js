@@ -1,10 +1,20 @@
-export const BASE_URL = "http://api-ingress.production.93.115.21.184.xip.io/";
+const stagingBaseUrl = "http://staging.api.humbergames.com/";
+const stagingGameUrl = "http://staging.gaming-service.humbergames.com/";
+
+const productionBaseUrl = "http://api.humbergames.com/";
+const productionGameUrl = "http://gaming-service.humbergames.com/";
+
+const host = window.location.host.split(".");
+
+export const BASE_URL =
+  host[0] === "client" ? productionBaseUrl : stagingBaseUrl;
 export const USER_BASE_URL = BASE_URL + "users/v1/";
+export const RESET_CODE_URL = USER_BASE_URL + "passwords/reset";
 export const CAMPAIGN_BASE_URL = BASE_URL + "campaigns/v1";
 export const ETL_BASE_URL = BASE_URL + "etl-filter/";
 export const NOTIFICATION_BASE_URL = BASE_URL + "notifications/v1/";
 export const GAME_BASE_URL =
-  "http://gaming-service-ingress.production.93.115.21.184.xip.io/";
+  host[0] === "client" ? productionGameUrl : stagingGameUrl;
 
 export const LOGIN_URL = USER_BASE_URL + "auths/login";
 export const ROLES_URL = USER_BASE_URL + "roles";

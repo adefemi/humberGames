@@ -1,3 +1,5 @@
+@import "../../styles/theme";
+
 .newCampaign{
   h3{
     font-size: 14px;
@@ -20,5 +22,18 @@
     font-size: 25px;
     font-weight: bold;
   }
+}
+
+.form-group{
+  position: relative;
+}
+
+.campaignMessageCounter{
+  position: absolute;
+  right: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  color: darken($primary-color, 10%);
+  font-style: italic;
 }
 

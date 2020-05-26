@@ -40,6 +40,7 @@ import SelectInput from "../../components/selectInput/selectInput";
 import FileUploadNew from "../../components/fileUploadNew/fileUploadNew";
 import ContentModal from "../../components/contentModal/contentModal";
 import { Modal } from "../../components/modal/Modal";
+import { cleanParameters } from "../campaign/campaign";
 
 function Sandbox(props) {
   const { dispatch } = useContext(store);
@@ -61,7 +62,7 @@ function Sandbox(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
-    extra += `&${qs.stringify(queryParams)}`;
+    extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getInstance(extra);
   }, [search, queryParams, currentPage]);
 

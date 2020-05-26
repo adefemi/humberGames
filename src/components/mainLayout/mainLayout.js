@@ -54,22 +54,47 @@ function MainLayout(props) {
       routeToLogin();
     }
     let token = localStorage.getItem(USERTOKEN);
-    if (!token) {
+    // if (token) {
+    //   token = JSON.parse(token);
+    //   axiosHandler({
+    //     method: "get",
+    //     url: USER_ME_URL,
+    //     token: token.access,
+    //     clientID
+    //   }).then(
+    //       res => {
+    //         dispatch({ type: setUserDetails, payload: res.data.data });
+    //         setLoading(false);
+    //         props.history.push(
+    //             props.location.pathname + `?${props.location.search}`
+    //         );
+    //       },
+    //       _ => {
+    //         routeToLogin();
+    //       }
+    //   );
+    // } else {
+    //   routeToLogin();
+    // }
+    try {
+      const decoded = jwtDecode(token);
+      axiosHandler({
+        method: "get",
+        clientID: "default",
+        token: getToken(),
+        url: CLIENT_FETCH_URL + `?clientId=${decoded.auth.clientId}`
+      }).then(res => {
+        dispatch({ type: setUserDetails, payload: decoded.auth });
+        dispatch({ type: setActiveClient, payload: res.data.data[0] });
+        setLoading(false);
+        props.history.push(
+          props.location.pathname + `?${props.location.search}`
+        );
+      });
+    } catch (e) {
       routeToLogin();
-      return;
     }
-    const decoded = jwtDecode(token);
-    axiosHandler({
-      method: "get",
-      clientID: "default",
-      token: getToken(),
-      url: CLIENT_FETCH_URL + `?clientId=${decoded.auth.clientId}`
-    }).then(res => {
-      dispatch({ type: setUserDetails, payload: decoded.auth });
-      dispatch({ type: setActiveClient, payload: res.data.data[0] });
-      setLoading(false);
-      props.history.push(props.location.pathname + `?${props.location.search}`);
-    });
+
     // verify token
     //
   }, []);

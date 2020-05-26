@@ -4,6 +4,8 @@ import MainLayout from "./components/mainLayout/mainLayout";
 import GlobalLoader from "./components/GlobalLoader/globalLoader";
 import Logout from "./components/logout/logout";
 import Login from "./pages/login/login";
+import ForgotPassword from "./pages/login/forgotPassword";
+import ChangePassword from "./pages/login/changePassword";
 
 const Games = lazy(() => import("./pages/games/games"));
 const SingleGame = lazy(() => import("./pages/games/singleGame"));
@@ -30,6 +32,8 @@ const RouterMain = props => {
         <Switch>
           <Route path="/logout" exact component={Logout} />
           <Route path="/login" exact component={Login} />
+          <Route path="/forgot-password" exact component={ForgotPassword} />
+          <Route path="/reset-password" exact component={ChangePassword} />
           <Route
             path="/client/:name"
             exact
@@ -143,6 +147,16 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <SingleCampaign {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/campaigns/:uuid/duplicate"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <NewCampaign {...props} duplicate />
                     </Suspense>
                   )}
                 />

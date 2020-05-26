@@ -11,19 +11,18 @@ import { gameStatusSort, timeSortOption } from "../../utils/data";
 import { Button } from "../../components/button/Button";
 import Pagination from "../../components/Pagination/pagination";
 import {
-  errorHandler,
   genericChangeSingle,
   getClientId,
   getToken,
   numberWithCommas
 } from "../../utils/helper";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { GAME_INSTANCE_URL, GAME_URL } from "../../utils/urls";
-import { Notification } from "../../components/notification/Notification";
+import { GAME_INSTANCE_URL } from "../../utils/urls";
 import qs from "querystring";
 import Skeleton from "react-loading-skeleton";
 import moment from "moment";
 import Result from "../../components/Result/result";
+import { cleanParameters } from "../campaign/campaign";
 
 function GameInstances(props) {
   const {
@@ -48,11 +47,15 @@ function GameInstances(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
-    extra += `&${qs.stringify(queryParams)}`;
+    extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getInstance(extra);
   }, [search, queryParams, currentPage]);
 
   const getInstance = (extra = "") => {
+    if (!activeClient) {
+      props.history.push("/logout");
+      return;
+    }
     if (!fetching) {
       setFetching(true);
     }

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
 .newCampaign h3 {
   font-size: 14px;
 }
@@ -13,6 +14,19 @@
   margin-top: 20px;
   font-size: 25px;
   font-weight: bold;
+}
+
+.form-group {
+  position: relative;
+}
+
+.campaignMessageCounter {
+  position: absolute;
+  right: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #495383;
+  font-style: italic;
 }
 
 /*# sourceMappingURL=campaign.css.map */
