@@ -1,0 +1,27 @@
+image: nikolaik/python-nodejs
+pipelines:
+  default:
+    - step:
+        name: Deploy Live
+        caches:
+          - node
+        script: # Modify the commands below to build your repository.
+          - npm install
+          - unset CI
+          - npm run build
+          - pip install awscli --upgrade --ignore-installed six
+          - aws s3 sync ./build s3://humberclientadmin
+          - aws s3 cp --cache-control max-age=0 ./build/service-worker.js s3://humberclientadmin/
+          - aws cloudfront create-invalidation --distribution-id E15L2N77WIVY2O --paths "/*"
+    - step:
+        name: Deploy Staging
+        caches:
+          - node
+        script: # Modify the commands below to build your repository.
+          - npm install
+          - unset CI
+          - npm run build
+          - pip install awscli --upgrade --ignore-installed six
+          - aws s3 sync ./build s3://clent-staging
+          - aws s3 cp --cache-control max-age=0 ./build/service-worker.js s3://clent-staging/
+          - aws cloudfront create-invalidation --distribution-id ESAHB3T3FCYL2 --paths "/*"
