@@ -11,15 +11,16 @@ import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
 import moment from "moment";
 
-var oneWeekAgo = new Date();
-oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+let tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+export { tomorrow };
 
 function Dashboard(props) {
   const [data, setData] = useState(null);
   const [fetching, setFetching] = useState(true);
   const [dateData, setDateData] = useState({
-    startDate: moment(oneWeekAgo).format("YYYY-MM-DD"),
-    endDate: moment(new Date()).format("YYYY-MM-DD")
+    startDate: moment(new Date()).format("YYYY-MM-DD"),
+    endDate: moment(tomorrow).format("YYYY-MM-DD")
   });
 
   useEffect(() => {
@@ -114,12 +115,10 @@ function Dashboard(props) {
                 <Spinner color="#000000" />
               ) : (
                 <h1>
-                  {data.kpiInfo
-                    ? data.kpiInfo.totalGamePlays / data.kpiInfo.totalWinnings <
-                      1
-                      ? 1
-                      : data.kpiInfo.totalWinnings
-                    : "-"}
+                  {data.kpiInfo &&
+                    (
+                      data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays
+                    ).toFixed(4)}
                 </h1>
               )}
             </center>

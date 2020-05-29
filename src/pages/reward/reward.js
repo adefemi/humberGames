@@ -91,13 +91,7 @@ function Reward(props) {
         <span>
           {item.title.substring(0, 30)} {item.title.length > 30 && "..."}
         </span>,
-        // item.drawFrequenceInHours,
-        // item.cutOffTimeInHours,
-        // moment(item.nextdrawTime, "YYYY-MM-DD HH:mm:ss").fromNow(),
         moment(new Date(item.createdAt)).fromNow(),
-        <div>
-          <Badge>{item.status}</Badge>
-        </div>,
         <div>
           <span
             className="link"
@@ -134,7 +128,7 @@ function Reward(props) {
     return result;
   };
 
-  const headings = ["Title", "Created at", "Status", ""];
+  const headings = ["Title", "Created at", ""];
 
   return (
     <div>
