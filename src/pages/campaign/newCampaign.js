@@ -25,7 +25,12 @@ import {
   getToken
 } from "../../utils/helper";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { CAMPAIGN_URL, ETL_FILTER_URL, REWARDS_URL } from "../../utils/urls";
+import {
+  CAMPAIGN_URL,
+  CLIENT_SETTING,
+  ETL_FILTER_URL,
+  REWARDS_URL
+} from "../../utils/urls";
 import { Modal } from "../../components/modal/Modal";
 import { QualificationRuleForm } from "../reward/newReward";
 import "../reward/reward.css";
@@ -41,6 +46,7 @@ function NewCampaign(props) {
   const [rewards, setRewards] = useState([]);
   const [selectedReward, setSelectedReward] = useState(null);
   const [recipientData, setRecipientData] = useState({});
+  const [clientSettings, setClientSettings] = useState({});
   const [payload, setPayload] = useState({
     message: "",
     title: ""
@@ -57,27 +63,63 @@ function NewCampaign(props) {
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "New Campaign" });
     getRewards();
+    getSettings();
     if (props.duplicate) {
       getActiveCampaign();
     }
   }, []);
 
-  const getActiveCampaign = () => {
+  const getSettings = () => {
     axiosHandler({
       method: "get",
-      clientID: getClientId(),
+      url: CLIENT_SETTING + `?clientId=${getClientId()}`,
       token: getToken(),
-      url: CAMPAIGN_URL + `/sms/${props.match.params.uuid}`
+      clientID: getClientId()
     }).then(
       res => {
+        if (res.data._embedded.clientSettings[0]) {
+          setClientSettings(res.data._embedded.clientSettings[0].settings);
+        }
+        setFetching(false);
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+      }
+    );
+  };
+
+  const getActiveCampaign = () => {
+    Promise.all([
+      axiosHandler({
+        method: "get",
+        clientID: getClientId(),
+        token: getToken(),
+        url: CAMPAIGN_URL + `/sms/${props.match.params.uuid}`
+      }),
+      axiosHandler({
+        method: "get",
+        url: CLIENT_SETTING + `?clientId=${getClientId()}`,
+        token: getToken(),
+        clientID: getClientId()
+      })
+    ]).then(
+      (activeCamp, settingsMain) => {
         let data = {
-          title: res.data.data.title,
-          message: res.data.data.message,
-          sender: res.data.data.sender
+          title: activeCamp.data.data.title,
+          message: activeCamp.data.data.message,
+          sender: activeCamp.data.data.sender
         };
-        setScheduleStatus(res.data.data.status === "scheduled");
+        if (settingsMain.data._embedded.clientSettings[0]) {
+          setClientSettings(
+            settingsMain.data._embedded.clientSettings[0].settings
+          );
+        }
+        setScheduleStatus(activeCamp.data.data.status === "scheduled");
         setPayload(data);
-        const sched = res.data.data.schedule.split(" ");
+        const sched = activeCamp.data.data.schedule.split(" ");
         setScheduleData({ date: sched[0], time: sched[1] });
         setFetchingMain(false);
       },
@@ -264,6 +306,12 @@ function NewCampaign(props) {
 
   const completeSave = () => {
     setShowModal(false);
+    if (clientSettings.networkId) {
+      activeData.networkId = clientSettings.networkId;
+    }
+    if (!activeData.sender && clientSettings.senderId) {
+      activeData.sender = clientSettings.senderId;
+    }
     axiosHandler({
       method: "post",
       clientID: getClientId(),

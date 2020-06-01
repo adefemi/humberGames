@@ -6,16 +6,16 @@ const productionGameUrl = "http://gaming-service.humbergames.com/";
 
 const host = window.location.host.split(".");
 
-export const BASE_URL = productionBaseUrl;
-//host[0] === "client" ? productionBaseUrl : stagingBaseUrl;
+export const BASE_URL =
+  host[0] === "client" ? productionBaseUrl : stagingBaseUrl;
 
 export const USER_BASE_URL = BASE_URL + "users/v1/";
 export const RESET_CODE_URL = USER_BASE_URL + "passwords/reset";
 export const CAMPAIGN_BASE_URL = BASE_URL + "campaigns/v1";
 export const ETL_BASE_URL = BASE_URL + "etl-filter/";
 export const NOTIFICATION_BASE_URL = BASE_URL + "notifications/v1/";
-export const GAME_BASE_URL = productionGameUrl;
-//host[0] === "client" ? productionGameUrl : stagingGameUrl;
+export const GAME_BASE_URL =
+  host[0] === "client" ? productionGameUrl : stagingGameUrl;
 
 export const LOGIN_URL = USER_BASE_URL + "auths/login";
 export const ROLES_URL = USER_BASE_URL + "roles";
@@ -25,6 +25,7 @@ export const USER_ME_URL = USER_BASE_URL + "auths/me";
 export const USER_URL = USER_BASE_URL + "users";
 export const tempToken = "";
 export const GAME_URL = GAME_BASE_URL + "games";
+export const CLIENT_SETTING = GAME_BASE_URL + "clientSettings";
 export const GAME_INSTANCE_URL = GAME_BASE_URL + "gameInstances";
 export const GAME_TRANSACTION_URL = GAME_BASE_URL + "gameTransactions";
 export const GAME_PRICE_URL = GAME_BASE_URL + "prizes";

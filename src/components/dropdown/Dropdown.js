@@ -1,6 +1,11 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./Dropdown.css";
-import { hasClass, addClass, removeClass } from "../../utils/helper";
+import {
+  hasClass,
+  addClass,
+  removeClass,
+  randomIDGenerator
+} from "../../utils/helper";
 import { hasSomeParentTheClass } from "../../utils/helper";
 import propTypes from "prop-types";
 
@@ -9,34 +14,25 @@ const proptypes = {
   active: propTypes.any.isRequired,
   options: propTypes.arrayOf(propTypes.object).isRequired,
   onChange: propTypes.func.isRequired,
-  staticContent: propTypes.bool
+  staticContent: propTypes.bool,
+  fixedContent: propTypes.bool,
+  dropTrigger: propTypes.bool,
+  setDropTrigger: propTypes.func
 };
 
-export class DropDown extends Component {
-  onCLickSet = option => {
-    this.props.onChange(option);
-    this.setState({ active: option.value });
+const DropDown = props => {
+  const onCLickSet = option => {
+    props.onChange(option);
+    setActive(option.value);
   };
 
-  state = {
-    active: this.props.active
-  };
+  const [active, setActive] = useState(props.active);
 
-  dropDownID = 0;
-  dropDownUlID = 0;
+  const dropDownID = randomIDGenerator(10);
+  const dropDownUlID = randomIDGenerator(10);
 
-  dropDownRef = null;
-  dropDownUlRef = null;
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.active !== prevState.active) {
-      return { active: nextProps.active };
-    } else return null;
-  }
-
-  getActive = () => {
-    const { options, staticContent } = this.props;
-    const { active } = this.state;
+  const getActive = () => {
+    const { options, staticContent } = props;
 
     if (staticContent) {
       return active;
@@ -46,15 +42,15 @@ export class DropDown extends Component {
     return <div className="dropdown-content">{activeOption.content}</div>;
   };
 
-  getOptions = () => {
-    const { options, staticContent } = this.props;
+  const getOptions = () => {
+    const { options, staticContent } = props;
     const list = [];
 
     options.map((option, index) => {
       list.push(
         <li
           key={index}
-          onClick={() => (!staticContent ? this.onCLickSet(option) : null)}
+          onClick={() => (!staticContent ? onCLickSet(option) : null)}
         >
           {option.content}
         </li>
@@ -64,20 +60,39 @@ export class DropDown extends Component {
     return list;
   };
 
-  toggleDropDown = id => {
+  useEffect(() => {
+    if (props.dropTrigger) {
+      hideDropDown(dropDownID);
+      props.setDropTrigger(false);
+    }
+  }, [props.dropTrigger]);
+
+  const showDropDown = id => {
     let el = document.getElementById(id);
+    let overlay = el.getElementsByClassName("overlay-drop")[0];
     if (!hasClass(el, "open")) {
       addClass(el, "open");
+      addClass(overlay, "open");
     } else {
-      removeClass(el, "open");
+      if (!props.fixedContent) {
+        removeClass(el, "open");
+        removeClass(overlay, "open");
+      }
     }
   };
 
-  componentDidMount() {
-    document.body.onclick = this.removeDrop;
-  }
+  const hideDropDown = id => {
+    let el = document.getElementById(id);
+    let overlay = el.getElementsByClassName("overlay-drop")[0];
+    removeClass(el, "open");
+    removeClass(overlay, "open");
+  };
 
-  removeDrop = e => {
+  useEffect(() => {
+    document.body.onclick = removeDrop;
+  });
+
+  const removeDrop = e => {
     let dropDownCon = document.getElementsByClassName("dropdown-main");
     for (let i = 0; i < dropDownCon.length; i++) {
       let el = document.getElementById(dropDownCon[parseInt(i, 10)].id);
@@ -90,37 +105,45 @@ export class DropDown extends Component {
     }
   };
 
-  render() {
-    return (
-      <React.Fragment>
+  return (
+    <>
+      <div
+        id={dropDownID}
+        onClick={() => !props.fixedContent && showDropDown(dropDownID)}
+        className="dropdown-main"
+      >
         <div
-          id={this.dropDownID}
-          ref={ref => (this.dropDownRef = ref)}
-          onClick={() => this.toggleDropDown(this.dropDownID)}
-          className="dropdown-main"
+          className="overlay-drop"
+          onClick={_ => props.fixedContent && hideDropDown(dropDownID)}
+        />
+        {props.static ? (
+          <div className="dropdown-content">{props.children}</div>
+        ) : props.fixedContent ? (
+          <span onClick={() => props.fixedContent && showDropDown(dropDownID)}>
+            {props.active}
+          </span>
+        ) : (
+          getActive()
+        )}
+
+        <ul
+          style={{ width: props.dropDownWidth }}
+          id={dropDownUlID}
+          className="dropdown-ul"
         >
-          {this.props.static ? (
-            <div className="dropdown-content">{this.props.children}</div>
-          ) : (
-            this.getActive()
-          )}
-          <ul
-            style={{ width: this.props.dropDownWidth }}
-            id={this.dropDownUlID}
-            ref={ref => (this.dropDownUlRef = ref)}
-            className="dropdown-ul"
-          >
-            {this.getOptions()}
-          </ul>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
+          {props.fixedContent ? props.children : getOptions()}
+        </ul>
+      </div>
+    </>
+  );
+};
 
 DropDown.propTypes = proptypes;
 
 DropDown.defaultProps = {
   dropDownWidth: "100px",
-  staticContent: false
+  staticContent: false,
+  fixedContent: false
 };
+
+export { DropDown };

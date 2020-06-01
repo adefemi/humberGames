@@ -90,12 +90,17 @@ function DatePicker(props) {
 
     const checkPast = val => {
       let today = getToday().getDate();
-      if (props.showToday) {
-        today = getToday().setDate(getToday().getDate() - 1);
-        today = new Date(today).getDate();
-      }
+
       let month = getToday().getMonth() + 1;
       let year = getToday().getFullYear();
+
+      if (props.showToday) {
+        if (activeYear == year) {
+          if (activeMonth == month) {
+            if (val == today) return true;
+          }
+        }
+      }
 
       if (activeYear < year || activeMonth < month) return false;
 

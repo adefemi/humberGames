@@ -70,6 +70,14 @@ function Dashboard(props) {
       }
     );
   };
+
+  const calculateWinningRatio = () => {
+    if (!data.kpiInfo) return 0;
+    return data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays <= 0
+      ? 1
+      : data.kpiInfo.totalGamePlays;
+  };
+
   return (
     <div className="dashboard">
       <div className="flex align-center">
@@ -108,17 +116,17 @@ function Dashboard(props) {
             </center>
           </div>
         </Card>
-        <Card heading="Winning Ration">
+        <Card heading="Winning Ratio">
           <div className="contentCard">
             <center>
               {fetching ? (
                 <Spinner color="#000000" />
               ) : (
                 <h1>
-                  {data.kpiInfo &&
-                    (
-                      data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays
-                    ).toFixed(4)}
+                  {console.log(data.kpiInfo)}
+                  {calculateWinningRatio().length > 6
+                    ? calculateWinningRatio().toFixed(4)
+                    : calculateWinningRatio()}
                 </h1>
               )}
             </center>
