@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
 import { Select } from "../../components/select/Select";
-import { statusMode, statusModeTransaction } from "../../utils/data";
+import {
+  secondaryColor,
+  statusMode,
+  statusModeTransaction
+} from "../../utils/data";
 import TransactionTable from "../../components/transactionTable/transactionTable";
 import Pagination from "../../components/Pagination/pagination";
 import Badge from "../../components/Badge/badge";
@@ -18,8 +22,11 @@ import moment from "moment";
 import ContentModal from "../../components/contentModal/contentModal";
 import FormGroup from "../../components/formGroup/formGroup";
 import qs from "querystring";
-import { GAME_TRANSACTION_URL } from "../../utils/urls";
+import { GAME_TRANSACTION_URL, PAYOUT_URL } from "../../utils/urls";
 import { cleanParameters } from "../campaign/campaign";
+import Divider from "../../components/Divider/divider";
+import { Spinner } from "../../components/spinner/Spinner";
+import { Button } from "../../components/button/Button";
 
 function GameTransactions(props) {
   const headings = [
@@ -78,13 +85,18 @@ function GameTransactions(props) {
     const returnValue = [];
     transactions.map(item => {
       returnValue.push([
-        `${item.id.substring(0, 10)}${item.id.length > 10 && "..."}`,
+        `${item.id.substring(0, 10)}${item.id.length > 10 ? "..." : ""}`,
         `${item.transactionRef.substring(0, 10)}${
           item.transactionRef.length > 10 ? "..." : ""
         }`,
-        item.userId
-          ? `${item.userId.substring(0, 10)}${item.userId.length > 10 && "..."}`
-          : "N/A",
+        item.userId ? (
+          <span>
+            {item.userId.substring(0, 10)}
+            {item.userId.length > 10 && "..."}
+          </span>
+        ) : (
+          "N/A"
+        ),
         item.status ? (
           <Badge
             status={
@@ -100,18 +112,23 @@ function GameTransactions(props) {
         ) : (
           "N/A"
         ),
-        item.gameToken
-          ? `${item.gameToken.substring(0, 10)}${item.gameToken.length > 10 &&
-              "..."}`
-          : "N/A",
-        item.userInput
-          ? `${item.userInput.substring(0, 10)}${item.userInput.length > 10 &&
-              "..."}`
-          : "N/A",
+        item.gameToken ? (
+          <span>
+            {item.gameToken.substring(0, 10)}
+            {item.gameToken.length > 10 && "..."}
+          </span>
+        ) : (
+          "N/A"
+        ),
+        item.userInput ? (
+          <span>
+            {item.userInput.substring(0, 10)}
+            {item.userInput.length > 10 && "..."}
+          </span>
+        ) : (
+          "N/A"
+        ),
         moment(new Date(item.createdAt)).fromNow(),
-        // <span className="link">
-        //   {item.status && item.status.toLowerCase() === "won" && "pay"} |
-        // </span>,
         <span
           className="link"
           onClick={() => {
@@ -174,6 +191,64 @@ function GameTransactions(props) {
 }
 
 export const TransactionDetails = props => {
+  const [fetching, setFetching] = useState(true);
+  const [winningInfo, setWinningInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (
+      props.activeTrans.status &&
+      props.activeTrans.status.toLowerCase() === "won"
+    ) {
+      getWinningInfo();
+    }
+  }, []);
+  const getWinningInfo = () => {
+    setFetching(true);
+    axiosHandler({
+      method: "get",
+      token: getToken(),
+      clientID: getClientId(),
+      url: GAME_TRANSACTION_URL + `/${props.activeTrans.id}/playerWinning`
+    }).then(
+      res => {
+        setWinningInfo(res.data);
+        setFetching(false);
+        setLoading(false);
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+      }
+    );
+  };
+
+  const payNow = () => {
+    const url = PAYOUT_URL + winningInfo.id;
+    setLoading(true);
+    axiosHandler({
+      method: "get",
+      url,
+      clientID: getClientId(),
+      token: getToken()
+    })
+      .then(res => {
+        Notification.bubble({
+          type: "success",
+          content: "Payment initiated"
+        });
+        getWinningInfo();
+      })
+      .catch(err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+        setLoading(false);
+      });
+  };
+
   return (
     <div>
       <h4>Transaction details</h4>
@@ -230,6 +305,63 @@ export const TransactionDetails = props => {
           {moment(new Date(props.activeTrans.createdAt)).fromNow()}
         </div>
       </FormGroup>
+      {props.activeTrans.status &&
+        props.activeTrans.status.toLowerCase() === "won" && (
+          <>
+            <Divider />
+            <div className="flex align-center justify-between">
+              <h3>Winning Info</h3>
+              {!fetching && (
+                <>
+                  {winningInfo.paidAt ? (
+                    <Button
+                      color="default"
+                      disabled
+                      style={{ width: "unset", height: 30 }}
+                    >
+                      Payment Processed
+                    </Button>
+                  ) : (
+                    <Button
+                      disabled={loading}
+                      loading={loading}
+                      onClick={payNow}
+                      style={{ width: "unset", height: 30 }}
+                    >
+                      Pay now
+                    </Button>
+                  )}
+                </>
+              )}
+            </div>
+            {fetching ? (
+              <Spinner color={secondaryColor} />
+            ) : (
+              <div>
+                <FormGroup>
+                  <div className="info">UserID</div>
+                  <div className="context">{winningInfo.userId}</div>
+                </FormGroup>
+                <FormGroup>
+                  <div className="info">Won At</div>
+                  <div className="context">
+                    {winningInfo.wonAt
+                      ? moment(winningInfo.wonAt, "H:m:s").format("h:m a")
+                      : "N/A"}
+                  </div>
+                </FormGroup>
+                <FormGroup>
+                  <div className="info">Paid At</div>
+                  <div className="context">
+                    {winningInfo.paidAt
+                      ? moment(winningInfo.paidAt, "H:m:s").format("h:m a")
+                      : "Awaiting Payment"}
+                  </div>
+                </FormGroup>
+              </div>
+            )}
+          </>
+        )}
     </div>
   );
 };

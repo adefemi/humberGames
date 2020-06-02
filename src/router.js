@@ -23,6 +23,7 @@ const ClientDefinition = lazy(() => import("./pages/login/clientDefinition"));
 const SingleDraw = lazy(() => import("./pages/games/singleDraw"));
 const Users = lazy(() => import("./pages/users/users"));
 const SingleUser = lazy(() => import("./pages/users/singleUser"));
+const Payout = lazy(() => import("./pages/payouts/payouts"));
 
 const RouterMain = props => {
   return (
@@ -81,6 +82,15 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <CreateGame {...props} update />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/payouts"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Payout {...props} />
                     </Suspense>
                   )}
                 />

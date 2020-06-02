@@ -205,6 +205,12 @@ const SideBar = () => {
           icon={<Icon name="volume1" type="feather" />}
         />
         <SideLinks
+          link={"/payouts"}
+          title="Payouts"
+          active={getActive("payouts")}
+          icon={<Icon name="checkSquare" type="feather" />}
+        />
+        <SideLinks
           link={"/sandbox"}
           title="Sandbox"
           active={getActive("sandbox")}

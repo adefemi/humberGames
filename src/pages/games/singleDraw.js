@@ -153,12 +153,11 @@ const DrawOperations = props => {
   const getDrawButton = () => {
     const currentTime = moment(new Date()).unix();
     const drawTime = props.activeDraw.drawTime;
-    let drawEndTime = new Date(props.activeDraw.endTime);
-    drawEndTime = drawEndTime.setMinutes(
-      drawEndTime.getMinutes() +
-        props.activeInstance.gameConfig.delayToDrawInMins
-    );
-    drawEndTime = moment(drawEndTime).unix();
+
+    let drawEndTime =
+      moment(new Date(props.activeDraw.endTime)).unix() +
+      props.activeInstance.gameConfig.delayToDrawInMins * 60;
+
     if (!drawTime && currentTime > drawEndTime) {
       return (
         <Button

@@ -269,3 +269,9 @@ a {
 .padding-20{
   padding: 20px;
 }
+
+.transaction-table-button{
+  &.loading{
+    padding: 0 15px !important;
+  }
+}

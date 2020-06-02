@@ -73,6 +73,7 @@ function Dashboard(props) {
 
   const calculateWinningRatio = () => {
     if (!data.kpiInfo) return 0;
+    if (data.kpiInfo.totalGamePlays <= 0) return 0;
     return data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays <= 0
       ? 1
       : data.kpiInfo.totalGamePlays;
