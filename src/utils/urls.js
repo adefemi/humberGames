@@ -1,5 +1,5 @@
-const stagingBaseUrl = "http://staging.api.humbergames.com/";
-const stagingGameUrl = "http://staging.gaming-service.humbergames.com/";
+const stagingBaseUrl = "https://staging.api.humbergames.com/";
+const stagingGameUrl = "https://staging.gaming-service.humbergames.com/";
 
 const productionBaseUrl = "http://api.humbergames.com/";
 const productionGameUrl = "http://gaming-service.humbergames.com/";
