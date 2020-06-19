@@ -140,3 +140,113 @@ h3{
   }
 }
 
+.bundle-card{
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(black, 0.05);
+  border-left: 4px solid $primary-color;
+
+  *{
+    padding: 0;
+    margin: 0;
+  }
+
+  .top{
+    h3{
+      color:$secondary-color;
+      cursor: pointer;
+    }
+    p{
+      font-size: 13px;
+      margin-top: 10px;
+    }
+  }
+  .bottom{
+    margin-top: 30px;
+
+    h4{
+      font-size: 12px;
+      color: $primary-color;
+    }
+
+    small{
+      font-size: 12px;
+      color: darken(white, 50%);
+    }
+
+    .counter{
+      font-size: 11px;
+      color: white;
+      padding: 2px 5px;
+      background-color: $secondary-color;
+      margin-right: 5px;
+      border-radius: 2px;
+    }
+  }
+
+  .instance_list{
+    margin-top: 15px;
+
+    li{
+      list-style: none;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid darken(white,5%);
+
+      &:last-child{
+        margin-bottom: 0;
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+.bundle-form{
+  padding: 20px;
+  background-color: white;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid darken(white, 10%);
+  border-radius: 4px;
+
+  .top{
+    font-weight: 600;
+    margin-bottom: 30px;
+    margin-left: -10px;
+  }
+
+  .game_id_selection{
+    background-color: darken(white, 3%);
+    padding: 20px;
+
+    h3{
+      padding: 0;
+      margin: 0 0 20px;
+    }
+
+    li{
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid darken(white, 10%);
+      margin-bottom: 10px;
+
+      i{
+        color: $secondary-color;
+        cursor: pointer;
+      }
+
+      &:last-child{
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+}
+

@@ -121,4 +121,98 @@ h3 {
   background-color: #3dd89a;
 }
 
+.bundle-card {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #5B68A4;
+}
+.bundle-card * {
+  padding: 0;
+  margin: 0;
+}
+.bundle-card .top h3 {
+  color: #ff683c;
+  cursor: pointer;
+}
+.bundle-card .top p {
+  font-size: 13px;
+  margin-top: 10px;
+}
+.bundle-card .bottom {
+  margin-top: 30px;
+}
+.bundle-card .bottom h4 {
+  font-size: 12px;
+  color: #5B68A4;
+}
+.bundle-card .bottom small {
+  font-size: 12px;
+  color: gray;
+}
+.bundle-card .bottom .counter {
+  font-size: 11px;
+  color: white;
+  padding: 2px 5px;
+  background-color: #ff683c;
+  margin-right: 5px;
+  border-radius: 2px;
+}
+.bundle-card .instance_list {
+  margin-top: 15px;
+}
+.bundle-card .instance_list li {
+  list-style: none;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f2f2f2;
+}
+.bundle-card .instance_list li:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.bundle-form {
+  padding: 20px;
+  background-color: white;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+}
+.bundle-form .top {
+  font-weight: 600;
+  margin-bottom: 30px;
+  margin-left: -10px;
+}
+.bundle-form .game_id_selection {
+  background-color: #f7f7f7;
+  padding: 20px;
+}
+.bundle-form .game_id_selection h3 {
+  padding: 0;
+  margin: 0 0 20px;
+}
+.bundle-form .game_id_selection li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 10px;
+}
+.bundle-form .game_id_selection li i {
+  color: #ff683c;
+  cursor: pointer;
+}
+.bundle-form .game_id_selection li:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
 /*# sourceMappingURL=games.css.map */

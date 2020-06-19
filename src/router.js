@@ -8,7 +8,10 @@ import ForgotPassword from "./pages/login/forgotPassword";
 import ChangePassword from "./pages/login/changePassword";
 
 const Games = lazy(() => import("./pages/games/games"));
+const Bundles = lazy(() => import("./pages/games/bundles"));
+const NewBundle = lazy(() => import("./pages/games/newBundle"));
 const SingleGame = lazy(() => import("./pages/games/singleGame"));
+const SingleBundle = lazy(() => import("./pages/games/singleBundle"));
 const GameInstance = lazy(() => import("./pages/games/gameInstance"));
 const SandBox = lazy(() => import("./pages/games/sandBox"));
 const Settings = lazy(() => import("./pages/settings/settings"));
@@ -59,6 +62,33 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
+                  path="/game-bundles"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Bundles {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/game-bundles/create"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <NewBundle {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/game-bundle/:uuid/:label"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <SingleBundle {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
                   path="/instance/:uuid/:label"
                   exact
                   component={props => (
@@ -76,6 +106,7 @@ const RouterMain = props => {
                     </Suspense>
                   )}
                 />
+
                 <Route
                   path="/games/update/:uuid/:label"
                   exact

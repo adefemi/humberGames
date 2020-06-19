@@ -313,21 +313,6 @@ function NewReward(props) {
               onChange={e => genericChangeSingle(e, setRewardData, rewardData)}
             />
           </FormGroup>
-          {/*<div className="">*/}
-          {/*<FormGroup label="Draw Frequency (in hours)">*/}
-          {/*  <Input*/}
-          {/*    placeholder="Specify frequency"*/}
-          {/*    name="drawFrequenceInHours"*/}
-          {/*    type="number"*/}
-          {/*    required*/}
-          {/*    value={rewardData.drawFrequenceInHours || ""}*/}
-          {/*    onChange={e =>*/}
-          {/*      genericChangeSingle(e, setRewardData, rewardData)*/}
-          {/*    }*/}
-          {/*  />*/}
-          {/*</FormGroup>*/}
-
-          {/*</div>*/}
           <div className="grid grid-2 grid-gap-2">
             <FormGroup label="Game Instance">
               <Select
@@ -362,25 +347,6 @@ function NewReward(props) {
               />
             </FormGroup>
           </div>
-          {/*<FormGroup label="Next Draw Time">*/}
-          {/*  <div className="grid grid-2 grid-gap-2">*/}
-          {/*    <DatePicker*/}
-          {/*      id={1}*/}
-          {/*      name="nextdrawDate"*/}
-          {/*      required*/}
-          {/*      onChange={e =>*/}
-          {/*        genericChangeSingle(e, setNextDrawInfo, nextDrawInfo)*/}
-          {/*      }*/}
-          {/*    />*/}
-          {/*    <TimePicker*/}
-          {/*      use24H*/}
-          {/*      name="nextdrawTime"*/}
-          {/*      onChange={e =>*/}
-          {/*        genericChangeSingle(e, setNextDrawInfo, nextDrawInfo)*/}
-          {/*      }*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*</FormGroup>*/}
           <br />
           <h3>Qualification Rules</h3>
           {qualificationRules.map((item, index) => {

@@ -193,6 +193,12 @@ const SideBar = () => {
           icon={<Icon name="controller" type="entypo" />}
         />
         <SideLinks
+          link={"/game-bundles"}
+          title="Games Bundles"
+          active={getActive("game-bundles")}
+          icon={<Icon name="ic_dashboard" type="md" />}
+        />
+        <SideLinks
           link={"/rewards"}
           title="Rewards"
           active={getActive("rewards")}

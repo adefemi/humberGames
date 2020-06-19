@@ -226,4 +226,8 @@ a {
   padding: 0 15px !important;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=default.css.map */
