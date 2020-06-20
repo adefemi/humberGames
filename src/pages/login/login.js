@@ -37,7 +37,7 @@ function Login(props) {
   const onSubmit = e => {
     e.preventDefault();
     setLoading(true);
-    const clientID = getClientId();
+    const clientID = activeClient.clientId;
     axiosHandler({
       method: "post",
       url: LOGIN_URL,
