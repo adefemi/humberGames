@@ -108,7 +108,7 @@ function NewReward(props) {
       method: "get",
       token: getToken(),
       clientID: getClientId(),
-      url: GAME_INSTANCE_URL + `?clientId=${activeClient.id}`
+      url: GAME_INSTANCE_URL + `?clientId=${getClientId()}`
     }).then(
       res => {
         if (res.data._embedded && res.data._embedded.gameInstances) {
@@ -163,7 +163,7 @@ function NewReward(props) {
       ...rewardData,
       qualificationRules,
       targetDemographyRules,
-      clientId: activeClient.id
+      clientId: getClientId()
     };
     setLoading(true);
     setActiveData(newData);

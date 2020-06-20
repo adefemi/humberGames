@@ -80,6 +80,15 @@ const RouterMain = props => {
                   )}
                 />
                 <Route
+                  path="/game-bundles/edit/:uuid"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <NewBundle {...props} edit />
+                    </Suspense>
+                  )}
+                />
+                <Route
                   path="/game-bundle/:uuid/:label"
                   exact
                   component={props => (

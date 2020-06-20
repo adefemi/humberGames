@@ -24,6 +24,7 @@ function Dashboard(props) {
   });
 
   useEffect(() => {
+    if (props.bundle) return;
     if (!fetching) {
       setFetching(true);
     }
@@ -31,6 +32,7 @@ function Dashboard(props) {
   }, [dateData]);
 
   useEffect(() => {
+    if (props.bundle) return;
     getDateData();
   }, []);
 

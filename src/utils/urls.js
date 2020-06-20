@@ -26,6 +26,8 @@ export const USER_URL = USER_BASE_URL + "users";
 export const tempToken = "";
 export const GAME_URL = GAME_BASE_URL + "games";
 export const GAME_BUNDLE_URL = GAME_BASE_URL + "gameBundles";
+export const GAME_BUNDLE_TRANSACTION_URL =
+  GAME_BASE_URL + "gameBundleTransactions";
 export const CLIENT_SETTING = GAME_BASE_URL + "clientSettings";
 export const GAME_INSTANCE_URL = GAME_BASE_URL + "gameInstances";
 export const PAYOUT_URL = GAME_BASE_URL + "payout/";

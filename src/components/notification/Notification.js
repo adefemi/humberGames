@@ -44,7 +44,7 @@ export const getIconType = propType => {
 
 const onClose = setVisible => {
   let el = document.querySelector(".notification-main");
-  addClass(el, "close");
+  addClass(el, "closer");
   setTimeout(() => {
     addClass(el, "remove");
     setVisible(false);
@@ -54,7 +54,7 @@ const onClose = setVisible => {
 const onOpen = () => {
   let el = document.querySelector(".notification-main");
   removeClass(el, "remove");
-  removeClass(el, "close");
+  removeClass(el, "closer");
 };
 
 export const Notification = props => {
@@ -88,7 +88,7 @@ const NotificationElement = ({
   children
 }) => (
   <div className={`notification-main ${type}`}>
-    <div className={closable ? "close-button" : "hide"} onClick={onClick}>
+    <div className={closable ? "close-button-main" : "hide"} onClick={onClick}>
       <Icon size={30} icon={arrowsRemove} />
     </div>
 

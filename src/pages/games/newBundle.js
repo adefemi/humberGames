@@ -19,6 +19,7 @@ import { TextAreaField } from "../../components/textarea/TextAreaField";
 import { Button } from "../../components/button/Button";
 import "./games.css";
 import { cleanParameters } from "../campaign/campaign";
+import { Spinner } from "../../components/spinner/Spinner";
 
 function NewBundle(props) {
   const {
@@ -30,6 +31,7 @@ function NewBundle(props) {
   const [gameInstance, setGameInstance] = useState([]);
   const [gameInstanceIds, setGameInstanceIds] = useState([]);
   const [fetchingInstance, setfetchingInstance] = useState(true);
+  const [fetching, setFetching] = useState(props.edit);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -38,14 +40,42 @@ function NewBundle(props) {
       payload: ""
     });
     getGameInstances();
+    if (props.edit) {
+      getActiveBundle();
+    }
   }, []);
+
+  const getActiveBundle = () => {
+    axiosHandler({
+      method: "get",
+      url: GAME_BUNDLE_URL + `/${props.match.params.uuid}`,
+      token: getToken(),
+      clientID: getClientId()
+    }).then(
+      res => {
+        setBundleData({
+          amount: res.data.amount,
+          label: res.data.label,
+          desccription: res.data.desccription
+        });
+        setGameInstanceIds(res.data.gameInstanceIds);
+        setFetching(false);
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+      }
+    );
+  };
 
   const getGameInstances = _ => {
     axiosHandler({
       method: "get",
       token: getToken(),
       clientID: getClientId(),
-      url: GAME_INSTANCE_URL + `?clientId=${activeClient.id}`
+      url: GAME_INSTANCE_URL + `?clientId=${getClientId()}`
     }).then(
       res => {
         if (res.data._embedded && res.data._embedded.gameInstances) {
@@ -89,9 +119,17 @@ function NewBundle(props) {
     }
     setLoading(true);
     const data = cleanParameters({ ...bundleData, gameInstanceIds });
+    data.clientId = getClientId();
+    data.userId = activeClient.userId;
+    let method = "post";
+    let url = GAME_BUNDLE_URL;
+    if (props.edit) {
+      method = "put";
+      url = url + `/${props.match.params.uuid}`;
+    }
     axiosHandler({
-      method: "post",
-      url: GAME_BUNDLE_URL,
+      method,
+      url,
       data,
       token: getToken(),
       clientID: getClientId()
@@ -99,7 +137,7 @@ function NewBundle(props) {
       _ => {
         Notification.bubble({
           type: "success",
-          content: "Bundle created successfully"
+          content: `Bundle ${props.edit ? "updated" : "created"} successfully`
         });
         props.history.push("/game-bundles");
       },
@@ -112,6 +150,10 @@ function NewBundle(props) {
       }
     );
   };
+
+  if (fetching) {
+    return <Spinner color={secondaryColor} />;
+  }
 
   return (
     <div>
@@ -128,7 +170,7 @@ function NewBundle(props) {
                 className="cursor-pointer"
               />
             </span>
-            &nbsp; Create New Game Bundle
+            &nbsp; {props.edit ? "Update Bundle" : "Create New Game Bundle"}
           </span>
         </div>
         <FormGroup label="Bundle Label">
@@ -150,11 +192,6 @@ function NewBundle(props) {
               name="gameInstanceIds"
               dontSetValue
               onChange={updateIdList}
-              // defaultOption={
-              //     props.update &&
-              //     !fetchingInstance &&
-              //     getDefaultInstance(gameInstance, rewardData.gameInstance)
-              // }
               optionList={gameInstance}
             />
           </FormGroup>
@@ -193,7 +230,7 @@ function NewBundle(props) {
         <br />
         <br />
         <Button type="submit" loading={loading} disabled={loading}>
-          Create Bundle
+          {props.edit ? "Update" : "Create Bundle"}
         </Button>
       </form>
       <br />

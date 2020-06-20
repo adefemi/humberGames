@@ -13,11 +13,12 @@
   margin-bottom: 20px;
   z-index: 100000001;
 
-  .close-button {
+  .close-button-main {
     position: absolute;
     right: 0;
     top: 0;
     display: block;
+    color: white !important;
     cursor: pointer;
   }
 
@@ -55,13 +56,17 @@
   color: black;
 }
 
-.notification-main.close {
+.notification-main.closer {
   visibility: hidden;
   opacity: 0;
 }
 
 .notification-main.remove {
   display: none !important;
+}
+
+.icon-contain{
+  color: white !important;
 }
 
 #notification-root {
@@ -80,7 +85,7 @@
   animation: animateNotificationBubble 0.3s ease-in-out forwards;
 
   @media screen and (max-width: 480px) {
-    width: unset;
+    width: 100%;
   }
 }
 

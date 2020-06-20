@@ -4,7 +4,11 @@ import logo from "../../assets/images/logo.jpg";
 import FormGroup from "../../components/formGroup/formGroup";
 import Input from "../../components/input/Input";
 import { Button } from "../../components/button/Button";
-import { errorHandler, genericChangeSingle } from "../../utils/helper";
+import {
+  errorHandler,
+  genericChangeSingle,
+  getClientId
+} from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import { USERTOKEN } from "../../utils/data";
 import { axiosHandler } from "../../utils/axiosHandler";
@@ -30,7 +34,7 @@ function Login(props) {
   const onSubmit = e => {
     e.preventDefault();
     setLoading(true);
-    const clientID = activeClient.clientId;
+    const clientID = getClientId();
     axiosHandler({
       method: "get",
       url: RESET_CODE_URL + `?email=${loginData.email}`,

@@ -22,14 +22,18 @@ import moment from "moment";
 import ContentModal from "../../components/contentModal/contentModal";
 import FormGroup from "../../components/formGroup/formGroup";
 import qs from "querystring";
-import { GAME_TRANSACTION_URL, PAYOUT_URL } from "../../utils/urls";
+import {
+  GAME_BUNDLE_TRANSACTION_URL,
+  GAME_TRANSACTION_URL,
+  PAYOUT_URL
+} from "../../utils/urls";
 import { cleanParameters } from "../campaign/campaign";
 import Divider from "../../components/Divider/divider";
 import { Spinner } from "../../components/spinner/Spinner";
 import { Button } from "../../components/button/Button";
 
 function GameTransactions(props) {
-  const headings = [
+  let headings = [
     "ID",
     "Transaction Ref",
     "User ID",
@@ -39,6 +43,9 @@ function GameTransactions(props) {
     "Draw TIme",
     ""
   ];
+  if (props.bundle) {
+    headings = ["ID", "Transaction Ref", "User ID", "User Input", ""];
+  }
   const [transactions, setTransaction] = useState([]);
   const [fetching, setFetching] = useState(true);
   const [modalShow, setModalShow] = useState(false);
@@ -58,18 +65,30 @@ function GameTransactions(props) {
     if (!fetching) {
       setFetching(true);
     }
+    let url =
+      GAME_TRANSACTION_URL +
+      `?${props.user ? "userId" : props.draw ? "draw" : "gameInstance"}=${
+        props.match.params.uuid
+      }&size=20&${extra}`;
+    if (props.bundle) {
+      url =
+        GAME_BUNDLE_TRANSACTION_URL +
+        `?id=${props.match.params.uuid}&size=20&${extra}`;
+    }
     axiosHandler({
       method: "get",
-      url:
-        GAME_TRANSACTION_URL +
-        `?${props.user ? "userId" : props.draw ? "draw" : "gameInstance"}=${
-          props.match.params.uuid
-        }&size=20&${extra}`,
+      url,
       clientID: getClientId(),
       token: getToken()
     })
       .then(res => {
-        setTransaction(res.data._embedded.gameTransactions);
+        let data;
+        if (props.bundle) {
+          data = res.data._embedded.gameBundleTransactions;
+        } else {
+          data = res.data._embedded.gameTransactions;
+        }
+        setTransaction(data);
         setPageInfo(res.data.page);
         setFetching(false);
       })
@@ -83,64 +102,101 @@ function GameTransactions(props) {
 
   const formatTransactions = () => {
     const returnValue = [];
-    transactions.map(item => {
-      returnValue.push([
-        `${item.id.substring(0, 10)}${item.id.length > 10 ? "..." : ""}`,
-        `${item.transactionRef.substring(0, 10)}${
-          item.transactionRef.length > 10 ? "..." : ""
-        }`,
-        item.userId ? (
-          <span>
-            {item.userId.substring(0, 10)}
-            {item.userId.length > 10 && "..."}
-          </span>
-        ) : (
-          "N/A"
-        ),
-        item.status ? (
-          <Badge
-            status={
-              item.status.toLowerCase() === "won"
-                ? "success"
-                : item.status.toLowerCase() === "lost"
-                ? "error"
-                : "processing"
-            }
+    if (props.bundle) {
+      transactions.map(item => {
+        returnValue.push([
+          `${item.id.substring(0, 10)}${item.id.length > 10 ? "..." : ""}`,
+          `${item.transactionRef.substring(0, 10)}${
+            item.transactionRef.length > 10 ? "..." : ""
+          }`,
+          item.userId ? (
+            <span>
+              {item.userId.substring(0, 10)}
+              {item.userId.length > 10 && "..."}
+            </span>
+          ) : (
+            "N/A"
+          ),
+          item.userInput ? (
+            <span>
+              {item.userInput.substring(0, 10)}
+              {item.userInput.length > 10 && "..."}
+            </span>
+          ) : (
+            "N/A"
+          ),
+          <span
+            className="link"
+            onClick={() => {
+              setActiveTransaction(item);
+              setModalShow(true);
+            }}
           >
-            {item.status}
-          </Badge>
-        ) : (
-          "N/A"
-        ),
-        item.gameToken ? (
-          <span>
-            {item.gameToken.substring(0, 10)}
-            {item.gameToken.length > 10 && "..."}
+            View Transaction
           </span>
-        ) : (
-          "N/A"
-        ),
-        item.userInput ? (
-          <span>
-            {item.userInput.substring(0, 10)}
-            {item.userInput.length > 10 && "..."}
+        ]);
+        return null;
+      });
+    } else {
+      transactions.map(item => {
+        returnValue.push([
+          `${item.id.substring(0, 10)}${item.id.length > 10 ? "..." : ""}`,
+          `${item.transactionRef.substring(0, 10)}${
+            item.transactionRef.length > 10 ? "..." : ""
+          }`,
+          item.userId ? (
+            <span>
+              {item.userId.substring(0, 10)}
+              {item.userId.length > 10 && "..."}
+            </span>
+          ) : (
+            "N/A"
+          ),
+          item.status ? (
+            <Badge
+              status={
+                item.status.toLowerCase() === "won"
+                  ? "success"
+                  : item.status.toLowerCase() === "lost"
+                  ? "error"
+                  : "processing"
+              }
+            >
+              {item.status}
+            </Badge>
+          ) : (
+            "N/A"
+          ),
+          item.gameToken ? (
+            <span>
+              {item.gameToken.substring(0, 10)}
+              {item.gameToken.length > 10 && "..."}
+            </span>
+          ) : (
+            "N/A"
+          ),
+          item.userInput ? (
+            <span>
+              {item.userInput.substring(0, 10)}
+              {item.userInput.length > 10 && "..."}
+            </span>
+          ) : (
+            "N/A"
+          ),
+          moment(new Date(item.createdAt)).fromNow(),
+          <span
+            className="link"
+            onClick={() => {
+              setActiveTransaction(item);
+              setModalShow(true);
+            }}
+          >
+            View Transaction
           </span>
-        ) : (
-          "N/A"
-        ),
-        moment(new Date(item.createdAt)).fromNow(),
-        <span
-          className="link"
-          onClick={() => {
-            setActiveTransaction(item);
-            setModalShow(true);
-          }}
-        >
-          View Transaction
-        </span>
-      ]);
-      return null;
-    });
+        ]);
+        return null;
+      });
+    }
     return returnValue;
   };
 

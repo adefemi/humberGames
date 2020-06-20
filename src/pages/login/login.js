@@ -7,6 +7,7 @@ import { Button } from "../../components/button/Button";
 import {
   errorHandler,
   genericChangeSingle,
+  getClientId,
   updateExpiration
 } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
@@ -36,7 +37,7 @@ function Login(props) {
   const onSubmit = e => {
     e.preventDefault();
     setLoading(true);
-    const clientID = activeClient.clientId;
+    const clientID = getClientId();
     axiosHandler({
       method: "post",
       url: LOGIN_URL,

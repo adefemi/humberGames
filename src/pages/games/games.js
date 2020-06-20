@@ -47,7 +47,7 @@ function Games(props) {
       method: "get",
       url:
         GAME_LICENSE_URL +
-        `?projection=licenseWithGame&${extra}&clientId=${activeClient.id}&size=3`,
+        `?projection=licenseWithGame&${extra}&clientId=${getClientId()}&size=3`,
       token: getToken(),
       clientID: getClientId()
     }).then(res => {

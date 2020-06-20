@@ -85,8 +85,8 @@ export const campaignNetworkOptions = [
 
 export const timeSortOption = [
   { title: "All", value: "" },
-  { title: "Newest first", value: "createdAt,asc" },
-  { title: "Oldest first", value: "createdAt,desc" }
+  { title: "Newest first", value: "createdAt,desc" },
+  { title: "Oldest first", value: "createdAt,asc" }
 ];
 
 export const maritalStatusOption = [
