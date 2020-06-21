@@ -55,7 +55,7 @@ function Bundles(props) {
     }
     axiosHandler({
       method: "get",
-      url: GAME_BUNDLE_URL + `?${extra}&size=3`,
+      url: GAME_BUNDLE_URL + `?${extra}&size=6`,
       token: getToken(),
       clientID: getClientId()
     }).then(res => {

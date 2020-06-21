@@ -3,59 +3,42 @@ import "./transactionTable.css";
 import proptype from "prop-types";
 import { Spinner } from "../spinner/Spinner";
 
-function TransactionTable({ keys, values, loading, canClick, onClick }) {
-  if (!loading) {
-    if (!keys || !values) {
-      return <div />;
-    }
+function TransactionTable({ keys, values, loading }) {
+  if (!keys || !values) {
+    return <div />;
   }
-
-  const getTableItems = item => {
-    const returnValue = [];
-    for (let i = 0; i < item.length; i++) {
-      if (canClick && i === item.length - 1) continue;
-      returnValue.push(<td key={i}>{item[i]}</td>);
-    }
-    return returnValue;
-  };
-
   return (
-    <div className="table-cover">
-      <div className="transactionTable">
-        <table>
-          <thead>
-            <tr>
-              {keys.map((item, index) => (
-                <th key={index}>{item}</th>
-              ))}
-            </tr>
-          </thead>
-          {loading ? (
-            <div className="loading">
-              <Spinner />
-            </div>
-          ) : (
-            <tbody>
-              {values.map((item, index) => (
-                <tr
-                  key={index}
-                  className={canClick ? "hoverable" : ""}
-                  onClick={() => {
-                    if (canClick && onClick) {
-                      onClick(item[item.length - 1]);
-                    }
-                  }}
-                >
-                  {getTableItems(item)}
-                </tr>
-              ))}
-              {values.length < 1 && (
-                <div className="noData">No data found...</div>
-              )}
-            </tbody>
-          )}
-        </table>
-      </div>
+    <div className="transaction_table_main">
+      <table className="inner_main">
+        <thead className="heading">
+          {keys.map((item, index) => (
+            <th className="thead" key={index}>
+              {item}
+            </th>
+          ))}
+        </thead>
+        {!loading && (
+          <tbody>
+            {values.map((item, index) => (
+              <tr className="body" key={index}>
+                {item.map((content, key) => (
+                  <td className="tbody" key={key}>
+                    {content}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        )}
+      </table>
+      {values.length < 1 && !loading && (
+        <div className="noData">No data found...</div>
+      )}
+      {loading && (
+        <div className="noData">
+          <Spinner color="#c3c3c3" />
+        </div>
+      )}
     </div>
   );
 }

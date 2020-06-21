@@ -31,6 +31,7 @@ import { cleanParameters } from "../campaign/campaign";
 import Divider from "../../components/Divider/divider";
 import { Spinner } from "../../components/spinner/Spinner";
 import { Button } from "../../components/button/Button";
+import TransactionDetailsTwo from "./transactionDetailsTwo";
 
 function GameTransactions(props) {
   let headings = [
@@ -44,7 +45,7 @@ function GameTransactions(props) {
     ""
   ];
   if (props.bundle) {
-    headings = ["ID", "Transaction Ref", "User ID", "User Input", ""];
+    headings = ["Transaction Ref", "User ID", "User Input", ""];
   }
   const [transactions, setTransaction] = useState([]);
   const [fetching, setFetching] = useState(true);
@@ -54,6 +55,7 @@ function GameTransactions(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({});
   const [search, setSearch] = useState("");
+  const [showDetails2, setShowDetails2] = useState(false);
 
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
@@ -65,6 +67,7 @@ function GameTransactions(props) {
     if (!fetching) {
       setFetching(true);
     }
+    console.log(props);
     let url =
       GAME_TRANSACTION_URL +
       `?${props.user ? "userId" : props.draw ? "draw" : "gameInstance"}=${
@@ -73,7 +76,12 @@ function GameTransactions(props) {
     if (props.bundle) {
       url =
         GAME_BUNDLE_TRANSACTION_URL +
-        `?id=${props.match.params.uuid}&size=20&${extra}`;
+        `?game_bundle_id=${props.match.params.uuid}&size=20&${extra}`;
+    }
+    if (props.transRef) {
+      url =
+        GAME_TRANSACTION_URL +
+        `?transactionRef=${props.transRef}&size=20&${extra}`;
     }
     axiosHandler({
       method: "get",
@@ -105,7 +113,6 @@ function GameTransactions(props) {
     if (props.bundle) {
       transactions.map(item => {
         returnValue.push([
-          `${item.id.substring(0, 10)}${item.id.length > 10 ? "..." : ""}`,
           `${item.transactionRef.substring(0, 10)}${
             item.transactionRef.length > 10 ? "..." : ""
           }`,
@@ -129,7 +136,7 @@ function GameTransactions(props) {
             className="link"
             onClick={() => {
               setActiveTransaction(item);
-              setModalShow(true);
+              setShowDetails2(true);
             }}
           >
             View Transaction
@@ -202,45 +209,64 @@ function GameTransactions(props) {
 
   return (
     <div>
-      <div className="flex align-center justify-between">
-        <div>
-          <div className="lease-search-box">
-            <Input
-              placeholder="Search ID"
-              iconRight={<AppIcon name="search" type="feather" />}
+      {showDetails2 && (
+        <TransactionDetailsTwo
+          {...props}
+          activeTransaction={activeTransaction}
+          setDetails2={setShowDetails2}
+        />
+      )}
+      {!showDetails2 && (
+        <div className="flex align-center justify-between">
+          <div>
+            <div className="lease-search-box">
+              <Input
+                placeholder="Search ID"
+                iconRight={<AppIcon name="search" type="feather" />}
+              />
+            </div>
+          </div>
+          <div className="flex align-center props">
+            &nbsp;
+            <Select
+              className="lease-search-box"
+              name="status"
+              defaultOption={statusModeTransaction[0]}
+              optionList={statusModeTransaction}
+              onChange={e =>
+                genericChangeSingle(e, setQueryParams, queryParams)
+              }
             />
           </div>
         </div>
-        <div className="flex align-center props">
-          &nbsp;
-          <Select
-            className="lease-search-box"
-            name="status"
-            defaultOption={statusModeTransaction[0]}
-            optionList={statusModeTransaction}
-            onChange={e => genericChangeSingle(e, setQueryParams, queryParams)}
-          />
-        </div>
-      </div>
-      <br />
-      <br />
-      <TransactionTable
-        keys={headings}
-        values={formatTransactions()}
-        loading={fetching}
-      />
-      <br />
-      {!fetching && transactions.length > 0 && (
-        <Pagination
-          counter={pageInfo.size}
-          total={pageInfo.totalElements}
-          current={currentPage}
-          onChange={setCurrentPage}
-        />
       )}
+      {!showDetails2 && (
+        <>
+          <br />
+          <br />
+          <TransactionTable
+            keys={headings}
+            values={formatTransactions()}
+            loading={fetching}
+          />
+          <br />
+          {!fetching && transactions.length > 0 && (
+            <Pagination
+              counter={pageInfo.size}
+              total={pageInfo.totalElements}
+              current={currentPage}
+              onChange={setCurrentPage}
+            />
+          )}
+        </>
+      )}
+
       <br />
       <ContentModal visible={modalShow} setVisible={setModalShow}>
-        <TransactionDetails activeTrans={activeTransaction} />
+        <TransactionDetails
+          activeTrans={activeTransaction}
+          bundle={props.bundle}
+        />
       </ContentModal>
     </div>
   );
@@ -309,10 +335,12 @@ export const TransactionDetails = props => {
     <div>
       <h4>Transaction details</h4>
       <br />
-      <FormGroup>
-        <div className="info">ID</div>
-        <div className="context">{props.activeTrans.id}</div>
-      </FormGroup>
+      {!props.bundle && (
+        <FormGroup>
+          <div className="info">ID</div>
+          <div className="context">{props.activeTrans.id}</div>
+        </FormGroup>
+      )}
       <FormGroup>
         <div className="info">Transaction Ref</div>
         <div className="context">{props.activeTrans.transactionRef}</div>
@@ -323,44 +351,52 @@ export const TransactionDetails = props => {
           {props.activeTrans.userId ? props.activeTrans.userId : "N/A"}
         </div>
       </FormGroup>
-      <FormGroup>
-        <div className="info">Status</div>
-        <div className="context">
-          {props.activeTrans.status ? (
-            <Badge
-              status={
-                props.activeTrans.status.toLowerCase() === "won"
-                  ? "success"
-                  : props.activeTrans.status.toLowerCase() === "lost"
-                  ? "error"
-                  : "processing"
-              }
-            >
-              {props.activeTrans.status}
-            </Badge>
-          ) : (
-            "N/A"
-          )}
-        </div>
-      </FormGroup>
-      <FormGroup>
-        <div className="info">Game Token</div>
-        <div className="context">
-          {props.activeTrans.gameToken ? props.activeTrans.gameToken : "N/A"}
-        </div>
-      </FormGroup>
+      {!props.bundle && (
+        <FormGroup>
+          <div className="info">Status</div>
+          <div className="context">
+            {props.activeTrans.status ? (
+              <Badge
+                status={
+                  props.activeTrans.status.toLowerCase() === "won"
+                    ? "success"
+                    : props.activeTrans.status.toLowerCase() === "lost"
+                    ? "error"
+                    : "processing"
+                }
+              >
+                {props.activeTrans.status}
+              </Badge>
+            ) : (
+              "N/A"
+            )}
+          </div>
+        </FormGroup>
+      )}
+      {!props.bundle && (
+        <FormGroup>
+          <div className="info">Game Token</div>
+          <div className="context">
+            {props.activeTrans.gameToken ? props.activeTrans.gameToken : "N/A"}
+          </div>
+        </FormGroup>
+      )}
+
       <FormGroup>
         <div className="info">User Input</div>
         <div className="context">
           {props.activeTrans.userInput ? props.activeTrans.userInput : "N/A"}
         </div>
       </FormGroup>
-      <FormGroup>
-        <div className="info">Draw TIme</div>
-        <div className="context">
-          {moment(new Date(props.activeTrans.createdAt)).fromNow()}
-        </div>
-      </FormGroup>
+      {!props.bundle && (
+        <FormGroup>
+          <div className="info">Draw TIme</div>
+          <div className="context">
+            {moment(new Date(props.activeTrans.createdAt)).fromNow()}
+          </div>
+        </FormGroup>
+      )}
+
       {props.activeTrans.status &&
         props.activeTrans.status.toLowerCase() === "won" && (
           <>

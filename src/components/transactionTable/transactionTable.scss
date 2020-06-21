@@ -1,64 +1,46 @@
 @import "../../styles/theme";
 
-.transactionTable {
-  table {
-    display: block;
-    background-color: white;
-    overflow-x: auto;
-  }
-  width: 100%;
+
+.transaction_table_main{
+  overflow: auto;
 
   .noData{
-    padding: 30px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: darken(white, 50%);
-  }
-  thead {
-    background-color: darken(white, 5%);
-    width: 100%;
-    display: block;
-    vertical-align: unset;
-  }
-  tbody {
-    width: 100%;
-    display: block;
-    vertical-align: unset;
-
-    tr {
-      border-bottom: 1px solid darken(white, 3%);
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      &.hoverable:hover{
-        background-color: darken(white, 1%);
-        cursor: pointer;
-      }
-    }
-  }
-  tr {
-    min-height: 40px;
+    height: 100px;
     display: flex;
     align-items: center;
-    padding: 10px;
-  }
-  th,
-  td {
-    flex: 1;
-    font-size: 12px;
-    text-align: left;
-    padding-left: 20px;
-    min-width: 100px;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    font-family: $secondary_font;
+    font-weight: 500;
+    color: darken(white, 40%);
   }
 
-  .loading{
-    padding: 40px;
-    text-align: center;
-    .lds-dual-ring{
-      border-color: rgba($primary-color, 0.5);
-    }
+  table{
+    width: 100%;
   }
+
+  th, td{
+    padding: 10px 20px;
+  }
+
+  th{
+    font-size: 14px;
+    text-align: left;
+  }
+
+  td{
+    font-size: 15px;
+    font-family: $secondary_font;
+    min-width: 50px;
+  }
+
+  thead{
+    background-color: darken(white, 10%);
+  }
+
+  tbody{
+    background-color: white;
+  }
+
 }

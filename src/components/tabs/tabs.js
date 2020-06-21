@@ -15,7 +15,7 @@ export const Tabs = props => {
 
   return (
     <div className="tabs-container">
-      <div className="heading">
+      <div className="head">
         {heading.map((item, id) => (
           <div
             onClick={() => {

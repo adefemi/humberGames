@@ -1,60 +1,38 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap");
-.transactionTable {
-  width: 100%;
+.transaction_table_main {
+  overflow: auto;
 }
-.transactionTable table {
-  display: block;
-  background-color: white;
-  overflow-x: auto;
-}
-.transactionTable .noData {
-  padding: 30px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: gray;
-}
-.transactionTable thead {
-  background-color: #f2f2f2;
-  width: 100%;
-  display: block;
-  vertical-align: unset;
-}
-.transactionTable tbody {
-  width: 100%;
-  display: block;
-  vertical-align: unset;
-}
-.transactionTable tbody tr {
-  border-bottom: 1px solid #f7f7f7;
-}
-.transactionTable tbody tr:last-child {
-  border-bottom: none;
-}
-.transactionTable tbody tr.hoverable:hover {
-  background-color: #fcfcfc;
-  cursor: pointer;
-}
-.transactionTable tr {
-  min-height: 40px;
+.transaction_table_main .noData {
+  height: 100px;
   display: flex;
   align-items: center;
-  padding: 10px;
-}
-.transactionTable th,
-.transactionTable td {
-  flex: 1;
-  font-size: 12px;
-  text-align: left;
-  padding-left: 20px;
-  min-width: 100px;
-}
-.transactionTable .loading {
-  padding: 40px;
+  justify-content: center;
   text-align: center;
+  background-color: white;
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 500;
+  color: #999999;
 }
-.transactionTable .loading .lds-dual-ring {
-  border-color: rgba(91, 104, 164, 0.5);
+.transaction_table_main table {
+  width: 100%;
+}
+.transaction_table_main th, .transaction_table_main td {
+  padding: 10px 20px;
+}
+.transaction_table_main th {
+  font-size: 14px;
+  text-align: left;
+}
+.transaction_table_main td {
+  font-size: 15px;
+  font-family: "Nunito Sans", sans-serif;
+  min-width: 50px;
+}
+.transaction_table_main thead {
+  background-color: #e6e6e6;
+}
+.transaction_table_main tbody {
+  background-color: white;
 }
 
 /*# sourceMappingURL=transactionTable.css.map */
