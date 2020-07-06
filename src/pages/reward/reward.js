@@ -45,7 +45,7 @@ function Reward(props) {
     }
     axiosHandler({
       method: "get",
-      url: REWARDS_URL + `?${extra}&size=20`,
+      url: REWARDS_URL + `?${extra}&size=20&clientId=${getClientId()}`,
       token: getToken(),
       clientID: getClientId()
     }).then(
