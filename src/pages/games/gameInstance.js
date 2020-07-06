@@ -62,7 +62,11 @@ function GameInstances(props) {
     if (!props.embedded) {
       axiosHandler({
         method: "get",
-        url: GAME_INSTANCE_URL + `?gameId=${props.match.params.uuid}`,
+        url:
+          GAME_INSTANCE_URL +
+          `?gameId=${
+            props.match.params.uuid
+          }&clientId=${getClientId()}&size=10&${extra}`,
         clientID: getClientId(),
         token: getToken()
       }).then(res => {
