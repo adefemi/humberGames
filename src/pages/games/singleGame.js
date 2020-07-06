@@ -48,19 +48,19 @@ function Games(props) {
         console.log(activeInstanceMain);
         setActiveInstance(activeInstanceMain);
         setGameLink(
-          activeInstanceMain._links.game.href.replace("{projection}", "")
+          activeInstanceMain._links.game.href.replace("{?projection}", "")
         );
         setTransactionLink(
           activeInstanceMain._links.gameTransactions.href.replace(
-            "{projection}",
+            "{?projection}",
             ""
           )
         );
         setPrizesLink(
-          activeInstanceMain._links.prizes.href.replace("{projection}", "")
+          activeInstanceMain._links.prizes.href.replace("{?projection}", "")
         );
         setDrawsLink(
-          activeInstanceMain._links.draws.href.replace("{projection}", "")
+          activeInstanceMain._links.draws.href.replace("{?projection}", "")
         );
         setFetching(false);
       })
