@@ -1,35 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
-import { Select } from "../../components/select/Select";
-import {
-  secondaryColor,
-  statusMode,
-  statusModeTransaction
-} from "../../utils/data";
 import TransactionTable from "../../components/transactionTable/transactionTable";
 import Pagination from "../../components/Pagination/pagination";
 import Badge from "../../components/Badge/badge";
 import { axiosHandler } from "../../utils/axiosHandler";
-import {
-  errorHandler,
-  genericChangeSingle,
-  getClientId,
-  getToken
-} from "../../utils/helper";
+import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
-import ContentModal from "../../components/contentModal/contentModal";
-import FormGroup from "../../components/formGroup/formGroup";
 import qs from "querystring";
-import {
-  CUSTOMER_WINNING_URL,
-  GAME_TRANSACTION_URL,
-  PAYOUT_URL
-} from "../../utils/urls";
+import { CUSTOMER_WINNING_URL, PAYOUT_URL } from "../../utils/urls";
 import { cleanParameters } from "../campaign/campaign";
-import Divider from "../../components/Divider/divider";
-import { Spinner } from "../../components/spinner/Spinner";
 import { Button } from "../../components/button/Button";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
@@ -38,7 +19,6 @@ function GameTransactions(props) {
   const headings = ["UserID", "WonAt", "PaidAt", ""];
   const [transactions, setTransaction] = useState([]);
   const [fetching, setFetching] = useState(true);
-  const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,7 +36,9 @@ function GameTransactions(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
-    extra += `&${qs.stringify(cleanParameters(queryParams))}`;
+    extra += `&${qs.stringify(
+      cleanParameters(queryParams)
+    )}&clientId=${getClientId()}`;
     getTransactions(extra);
   }, [search, queryParams, currentPage]);
 

@@ -14,6 +14,8 @@ export const RESET_CODE_URL = USER_BASE_URL + "passwords/reset";
 export const CAMPAIGN_BASE_URL = BASE_URL + "campaigns/v1";
 export const ETL_BASE_URL = BASE_URL + "etl-filter/";
 export const NOTIFICATION_BASE_URL = BASE_URL + "notifications/v1/";
+export const PRODUCT_BASE_URL = BASE_URL + "products/v1/";
+export const BILLING_BASE_URL = BASE_URL + "billings";
 export const GAME_BASE_URL =
   host[0] === "client" ? productionGameUrl : stagingGameUrl;
 
@@ -50,5 +52,10 @@ export const NOTIFICATION_LOGS_URL = NOTIFICATION_BASE_URL + "sms/logs";
 export const DRAWS_URL = GAME_BASE_URL + "draws";
 export const DRAW_EXECUTE_DRAW_URL = GAME_BASE_URL + "execute/draw/";
 export const DRAW_EXECUTE_QUALIFY_URL = GAME_BASE_URL + "execute/qualify/";
+
 export const NOTIFICATION_STATUS_URL =
   NOTIFICATION_BASE_URL + "sms/status?campaignId=";
+
+export const PRODUCTS_URL = PRODUCT_BASE_URL + "product";
+export const WALLET_TRANSACTIONS_URL =
+  BILLING_BASE_URL + "/wallet-transactions";

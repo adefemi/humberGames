@@ -120,6 +120,12 @@ export const statusModeCampaign = [
   { title: "Failed", value: "failed" }
 ];
 
+export const walletTransOption = [
+  { title: "All", value: "" },
+  { title: "Debit", value: "debit" },
+  { title: "Credit", value: "credit" }
+];
+
 export const durationType = [
   { title: "Daily", value: "daily" },
   { title: "Weekly", value: "weekly" },

@@ -27,6 +27,8 @@ const SingleDraw = lazy(() => import("./pages/games/singleDraw"));
 const Users = lazy(() => import("./pages/users/users"));
 const SingleUser = lazy(() => import("./pages/users/singleUser"));
 const Payout = lazy(() => import("./pages/payouts/payouts"));
+const Products = lazy(() => import("./pages/products/products"));
+const Billings = lazy(() => import("./pages/billings/billings"));
 
 const RouterMain = props => {
   return (
@@ -177,6 +179,26 @@ const RouterMain = props => {
                   component={props => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <SandBox {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/products"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Products {...props} />
+                    </Suspense>
+                  )}
+                />
+
+                <Route
+                  path="/billings"
+                  exact
+                  component={props => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Billings {...props} />
                     </Suspense>
                   )}
                 />

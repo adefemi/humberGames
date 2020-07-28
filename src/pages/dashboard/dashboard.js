@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./dashboard.css";
 import { Card } from "../../components/card/Card";
-import { DATA, OPTIONS, DATA2, OPTIONS2 } from "./transactionGraphData";
+import { DATA, OPTIONS } from "./transactionGraphData";
 import Graph from "../../components/graph/Graph";
 import DatePicker from "../../components/DatePicker/datePicker";
 import { axiosHandler } from "../../utils/axiosHandler";
