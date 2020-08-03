@@ -9,7 +9,7 @@ import {
   getClientId,
   getToken
 } from "../../utils/helper";
-import { CAMPAIGN_URL } from "../../utils/urls";
+import { CAMPAIGN_URL, PRODUCTS_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import Badge from "../../components/Badge/badge";
 import moment from "moment";
@@ -50,11 +50,12 @@ function Products(props) {
       method: "get",
       clientID: getClientId(),
       token: getToken(),
-      url: CAMPAIGN_URL + `/sms?limit=20&${extra}&clientId=${getClientId()}`
+      url: PRODUCTS_URL
     }).then(
       res => {
-        setCampaigns(res.data);
-        setFetching(false);
+        console.log(res.data);
+        // setCampaigns(res.data);
+        // setFetching(false);
       },
       err => {
         Notification.bubble({
@@ -133,7 +134,7 @@ function Products(props) {
         <div>
           <div className="lease-search-box">
             <Input
-              placeholder="Search campaigns"
+              placeholder="Search products"
               iconRight={<AppIcon name="search" type="feather" />}
               debounce
               onChange={e => setSearch(e.target.value)}

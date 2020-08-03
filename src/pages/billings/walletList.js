@@ -37,6 +37,14 @@ function WalletList(props) {
     if (!fetching) {
       setFetching(true);
     }
+    if(props.user){
+      if(props.fetching)return;
+      extra = extra + `walletId=${props.walletID}`
+      if(props.walletID === 0){
+        setFetching(false);
+        return;
+      }
+    }
     axiosHandler({
       method: "get",
       clientID: getClientId(),

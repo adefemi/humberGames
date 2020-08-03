@@ -59,3 +59,6 @@ export const NOTIFICATION_STATUS_URL =
 export const PRODUCTS_URL = PRODUCT_BASE_URL + "product";
 export const WALLET_TRANSACTIONS_URL =
   BILLING_BASE_URL + "/wallet-transactions";
+export const USER_WALLET_URL = BILLING_BASE_URL + "/wallets";
+export const USER_TRANSACTION_URL = BILLING_BASE_URL + "/transactions";
+export const ANALYTICS_URL = BILLING_BASE_URL + "/analytics/";

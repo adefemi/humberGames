@@ -34,6 +34,7 @@ import {
 import { Modal } from "../../components/modal/Modal";
 import { QualificationRuleForm } from "../reward/newReward";
 import "../reward/reward.css";
+import _ from "lodash"
 
 function NewCampaign(props) {
   const [active, setActive] = useState("sms");
@@ -107,15 +108,20 @@ function NewCampaign(props) {
       })
     ]).then(
       (activeCamp, settingsMain) => {
+        if(!_.get(activeCamp, "data.data.title", null)){
+          activeCamp = activeCamp[0]
+        }
         let data = {
-          title: activeCamp.data.data.title,
-          message: activeCamp.data.data.message,
-          sender: activeCamp.data.data.sender
+          title: _.get(activeCamp, "data.data.title", ""),
+          message: _.get(activeCamp, "data.data.message", ""),
+          sender: _.get(activeCamp, "data.data.sender", "")
         };
-        if (settingsMain.data._embedded.clientSettings[0]) {
+        if(settingsMain){
+          if (settingsMain.data._embedded.clientSettings[0]) {
           setClientSettings(
             settingsMain.data._embedded.clientSettings[0].settings
           );
+        }
         }
         setScheduleStatus(activeCamp.data.data.status === "scheduled");
         setPayload(data);
@@ -123,10 +129,10 @@ function NewCampaign(props) {
         setScheduleData({ date: sched[0], time: sched[1] });
         setFetchingMain(false);
       },
-      _ => {
+      err => {
         Notification.bubble({
           type: "error",
-          content: "Campaign with the ID not found!"
+          content: errorHandler(err)
         });
         props.history.push("/campaigns");
       }

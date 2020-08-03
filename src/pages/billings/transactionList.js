@@ -8,18 +8,21 @@ import {
   errorHandler,
   genericChangeSingle,
   getClientId,
-  getToken
+  getToken,
+  numberWithCommas
 } from "../../utils/helper";
-import { CAMPAIGN_URL } from "../../utils/urls";
+import { CAMPAIGN_URL, USER_TRANSACTION_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import Badge from "../../components/Badge/badge";
 import moment from "moment";
 import { store } from "../../stateManagement/store";
 import { Select } from "../../components/select/Select";
 import { statusModeCampaign } from "../../utils/data";
+import _ from "lodash"
 
 function TransactionList(props) {
-  const [campaigns, setCampaigns] = useState({});
+  const [campaigns, setCampaigns] = useState([]);
+  const [pageInfo, setPageInfo] = useState({});
   const [fetching, setFetching] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({});
@@ -36,14 +39,24 @@ function TransactionList(props) {
     if (!fetching) {
       setFetching(true);
     }
+    if(props.user){
+      if(props.fetching)return;
+      extra = extra + `id=${props.walletID}`
+      console.log(props.walletID)
+      if(props.walletID === 0){
+        setFetching(false);
+        return;
+      }
+    }
     axiosHandler({
       method: "get",
       clientID: getClientId(),
       token: getToken(),
-      url: CAMPAIGN_URL + `/sms?limit=20&${extra}&clientId=${getClientId()}`
+      url: USER_TRANSACTION_URL + `?limit=20&${extra}&clientId=${getClientId()}`
     }).then(
       res => {
-        setCampaigns(res.data);
+        setCampaigns(_.get(res, "data._embedded.transactions", []));
+        setPageInfo(_.get(res.data, "page", {}));
         setFetching(false);
       },
       err => {
@@ -57,60 +70,35 @@ function TransactionList(props) {
 
   const headings = [
     "id",
-    "Title",
-    "Status",
-    "recipientCount",
-    "Schedule",
+    "Amount",
+    "Type",
+    "Reference",
+    "narration",
     "created at",
     ""
   ];
 
   const formatCampaigns = () => {
-    if (!campaigns.data) return [];
+    if (!campaigns) return [];
     const result = [];
-    campaigns.data.map(item => {
+    campaigns.map(item => {
       result.push([
         <span>
-          {item.campaignId.substring(0, 10)}
-          {item.campaignId.length > 10 && "..."}
+          {item.id.substring(0, 15)}
+          {item.id.length > 15 && "..."}
         </span>,
         <span>
-          {item.title.substring(0, 15)}
-          {item.title.length > 15 && "..."}
+          {numberWithCommas(
+            item.debitAmount < 1 ? item.creditAmount : item.debitAmount
+          )}
         </span>,
-        <Badge
-          status={
-            item.status === "sent"
-              ? "success"
-              : item.status === "pending" || item.status === "scheduled"
-              ? "processing"
-              : "error"
-          }
-        >
-          {item.status}
+        <Badge status={item.debitAmount < 1 ? "success" : "error"}>
+          {item.debitAmount > 0 ? "DR" : "CR"}
         </Badge>,
-        item.recipientCount,
-        item.schedule,
+        <div style={{ maxWidth: 250, overflow: "auto" }}>{item.reference}</div>,
+        item.narration || "Not specified",
         moment(new Date(item.createdAt)).fromNow(),
-        <div>
-          <span
-            className="link"
-            onClick={() =>
-              props.history.push(`/campaigns/${item.campaignId}/active`)
-            }
-          >
-            View
-          </span>{" "}
-          |&nbsp;
-          <span
-            className="link"
-            onClick={() =>
-              props.history.push(`/campaigns/${item.campaignId}/duplicate`)
-            }
-          >
-            Duplicate
-          </span>
-        </div>
+        ""
       ]);
       return null;
     });
