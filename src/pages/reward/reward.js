@@ -17,6 +17,7 @@ import { Spinner } from "../../components/spinner/Spinner";
 import qs from "querystring";
 import Pagination from "../../components/Pagination/pagination";
 import Badge from "../../components/Badge/badge";
+import { cleanParameters } from "../campaign/campaign";
 
 function Reward(props) {
   const { dispatch } = useContext(store);
@@ -34,7 +35,7 @@ function Reward(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
-    extra += `&${qs.stringify(queryParams)}`;
+    extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getRewards(extra);
   }, [search, queryParams, currentPage]);
 
@@ -44,7 +45,7 @@ function Reward(props) {
     }
     axiosHandler({
       method: "get",
-      url: REWARDS_URL + `?${extra}&size=20`,
+      url: REWARDS_URL + `?${extra}&size=20&clientId=${getClientId()}`,
       token: getToken(),
       clientID: getClientId()
     }).then(
@@ -87,14 +88,10 @@ function Reward(props) {
     let result = [];
     rewards.map(item => {
       result.push([
-        item.title,
-        // item.drawFrequenceInHours,
-        // item.cutOffTimeInHours,
-        // moment(item.nextdrawTime, "YYYY-MM-DD HH:mm:ss").fromNow(),
+        <span>
+          {item.title.substring(0, 30)} {item.title.length > 30 && "..."}
+        </span>,
         moment(new Date(item.createdAt)).fromNow(),
-        <div>
-          <Badge>{item.status}</Badge>
-        </div>,
         <div>
           <span
             className="link"
@@ -131,7 +128,7 @@ function Reward(props) {
     return result;
   };
 
-  const headings = ["Title", "Created at", "Status", ""];
+  const headings = ["Title", "Created at", ""];
 
   return (
     <div>

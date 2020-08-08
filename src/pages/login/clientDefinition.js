@@ -25,6 +25,7 @@ function ClientDefinition(props) {
       checkIfClientExist(props.match.params.name);
     }
     fetchClients();
+    localStorage.clear();
   }, []);
 
   const fetchClients = () => {

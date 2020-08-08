@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { setPageTitleAction } from "../../stateManagement/actions";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { USER_FETCH_URL } from "../../utils/urls";
+import { USER_FETCH_URL, USER_WALLET_URL,  } from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import { store } from "../../stateManagement/store";
@@ -13,27 +13,34 @@ import "./users.css";
 import Divider from "../../components/Divider/divider";
 import AppIcon from "../../components/icons/Icon";
 import GameTransactions from "../games/gameTransactions";
+import {Tabs} from "../../components/tabs/tabs"
+import _ from "lodash"
+import WalletList from "../billings/walletList";
+import TransactionList from "../billings/transactionList";
 
 function SingleUser(props) {
   const { dispatch } = useContext(store);
   const [fetching, setFetching] = useState(true);
+  const [fetchingWalletId, setFetchingWallet] = useState(true);
   const [activeUser, setActiveUser] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const [activeUserWalletID, setActiveWalletID] = useState(0);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Single User" });
     getClients();
+    getWalletTransactions();
   }, []);
 
   const getClients = () => {
     axiosHandler({
       method: "get",
-      url: USER_FETCH_URL + `/${props.match.params.uuid}`,
+      url: USER_FETCH_URL + `?userId=${props.match.params.uuid}`,
       token: getToken(),
       clientID: getClientId()
     }).then(
       res => {
-        console.log(res.data.data);
-        setActiveUser(res.data.data);
+        setActiveUser(res.data.data[0]);
         setFetching(false);
       },
       err => {
@@ -44,6 +51,24 @@ function SingleUser(props) {
       }
     );
   };
+
+  const getWalletTransactions = (extra="") => {
+    axiosHandler({
+      method: "get", 
+      url:USER_WALLET_URL + `?customerId=${props.match.params.uuid}`,
+      token: getToken(),
+      clientID: getClientId()
+    }).then(
+      res => {
+        let wallets = _.get(res, "data._embedded.wallets", [])
+        if(wallets.length > 0){
+          setActiveWalletID(wallets[0].id)
+          
+        }
+        setFetchingWallet(false)
+      }
+    )
+  }
 
   const getUserMeta = metas => {
     const results = [];
@@ -108,10 +133,23 @@ function SingleUser(props) {
         )}
       </Card>
       <br />
-      <h3>User Transactions</h3>
-      <br />
-      <GameTransactions {...props} user />
-      <br />
+      <Tabs heading={[
+        "Transactions",
+       
+        "Game Transactions",
+        "Wallet Transactions",
+      ]}
+      body={
+        [
+          <TransactionList user fetching={fetchingWalletId} walletID={activeUserWalletID} />,
+          <GameTransactions {...props} user />,
+          <WalletList user fetching={fetchingWalletId} walletID={activeUserWalletID} />,
+        ]
+      }
+      activeIndex={activeTab}
+      onSwitch={setActiveTab}
+      />
+      
       <br />
     </>
   );

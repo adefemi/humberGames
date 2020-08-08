@@ -21,13 +21,25 @@ import Badge from "../../components/Badge/badge";
 import qs from "querystring";
 import Pagination from "../../components/Pagination/pagination";
 
+export const cleanParameters = obj => {
+  let newObj = {};
+  for (let i in obj) {
+    if (obj.hasOwnProperty(i)) {
+      if (obj[i]) {
+        newObj[i] = obj[i];
+      }
+    }
+  }
+  return newObj;
+};
+
 function Campaign(props) {
   const { dispatch } = useContext(store);
   const [campaigns, setCampaigns] = useState({});
   const [fetching, setFetching] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({});
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(null);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Campaigns" });
@@ -35,13 +47,15 @@ function Campaign(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage}`;
-    // extra += `&${qs.stringify(queryParams)}`;
+    extra += `&${qs.stringify(
+      cleanParameters({ ...queryParams, keyword: search })
+    )}`;
     getCampaigns(extra);
   }, [search, queryParams, currentPage]);
 
   const getCampaigns = (extra = "") => {
     if (!fetching) {
-      setFetching(fetching);
+      setFetching(true);
     }
     axiosHandler({
       method: "get",
@@ -99,14 +113,25 @@ function Campaign(props) {
         item.recipientCount,
         item.schedule,
         moment(new Date(item.createdAt)).fromNow(),
-        <span
-          className="link"
-          onClick={() =>
-            props.history.push(`/campaigns/${item.campaignId}/active`)
-          }
-        >
-          View
-        </span>
+        <div>
+          <span
+            className="link"
+            onClick={() =>
+              props.history.push(`/campaigns/${item.campaignId}/active`)
+            }
+          >
+            View
+          </span>{" "}
+          |&nbsp;
+          <span
+            className="link"
+            onClick={() =>
+              props.history.push(`/campaigns/${item.campaignId}/duplicate`)
+            }
+          >
+            Duplicate
+          </span>
+        </div>
       ]);
       return null;
     });
@@ -121,6 +146,8 @@ function Campaign(props) {
             <Input
               placeholder="Search campaigns"
               iconRight={<AppIcon name="search" type="feather" />}
+              debounce
+              onChange={e => setSearch(e.target.value)}
             />
           </div>
         </div>

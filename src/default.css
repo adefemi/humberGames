@@ -222,4 +222,12 @@ a {
   padding: 20px;
 }
 
+.transaction-table-button.loading {
+  padding: 0 15px !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=default.css.map */

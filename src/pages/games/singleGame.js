@@ -45,11 +45,23 @@ function Games(props) {
     })
       .then(res => {
         const activeInstanceMain = res.data._embedded.gameInstances[0];
+        console.log(activeInstanceMain);
         setActiveInstance(activeInstanceMain);
-        setGameLink(activeInstanceMain._links.game.href);
-        setTransactionLink(activeInstanceMain._links.gameTransactions.href);
-        setPrizesLink(activeInstanceMain._links.prizes.href);
-        setDrawsLink(activeInstanceMain._links.draws.href);
+        setGameLink(
+          activeInstanceMain._links.game.href.replace("{?projection}", "")
+        );
+        setTransactionLink(
+          activeInstanceMain._links.gameTransactions.href.replace(
+            "{?projection}",
+            ""
+          )
+        );
+        setPrizesLink(
+          activeInstanceMain._links.prizes.href.replace("{?projection}", "")
+        );
+        setDrawsLink(
+          activeInstanceMain._links.draws.href.replace("{?projection}", "")
+        );
         setFetching(false);
       })
       .catch(err => {

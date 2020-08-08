@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./Input.css";
 import { getNewProps } from "../../utils/helper";
+import { DebounceInput } from "react-debounce-input";
+import { Spinner } from "../spinner/Spinner";
 
 const defaultPropList = {
   value: PropTypes.any,
@@ -22,7 +24,11 @@ const defaultPropList = {
   setCurrencyState: PropTypes.func,
   defaultCurrencyValue: PropTypes.object,
   isError: PropTypes.bool,
-  noCurrencySelect: PropTypes.bool
+  noCurrencySelect: PropTypes.bool,
+  debounce: PropTypes.bool,
+  minLength: PropTypes.number,
+  debounceTimeout: PropTypes.number,
+  loader: PropTypes.bool
 };
 
 export const Input = props => {
@@ -46,21 +52,44 @@ export const Input = props => {
           style={props.isError ? { border: "1px solid red" } : {}}
         >
           {props.iconLeft && <span className="iconLeft">{props.iconLeft}</span>}
-          <input
-            placeholder={props.placeholder}
-            type={inputType === "phone" ? "number" : inputType}
-            disabled={props.disabled}
-            onChange={e => {
-              props.onChange(e);
-            }}
-            {...newProps}
-            value={props.value === null ? "" : props.value}
-            className={`${props.className} ${
-              props.iconRight ? "iconRight" : ""
-            } ${props.iconLeft ? "iconLeft" : ""}`}
-          />
+          {props.debounce ? (
+            <DebounceInput
+              placeholder={props.placeholder}
+              type={inputType === "phone" ? "number" : inputType}
+              disabled={props.disabled}
+              onChange={e => {
+                props.onChange(e);
+              }}
+              minLength={props.minLength || 1}
+              debounceTimeout={props.debounceTimeout || 300}
+              {...newProps}
+              value={props.value === null ? "" : props.value}
+              className={`${props.className} ${
+                props.iconRight ? "iconRight" : ""
+              } ${props.iconLeft ? "iconLeft" : ""}`}
+            />
+          ) : (
+            <input
+              placeholder={props.placeholder}
+              type={inputType === "phone" ? "number" : inputType}
+              disabled={props.disabled}
+              onChange={e => {
+                props.onChange(e);
+              }}
+              {...newProps}
+              value={props.value === null ? "" : props.value}
+              className={`${props.className} ${
+                props.iconRight ? "iconRight" : ""
+              } ${props.iconLeft ? "iconLeft" : ""}`}
+            />
+          )}
           {props.iconRight && (
             <span className="iconRight">{props.iconRight}</span>
+          )}
+          {props.loader && (
+            <span className="iconRight">
+              <Spinner color="#000" size={10} />
+            </span>
           )}
         </div>
       </div>
@@ -82,7 +111,9 @@ Input.defaultProps = {
   className: "",
   size: "default",
   disabled: false,
-  placeholder: ""
+  loader: false,
+  placeholder: "",
+  debounceTimeout: 300
 };
 
 export default Input;

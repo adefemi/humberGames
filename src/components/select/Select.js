@@ -34,6 +34,9 @@ export const Select = props => {
   useEffect(() => {
     if (selection !== "") {
       handleSelection();
+      if (props.dontSetValue) {
+        setSelection("");
+      }
     }
   }, [selection]);
 
@@ -94,7 +97,7 @@ export const Select = props => {
       li.classList.add("select-li");
       li.innerHTML = item.title;
       li.onclick = e => {
-        setSelection(e.target.innerHTML);
+        setSelection(e.target.innerText);
       };
       ul.appendChild(li);
       return null;
@@ -214,8 +217,9 @@ export const Select = props => {
       type="text"
       style={props.style}
       className={`select-input ${props.className ? props.className : ""}`}
-      value={activeOption}
+      value={props.dontSetValue ? null : activeOption}
       onBlur={_ => {
+        if (props.dontSetValue) return;
         if (props.onBlur) {
           props.onBlur();
         }
@@ -253,6 +257,7 @@ Select.propTypes = {
   value: proptype.any,
   autoComplete: proptype.bool,
   fetching: proptype.bool,
+  dontSetValue: proptype.bool,
   onTypeChange: proptype.func
 };
 

@@ -13,12 +13,7 @@ import {
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
 import { Spinner } from "../../components/spinner/Spinner";
-import {
-  conditionSort,
-  operatorSort,
-  secondaryColor,
-  winningRules
-} from "../../utils/data";
+import { conditionSort, operatorSort, secondaryColor } from "../../utils/data";
 import ContentModal from "../../components/contentModal/contentModal";
 import FormGroup from "../../components/formGroup/formGroup";
 import { Select } from "../../components/select/Select";
@@ -29,6 +24,7 @@ import { GAME_PRICE_URL, WINNING_CONDITION_URL } from "../../utils/urls";
 import CurrencyInput from "../../components/currencyInput/currencyInput";
 import Divider from "../../components/Divider/divider";
 import { Modal } from "../../components/modal/Modal";
+import { TextAreaField } from "../../components/textarea/TextAreaField";
 
 function InstanceConfig(props) {
   const headings = ["label", "Amount", ""];
@@ -570,6 +566,7 @@ const PricesConfig = props => {
             />
           </FormGroup>
         )}
+
         {/*<FormGroup label="Quantity">*/}
         {/*  <Select*/}
         {/*    onChange={props.onChange}*/}
@@ -586,6 +583,15 @@ const PricesConfig = props => {
         {/*  />*/}
         {/*</FormGroup>*/}
       </div>
+      <FormGroup label="Notification Message">
+        <TextAreaField
+          onChange={props.onChange}
+          name={"notificationMessage"}
+          placeholder="Enter message"
+          value={props.gameData.notificationMessage || ""}
+          required
+        />
+      </FormGroup>
     </div>
   );
 };

@@ -54,22 +54,47 @@ function MainLayout(props) {
       routeToLogin();
     }
     let token = localStorage.getItem(USERTOKEN);
-    if (!token) {
+    // if (token) {
+    //   token = JSON.parse(token);
+    //   axiosHandler({
+    //     method: "get",
+    //     url: USER_ME_URL,
+    //     token: token.access,
+    //     clientID
+    //   }).then(
+    //       res => {
+    //         dispatch({ type: setUserDetails, payload: res.data.data });
+    //         setLoading(false);
+    //         props.history.push(
+    //             props.location.pathname + `?${props.location.search}`
+    //         );
+    //       },
+    //       _ => {
+    //         routeToLogin();
+    //       }
+    //   );
+    // } else {
+    //   routeToLogin();
+    // }
+    try {
+      const decoded = jwtDecode(token);
+      axiosHandler({
+        method: "get",
+        clientID: "default",
+        token: getToken(),
+        url: CLIENT_FETCH_URL + `?clientId=${decoded.auth.clientId}`
+      }).then(res => {
+        dispatch({ type: setUserDetails, payload: decoded.auth });
+        dispatch({ type: setActiveClient, payload: res.data.data[0] });
+        setLoading(false);
+        props.history.push(
+          props.location.pathname + `?${props.location.search}`
+        );
+      });
+    } catch (e) {
       routeToLogin();
-      return;
     }
-    const decoded = jwtDecode(token);
-    axiosHandler({
-      method: "get",
-      clientID: "default",
-      token: getToken(),
-      url: CLIENT_FETCH_URL + `?clientId=${decoded.auth.clientId}`
-    }).then(res => {
-      dispatch({ type: setUserDetails, payload: decoded.auth });
-      dispatch({ type: setActiveClient, payload: res.data.data[0] });
-      setLoading(false);
-      props.history.push(props.location.pathname + `?${props.location.search}`);
-    });
+
     // verify token
     //
   }, []);
@@ -168,6 +193,12 @@ const SideBar = () => {
           icon={<Icon name="controller" type="entypo" />}
         />
         <SideLinks
+          link={"/game-bundles"}
+          title="Games Bundles"
+          active={getActive("game-bundles")}
+          icon={<Icon name="ic_dashboard" type="md" />}
+        />
+        <SideLinks
           link={"/rewards"}
           title="Rewards"
           active={getActive("rewards")}
@@ -178,6 +209,24 @@ const SideBar = () => {
           title="Campaigns"
           active={getActive("campaigns")}
           icon={<Icon name="volume1" type="feather" />}
+        />
+        <SideLinks
+          link={"/products"}
+          title="Products"
+          active={getActive("products")}
+          icon={<Icon name="server" type="feather" />}
+        />
+        <SideLinks
+          link={"/billings"}
+          title="Billings"
+          active={getActive("billings")}
+          icon={<Icon name="briefcase" type="feather" />}
+        />
+        <SideLinks
+          link={"/payouts"}
+          title="Payouts"
+          active={getActive("payouts")}
+          icon={<Icon name="checkSquare" type="feather" />}
         />
         <SideLinks
           link={"/sandbox"}

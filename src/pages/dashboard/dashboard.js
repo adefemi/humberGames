@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./dashboard.css";
 import { Card } from "../../components/card/Card";
-import { DATA, OPTIONS, DATA2, OPTIONS2 } from "./transactionGraphData";
+import { DATA, OPTIONS } from "./transactionGraphData";
 import Graph from "../../components/graph/Graph";
 import DatePicker from "../../components/DatePicker/datePicker";
 import { axiosHandler } from "../../utils/axiosHandler";
@@ -11,18 +11,20 @@ import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
 import moment from "moment";
 
-var oneWeekAgo = new Date();
-oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+let tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+export { tomorrow };
 
 function Dashboard(props) {
   const [data, setData] = useState(null);
   const [fetching, setFetching] = useState(true);
   const [dateData, setDateData] = useState({
-    startDate: moment(oneWeekAgo).format("YYYY-MM-DD"),
-    endDate: moment(new Date()).format("YYYY-MM-DD")
+    startDate: moment(new Date()).format("YYYY-MM-DD"),
+    endDate: moment(tomorrow).format("YYYY-MM-DD")
   });
 
   useEffect(() => {
+    if (props.bundle) return;
     if (!fetching) {
       setFetching(true);
     }
@@ -30,6 +32,7 @@ function Dashboard(props) {
   }, [dateData]);
 
   useEffect(() => {
+    if (props.bundle) return;
     getDateData();
   }, []);
 
@@ -69,6 +72,15 @@ function Dashboard(props) {
       }
     );
   };
+
+  const calculateWinningRatio = () => {
+    if (!data.kpiInfo) return 0;
+    if (data.kpiInfo.totalGamePlays <= 0) return 0;
+    return data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays <= 0
+      ? 1
+      : data.kpiInfo.totalGamePlays;
+  };
+
   return (
     <div className="dashboard">
       <div className="flex align-center">
@@ -107,19 +119,17 @@ function Dashboard(props) {
             </center>
           </div>
         </Card>
-        <Card heading="Winning Ration">
+        <Card heading="Winning Ratio">
           <div className="contentCard">
             <center>
               {fetching ? (
                 <Spinner color="#000000" />
               ) : (
                 <h1>
-                  {data.kpiInfo
-                    ? data.kpiInfo.totalGamePlays / data.kpiInfo.totalWinnings <
-                      1
-                      ? 1
-                      : data.kpiInfo.totalWinnings
-                    : "-"}
+                  {console.log(data.kpiInfo)}
+                  {calculateWinningRatio().length > 6
+                    ? calculateWinningRatio().toFixed(4)
+                    : calculateWinningRatio()}
                 </h1>
               )}
             </center>

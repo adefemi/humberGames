@@ -86,17 +86,21 @@ function DatePicker(props) {
     const startWeekDay = getStartWeekDay(activeMonth, activeYear);
 
     let counter = 0;
-    let start = true;
     let tempArray = [];
 
     const checkPast = val => {
       let today = getToday().getDate();
-      if (props.showToday) {
-        today = getToday().setDate(getToday().getDate() - 1);
-        today = new Date(today).getDate();
-      }
+
       let month = getToday().getMonth() + 1;
       let year = getToday().getFullYear();
+
+      if (props.showToday) {
+        if (activeYear == year) {
+          if (activeMonth == month) {
+            if (val == today) return true;
+          }
+        }
+      }
 
       if (activeYear < year || activeMonth < month) return false;
 
@@ -123,27 +127,28 @@ function DatePicker(props) {
       return true;
     };
 
+    for (let j = 0; j < startWeekDay; j++) {
+      tempArray.push(<div key={"k" + j} className="weekDays disabled" />);
+      counter++;
+    }
+
     for (let i = 1; i <= totalDaysInMonth; i++) {
-      if (start && i <= startWeekDay) {
-        tempArray.push(<div className="weekDays disabled" />);
-      } else {
-        if (start) start = false;
-        tempArray.push(
-          <div
-            key={"d" + i}
-            onClick={() => {
-              if (props.disablePastDate && !checkPast(i)) return;
-              if (!checkDisabled(i)) return;
-              setDate(i);
-            }}
-            className={`weekDays ${getIsToday(i) ? "active" : ""} ${
-              !checkDisabled(i) ? "disabled" : ""
-            } ${props.disablePastDate && !checkPast(i) ? "disabled" : ""}`}
-          >
-            {i}
-          </div>
-        );
-      }
+      tempArray.push(
+        <div
+          key={"d" + i}
+          onClick={() => {
+            if (props.disablePastDate && !checkPast(i)) return;
+            if (!checkDisabled(i)) return;
+            setDate(i);
+          }}
+          className={`weekDays ${getIsToday(i) ? "active" : ""} ${
+            !checkDisabled(i) ? "disabled" : ""
+          } ${props.disablePastDate && !checkPast(i) ? "disabled" : ""}`}
+        >
+          {i}
+        </div>
+      );
+
       counter++;
       if (counter >= 7) {
         returnValue.push(tempArray);
@@ -340,11 +345,19 @@ function DatePicker(props) {
       const windowHeight = window.innerHeight - 20;
 
       if (dropDownVPos > windowHeight) {
-        dropDown.style.top = `${inputBounds.top +
-          inputBounds.height -
-          dropDown.getBoundingClientRect().height}px`;
+        dropDown.style.top = `${
+          props.translated
+            ? 0
+            : inputBounds.top +
+              inputBounds.height -
+              dropDown.getBoundingClientRect().height
+        }px`;
       } else {
-        dropDown.style.top = `${props.translated ? 0 : inputBounds.top}px`;
+        dropDown.style.top = `${
+          props.translated
+            ? -dropDown.getBoundingClientRect().height
+            : inputBounds.top
+        }px`;
       }
     } catch (e) {}
   };

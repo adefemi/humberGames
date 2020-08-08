@@ -12,7 +12,6 @@ import {
 } from "../../utils/helper";
 import { Select } from "../../components/select/Select";
 import DatePicker from "../../components/DatePicker/datePicker";
-import TimePicker from "../../components/timePicker/timePicker";
 import Divider from "../../components/Divider/divider";
 import { Button } from "../../components/button/Button";
 import {
@@ -109,7 +108,7 @@ function NewReward(props) {
       method: "get",
       token: getToken(),
       clientID: getClientId(),
-      url: GAME_INSTANCE_URL + `?clientId=${activeClient.id}`
+      url: GAME_INSTANCE_URL + `?clientId=${getClientId()}`
     }).then(
       res => {
         if (res.data._embedded && res.data._embedded.gameInstances) {
@@ -164,7 +163,7 @@ function NewReward(props) {
       ...rewardData,
       qualificationRules,
       targetDemographyRules,
-      clientId: activeClient.id
+      clientId: getClientId()
     };
     setLoading(true);
     setActiveData(newData);
@@ -222,7 +221,78 @@ function NewReward(props) {
         onOK={completeSave}
         footer
       >
-        <pre>{JSON.stringify(activeData, null, 2)}</pre>
+        {activeData && (
+          <>
+            <FormGroup>
+              <div className="grid grid-2 grid-gap-2">
+                <div>
+                  <div className="info">Title</div>
+                  <div className="context">{activeData.title}</div>
+                </div>
+                <div>
+                  <div className="info">Game Instance</div>
+                  <div className="context">{activeData.gameInstance}</div>
+                </div>
+                <div>
+                  <div className="info">Cut-off Time In(mins)</div>
+                  <div className="context">{activeData.cutOffTimeInMins}</div>
+                </div>
+              </div>
+            </FormGroup>
+            <FormGroup label="Qualification Rules">
+              {activeData.qualificationRules.length > 0 ? (
+                activeData.qualificationRules.map((item, id) => {
+                  return (
+                    <div key={id} className="grid grid-3 grid-gap-2">
+                      <div>
+                        <div className="info">Condition</div>
+                        <div className="context">
+                          <pre>{JSON.stringify(item.condition)}</pre>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="info">DataHead</div>
+                        <div className="context">{item.dataHead}</div>
+                      </div>
+                      <div>
+                        <div className="info">Field</div>
+                        <div className="context">{item.field}</div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p>No qualification rule defined</p>
+              )}
+            </FormGroup>
+            <FormGroup label="Target Demography Rules">
+              {activeData.targetDemographyRules.length > 0 ? (
+                activeData.targetDemographyRules.map((item, id) => {
+                  return (
+                    <div key={id} className="grid grid-3 grid-gap-2">
+                      <div>
+                        <div className="info">Condition</div>
+                        <div className="context">
+                          <pre>{JSON.stringify(item.condition)}</pre>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="info">DataHead</div>
+                        <div className="context">{item.dataHead}</div>
+                      </div>
+                      <div>
+                        <div className="info">Field</div>
+                        <div className="context">{item.field}</div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p>No target demography rule defined</p>
+              )}
+            </FormGroup>
+          </>
+        )}
       </Modal>
       <div className="flex align-center">
         <span onClick={() => props.history.goBack()} className="link">
@@ -243,21 +313,6 @@ function NewReward(props) {
               onChange={e => genericChangeSingle(e, setRewardData, rewardData)}
             />
           </FormGroup>
-          {/*<div className="">*/}
-          {/*<FormGroup label="Draw Frequency (in hours)">*/}
-          {/*  <Input*/}
-          {/*    placeholder="Specify frequency"*/}
-          {/*    name="drawFrequenceInHours"*/}
-          {/*    type="number"*/}
-          {/*    required*/}
-          {/*    value={rewardData.drawFrequenceInHours || ""}*/}
-          {/*    onChange={e =>*/}
-          {/*      genericChangeSingle(e, setRewardData, rewardData)*/}
-          {/*    }*/}
-          {/*  />*/}
-          {/*</FormGroup>*/}
-
-          {/*</div>*/}
           <div className="grid grid-2 grid-gap-2">
             <FormGroup label="Game Instance">
               <Select
@@ -292,25 +347,6 @@ function NewReward(props) {
               />
             </FormGroup>
           </div>
-          {/*<FormGroup label="Next Draw Time">*/}
-          {/*  <div className="grid grid-2 grid-gap-2">*/}
-          {/*    <DatePicker*/}
-          {/*      id={1}*/}
-          {/*      name="nextdrawDate"*/}
-          {/*      required*/}
-          {/*      onChange={e =>*/}
-          {/*        genericChangeSingle(e, setNextDrawInfo, nextDrawInfo)*/}
-          {/*      }*/}
-          {/*    />*/}
-          {/*    <TimePicker*/}
-          {/*      use24H*/}
-          {/*      name="nextdrawTime"*/}
-          {/*      onChange={e =>*/}
-          {/*        genericChangeSingle(e, setNextDrawInfo, nextDrawInfo)*/}
-          {/*      }*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*</FormGroup>*/}
           <br />
           <h3>Qualification Rules</h3>
           {qualificationRules.map((item, index) => {
@@ -488,7 +524,7 @@ const formatConditions = condition => {
   return result;
 };
 
-const QualificationRuleForm = props => {
+export const QualificationRuleForm = props => {
   const getConditions = () => {
     const conds = [];
     for (let key in props.data.condition) {

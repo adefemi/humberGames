@@ -114,7 +114,7 @@ const CreateGame = props => {
       gameConfig: gameConfig,
       game: activeGame._links.self.href,
       userId: userDetails.userId,
-      clientId: activeClient.id,
+      clientId: getClientId(),
       startDate: gameData.endDate + " 00:00:00",
       endDate: gameData.endDate + " 00:00:00"
     };

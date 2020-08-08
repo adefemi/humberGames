@@ -4,9 +4,11 @@ import { store } from "../../stateManagement/store";
 import { axiosHandler } from "../../utils/axiosHandler";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import {
+  ANALYTICS_KPI_URL,
   DRAW_EXECUTE_DRAW_URL,
   DRAW_EXECUTE_QUALIFY_URL,
-  DRAWS_URL
+  DRAWS_URL,
+  GAME_TRANSACTION_URL
 } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
@@ -24,6 +26,7 @@ import GameTransactions, { TransactionDetails } from "./gameTransactions";
 import { Card } from "../../components/card/Card";
 import { Button } from "../../components/button/Button";
 import { Modal } from "../../components/modal/Modal";
+import { tomorrow } from "../dashboard/dashboard";
 
 function SingleDraw(props) {
   const {
@@ -33,15 +36,32 @@ function SingleDraw(props) {
   const [activeDraw, setActiveDraw] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [fetching, setFetching] = useState(true);
-  const [transactions, setTransactions] = useState([]);
   const [activeGameInstance, setActiveGameInstance] = useState(null);
+  const [dateData, setDateData] = useState({
+    startDate: moment(new Date()).format("YYYY-MM-DD"),
+    endDate: moment(tomorrow).format("YYYY-MM-DD")
+  });
   useEffect(() => {
     dispatch({
       type: setPageTitleAction,
       payload: `${props.match.params.label} - Draw`
     });
     getActiveDraw();
+    drawInfo();
   }, []);
+
+  const drawInfo = () => {
+    axiosHandler({
+      method: "post",
+      url: GAME_TRANSACTION_URL + `?draw=${props.match.params.uuid}`,
+      clientID: getClientId(),
+      token: getToken(),
+      data: {
+        startDate: `${dateData.startDate} 00:00:00`,
+        endDate: `${dateData.endDate} 00:00:00`
+      }
+    });
+  };
 
   const getActiveDraw = () => {
     axiosHandler({
@@ -54,23 +74,14 @@ function SingleDraw(props) {
         const activeDraw = res.data._embedded.draws[0];
         setActiveDraw(activeDraw);
         if (activeDraw) {
-          Promise.all([
-            axiosHandler({
-              method: "get",
-              clientID: getClientId(),
-              token: getToken(),
-              url: activeDraw._links.gameInstance.href
-            }),
-            axiosHandler({
-              method: "get",
-              clientID: getClientId(),
-              token: getToken(),
-              url: activeDraw._links.transaction.href
-            })
-          ]).then(
-            ([gameInstance, transactions]) => {
+          axiosHandler({
+            method: "get",
+            clientID: getClientId(),
+            token: getToken(),
+            url: activeDraw._links.gameInstance.href
+          }).then(
+            gameInstance => {
               setActiveGameInstance(gameInstance.data);
-              setTransactions(transactions.data._embedded.gameTransactions);
               setFetching(false);
             },
             err => {
@@ -140,14 +151,14 @@ const DrawOperations = props => {
   const [loading, setLoading] = useState(null);
 
   const getDrawButton = () => {
-    const currentTime = moment(new Date());
-    let drawEndTime = new Date(props.activeDraw.endTime);
-    drawEndTime = drawEndTime.setMinutes(
-      drawEndTime.getMinutes() + props.activeInstance.gameConfig.durationInMins
-    );
-    drawEndTime = moment(drawEndTime);
-    const timeDiff = drawEndTime.diff(currentTime, "seconds");
-    if (timeDiff > 0) {
+    const currentTime = moment(new Date()).unix();
+    const drawTime = props.activeDraw.drawTime;
+
+    let drawEndTime =
+      moment(new Date(props.activeDraw.endTime)).unix() +
+      props.activeInstance.gameConfig.delayToDrawInMins * 60;
+
+    if (!drawTime && currentTime > drawEndTime) {
       return (
         <Button
           onClick={() =>
@@ -178,16 +189,18 @@ const DrawOperations = props => {
   };
 
   const getQualifyButton = reward => {
-    const currentTime = moment(new Date());
+    const currentTime = moment(new Date()).unix();
+    const drawTime = props.activeDraw.drawTime;
     let cutoffTimeInMins = reward.cutOffTimeInMins;
     let drawEndTime = new Date(props.activeDraw.endTime);
     drawEndTime = drawEndTime.setMinutes(
       drawEndTime.getMinutes() +
-        (props.activeInstance.gameConfig.durationInMins - cutoffTimeInMins)
+        props.activeInstance.gameConfig.delayToDrawInMins -
+        cutoffTimeInMins
     );
-    drawEndTime = moment(drawEndTime);
-    const timeDiff = drawEndTime.diff(currentTime, "seconds");
-    if (timeDiff > 0) {
+
+    drawEndTime = moment(drawEndTime).unix();
+    if (!drawTime && currentTime > drawEndTime) {
       return (
         <Button
           onClick={() =>

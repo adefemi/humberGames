@@ -8,6 +8,19 @@
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
+  position: relative;
+}
+.dropdown-main .overlay-drop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: transparent;
+  display: none;
+}
+.dropdown-main .overlay-drop.open {
+  display: block;
 }
 .dropdown-main ul {
   position: absolute;
