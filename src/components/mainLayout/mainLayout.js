@@ -9,7 +9,7 @@ import {
   getToken,
   hasClass,
   removeClass,
-  updateExpiration
+  updateExpiration,
 } from "../../utils/helper";
 import { store } from "../../stateManagement/store";
 import { clientID, secondaryColor, USERTOKEN } from "../../utils/data";
@@ -23,7 +23,7 @@ import jwtDecode from "jwt-decode";
 function MainLayout(props) {
   const {
     dispatch,
-    state: { pageTitle }
+    state: { pageTitle },
   } = useContext(store);
   const [loading, setLoading] = useState(true);
 
@@ -49,7 +49,7 @@ function MainLayout(props) {
     if (!checkExpiration()) {
       Notification.bubble({
         type: "info",
-        content: "You session has expired."
+        content: "You session has expired.",
       });
       routeToLogin();
     }
@@ -82,8 +82,8 @@ function MainLayout(props) {
         method: "get",
         clientID: "default",
         token: getToken(),
-        url: CLIENT_FETCH_URL + `?clientId=${decoded.auth.clientId}`
-      }).then(res => {
+        url: CLIENT_FETCH_URL + `?clientId=${decoded.auth.clientId}`,
+      }).then((res) => {
         dispatch({ type: setUserDetails, payload: decoded.auth });
         dispatch({ type: setActiveClient, payload: res.data.data[0] });
         setLoading(false);
@@ -167,7 +167,7 @@ const SideLinks = ({ icon, title, link, active = false, logout }) => (
   </Link>
 );
 
-const getActive = val => {
+const getActive = (val) => {
   let ret = false;
   let pathArr = window.location.pathname.split("/");
   if (val === "/") {
@@ -234,6 +234,13 @@ const SideBar = () => {
           active={getActive("sandbox")}
           icon={<Icon name="branch" type="entypo" />}
         />
+        <SideLinks
+          link={"/simulations"}
+          title="Simulations"
+          active={getActive("simulations")}
+          icon={<Icon name="androidBulb" type="ionicons" />}
+        />
+
         <SideLinks
           link={"/users"}
           title="Users"

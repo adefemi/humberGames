@@ -27,14 +27,13 @@ function SingleProduct(props) {
   const [fetching, setFetching] = useState(true);
   const [fetchingWalletId, setFetchingWallet] = useState(true);
   const [product, setProduct] = useState(null);
-  const [balance, setBalance] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
   const [wallets, setWallets] = useState([]);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Single Product" });
     getProduct();
-    getWalletTransactions();
+    getWallet();
   }, []);
 
   const getProduct = () => {
@@ -57,21 +56,7 @@ function SingleProduct(props) {
     );
   };
 
-  const getBalance = () => {
-    const month = moment().subtract(1, "month").toISOString();
-    const today = moment().toISOString();
-
-    axiosHandler({
-      method: "get",
-      url: PRODUCT_BALANCE_URL + `?productId=${props.match.params.id}`,
-      token: getToken(),
-      clientID: getClientId(),
-    }).then((res) => {
-      setBalance(res.sum);
-    });
-  };
-
-  const getWalletTransactions = (extra = "") => {
+  const getWallet = (extra = "") => {
     axiosHandler({
       method: "get",
       url: USER_WALLET_URL + `?customerId=${props.match.params.id}`,
@@ -79,10 +64,7 @@ function SingleProduct(props) {
       clientID: getClientId(),
     }).then((res) => {
       let wallets = _.get(res, "data._embedded.wallets", []);
-      wallets = wallets.map((item) => item.id);
       setWallets(wallets);
-      console.log(wallets);
-
       setFetchingWallet(false);
     });
   };
@@ -137,7 +119,13 @@ function SingleProduct(props) {
         heading={wallets.map((item, key) => `Wallet (${key + 1})`)}
         body={[
           wallets.map((item) => (
-            <Wallet user fetching={fetchingWalletId} walletID={item} />
+            <Wallet
+              user
+              fetching={fetchingWalletId}
+              productId={props.match.params.id}
+              walletID={item.id}
+              balance={item.balance}
+            />
           )),
         ]}
         activeIndex={activeTab}

@@ -32,6 +32,7 @@ const NewProduct = lazy(() => import("./pages/products/newProduct"));
 const UpdateProduct = lazy(() => import("./pages/products/updateProduct"));
 const SingleProduct = lazy(() => import("./pages/products/singleProduct"));
 const Billings = lazy(() => import("./pages/billings/billings"));
+const Simulations = lazy(() => import("./pages/simulations/simulations"));
 
 const RouterMain = (props) => {
   return (
@@ -221,6 +222,15 @@ const RouterMain = (props) => {
                   component={(props) => (
                     <Suspense fallback={() => <h2>Loading...</h2>}>
                       <SingleProduct {...props} />
+                    </Suspense>
+                  )}
+                />
+                <Route
+                  path="/simulations"
+                  exact
+                  component={(props) => (
+                    <Suspense fallback={() => <h2>Loading...</h2>}>
+                      <Simulations {...props} />
                     </Suspense>
                   )}
                 />

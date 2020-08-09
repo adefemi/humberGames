@@ -43,10 +43,10 @@ function Products(props) {
     extra += `&${qs.stringify(
       cleanParameters({ ...queryParams, keyword: search })
     )}`;
-    getCampaigns(extra);
+    getProducts(extra);
   }, [search, queryParams, currentPage]);
 
-  const getCampaigns = (extra = "") => {
+  const getProducts = (extra = "") => {
     if (!fetching) {
       setFetching(true);
     }
@@ -147,9 +147,7 @@ function Products(props) {
       </div>
       <br />
       <br />
-      <span>
-        {productCounts} {productCounts > 1 ? "Products" : "Product"}
-      </span>
+
       <TransactionTable
         keys={headings}
         loading={fetching}

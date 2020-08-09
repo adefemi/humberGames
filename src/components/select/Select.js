@@ -9,10 +9,10 @@ import {
   addClass,
   hasClass,
   randomIDGenerator,
-  removeClass
+  removeClass,
 } from "../../utils/helper";
 
-export const Select = props => {
+export const Select = (props) => {
   const [optionList, setOptionList] = useState([]);
   const [defaultOptionList, setDefaultOptionList] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -84,7 +84,7 @@ export const Select = props => {
     addOptions(el);
   };
 
-  const addOptions = el => {
+  const addOptions = (el) => {
     let ul = document.createElement("ul");
     ul.classList.add("select-ul");
     appendSelections(ul, defaultOptionList);
@@ -96,7 +96,7 @@ export const Select = props => {
       let li = document.createElement("li");
       li.classList.add("select-li");
       li.innerHTML = item.title;
-      li.onclick = e => {
+      li.onclick = (e) => {
         setSelection(e.target.innerText);
       };
       ul.appendChild(li);
@@ -104,7 +104,7 @@ export const Select = props => {
     });
   };
 
-  const positionOptionDrop = _ => {
+  const positionOptionDrop = (_) => {
     try {
       let el = document.getElementById(activeID.toString());
       let inputField = document.getElementById(selectId.toString());
@@ -118,30 +118,30 @@ export const Select = props => {
       const windowHeight = window.innerHeight - 20;
 
       if (dropDownVPos > windowHeight) {
-        el.style.top = `${inputBounds.top -
-          10 -
-          el.getBoundingClientRect().height}px`;
+        el.style.top = `${
+          inputBounds.top - 10 - el.getBoundingClientRect().height
+        }px`;
       } else {
         el.style.top = `${inputBounds.top + inputBounds.height + 10}px`;
       }
     } catch (e) {}
   };
 
-  const handleSelection = _ => {
+  const handleSelection = (_) => {
     const valueCheck = defaultOptionList.filter(
-      item => item.title === selection
+      (item) => item.title === selection
     );
     if (valueCheck.length > 0) {
       const inputElement = document.getElementById(selectId);
-      inputElement.onblur = e => false;
+      inputElement.onblur = (e) => false;
       setSelectedOption(valueCheck[0]);
       setActiveOption(valueCheck[0].title);
       if (props.onChange) {
         props.onChange({
           target: {
             name,
-            value: valueCheck[0].value
-          }
+            value: valueCheck[0].value,
+          },
         });
       }
       closeAllSelect();
@@ -151,7 +151,7 @@ export const Select = props => {
   const handleClicks = () => {
     const input = document.getElementById(selectId);
 
-    document.body.onclick = e => {
+    document.body.onclick = (e) => {
       if (
         hasClass(e.target, "select-li") ||
         hasClass(e.target, "select-input")
@@ -175,7 +175,7 @@ export const Select = props => {
     }
   };
 
-  const closeAllSelect = id => {
+  const closeAllSelect = (id) => {
     const allSelect = document.getElementsByClassName("select-root");
     if (allSelect) {
       for (let i = 0; i < allSelect.length; i++) {
@@ -190,18 +190,18 @@ export const Select = props => {
     }
   };
 
-  const onChange = e => {
+  const onChange = (e) => {
     if (props.onTypeChange) {
       props.onTypeChange({
         target: {
           name: props.name,
-          value: e.target.value
-        }
+          value: e.target.value,
+        },
       });
     }
     setActiveOption(e.target.value);
     setSelectedOption(null);
-    const newList = defaultOptionList.filter(item =>
+    const newList = defaultOptionList.filter((item) =>
       item.title.toString().includes(e.target.value.toLowerCase())
     );
     if (e.target.value.length > 0) {
@@ -218,7 +218,7 @@ export const Select = props => {
       style={props.style}
       className={`select-input ${props.className ? props.className : ""}`}
       value={props.dontSetValue ? null : activeOption}
-      onBlur={_ => {
+      onBlur={(_) => {
         if (props.dontSetValue) return;
         if (props.onBlur) {
           props.onBlur();
@@ -258,10 +258,10 @@ Select.propTypes = {
   autoComplete: proptype.bool,
   fetching: proptype.bool,
   dontSetValue: proptype.bool,
-  onTypeChange: proptype.func
+  onTypeChange: proptype.func,
 };
 
 Select.defaultProps = {
   autoComplete: false,
-  fetching: false
+  fetching: false,
 };

@@ -19,20 +19,7 @@ import { Select } from "../../components/select/Select";
 import _ from "lodash";
 import { walletTransOption } from "../../utils/data";
 
-function WalletList(props) {
-  const [wallets, setWallets] = useState([]);
-  const [balance, setBalance] = useState(0);
-  const [pageInfo, setPageInfo] = useState({});
-  const [fetching, setFetching] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [queryParams, setQueryParams] = useState({});
-
-  useEffect(() => {
-    let extra = `page=${currentPage}`;
-    extra += `&${qs.stringify(queryParams)}`;
-    getWallets(extra);
-  }, [queryParams, currentPage]);
-
+function Rules(props) {
   const getWallets = (extra = "") => {
     if (!fetching) {
       setFetching(true);
@@ -65,13 +52,6 @@ function WalletList(props) {
     );
   };
 
-  const formatMoney = () => {
-    let balance = props.balance / 100;
-    balance = balance.toFixed(2);
-    balance = "₦" + balance;
-    return balance;
-  };
-
   const headings = [
     "id",
     "Amount",
@@ -81,6 +61,22 @@ function WalletList(props) {
     "created at",
     "",
   ];
+
+  const getBalance = () => {
+    const month = moment().subtract(1, "month").toISOString();
+    const today = moment().toISOString();
+
+    axiosHandler({
+      method: "get",
+      url:
+        PRODUCT_BALANCE_URL +
+        `?productId=${props.productId}?startDate=${month}&endDate=${today}`,
+      token: getToken(),
+      clientID: getClientId(),
+    }).then((res) => {
+      setBalance(res.sum);
+    });
+  };
 
   const formatWallets = () => {
     if (!wallets) return [];
@@ -93,9 +89,7 @@ function WalletList(props) {
         </span>,
         <span>
           {numberWithCommas(
-            item.debitAmount < 1
-              ? item.creditAmount / 100
-              : item.debitAmount / 100
+            item.debitAmount < 1 ? item.creditAmount : item.debitAmount
           )}
         </span>,
         <Badge status={item.debitAmount < 1 ? "success" : "error"}>
@@ -117,27 +111,9 @@ function WalletList(props) {
           <div className="lease-search-box" />
           ID: {props.walletID}
           <br />
-          Balance: {formatMoney()}
+          Balance: {balance}
           <br />
           Account type: N/A
-        </div>
-        <div className="flex align-center props">
-          &nbsp;
-          <Select
-            className="lease-search-box"
-            defaultOption={walletTransOption[0]}
-            optionList={walletTransOption}
-            name="status"
-            onChange={(e) => {
-              if (e.target.value === "credit") {
-                setQueryParams({ debitAmount: 0 });
-              } else if (e.target.value === "debit") {
-                setQueryParams({ creditAmount: 0 });
-              } else {
-                setQueryParams({});
-              }
-            }}
-          />
         </div>
       </div>
       <br />
@@ -147,18 +123,8 @@ function WalletList(props) {
         values={formatWallets()}
       />
       <br />
-      {!fetching && (
-        <Pagination
-          counter={pageInfo.size}
-          total={pageInfo.totalElements}
-          current={currentPage}
-          onChange={setCurrentPage}
-        />
-      )}
-      <br />
-      <br />
     </div>
   );
 }
 
-export default WalletList;
+export default Rules;
