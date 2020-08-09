@@ -17,9 +17,23 @@ import { secondaryColor } from "../../utils/data";
 import { store } from "../../stateManagement/store";
 import { setPageTitleAction } from "../../stateManagement/actions";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { GAME_INSTANCE_URL, GAME_URL } from "../../utils/urls";
+import { GAME_INSTANCE_URL, GAME_URL, PRODUCTS_URL } from "../../utils/urls";
 import { Spinner } from "../../components/spinner/Spinner";
 import moment from "moment";
+import { Select } from "../../components/select/Select";
+
+export const formatProduct = (prodData) => {
+  const returnData = [];
+  prodData.map(item => {
+    returnData.push({
+      title: item.name,
+      value: item.id
+    })
+    return null
+  })
+
+  return returnData;
+}
 
 const CreateGame = props => {
   const [gameData, setGameData] = useState({});
@@ -29,6 +43,8 @@ const CreateGame = props => {
 
   const [gameType, setGameType] = useState("");
   const [activeGame, setActiveGame] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [fetchingProd, setFetchingProd] = useState(true);
 
   const {
     dispatch,
@@ -45,7 +61,28 @@ const CreateGame = props => {
     } else {
       getActiveGame();
     }
+    getProducts();
   }, []);
+
+  const getProducts = (extra = "") => {
+    axiosHandler({
+      method: "get",
+      clientID: getClientId(),
+      token: getToken(),
+      url: PRODUCTS_URL,
+    }).then(
+      (res) => {
+        setProducts(res.data.data);
+        setFetchingProd(false);
+      },
+      (err) => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err),
+        });
+      }
+    );
+  };
 
   const getActiveInstance = () => {
     axiosHandler({
@@ -63,7 +100,6 @@ const CreateGame = props => {
           });
           return;
         }
-        console.log(activeGameInstance);
         setGameData({
           ...activeGameInstance,
           label: activeGameInstance.label,
@@ -109,7 +145,6 @@ const CreateGame = props => {
     setLoading(true);
     const data = {
       ...gameData,
-      productId: null,
       isActive: true,
       gameConfig: gameConfig,
       game: activeGame._links.self.href,
@@ -169,15 +204,21 @@ const CreateGame = props => {
       </div>
       <div className="form-container-main">
         <form onSubmit={onSubmit} className="main-container">
-          <FormGroup label="Game Label">
-            <Input
-              onChange={e => genericChangeSingle(e, setGameData, gameData)}
-              value={gameData.label || ""}
-              name={"label"}
-              placeholder="Specify game label"
-              required
-            />
-          </FormGroup>
+          <div className="grid grid-2 grid-gap-2">
+            <FormGroup label="Game Label">
+              <Input
+                onChange={e => genericChangeSingle(e, setGameData, gameData)}
+                value={gameData.label || ""}
+                name={"label"}
+                placeholder="Specify game label"
+                required
+              />
+            </FormGroup>
+            <FormGroup label="Product">
+              <Select placeholder={fetchingProd ? "loading products..." : "select a product"}
+               optionList={formatProduct(products)} name="productId" onChange={e => genericChangeSingle(e, setGameData, gameData)}/>
+            </FormGroup>
+          </div>
           {/*<FormGroup label="Cost Type">*/}
           {/*  <div className="flex align-center">*/}
           {/*    <Radio*/}

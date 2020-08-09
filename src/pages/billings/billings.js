@@ -16,41 +16,43 @@ import { getClientId, getToken, numberWithCommas } from "../../utils/helper";
 import _ from "lodash"
 import { primaryColor } from "../../utils/data";
 
+
 function Billings(props) {
   const { dispatch } = useContext(store);
   const [activeIndex, setActiveIndex] = useState(0);
   const [fetching, setFetching] = useState(true);
   const [summaryData, setSummaryData] = useState({});
   const [dateData, setDateData] = useState({
-    startDate: moment(new Date()).format("YYYY-MM-DD"),
-    endDate: moment(tomorrow).format("YYYY-MM-DD")
+    endDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+    startDate: moment(new Date()).format("YYYY-MM-DD") + " 00:00:00"
   });
   
   const getSummaryData = () => {
     Promise.all([
       axiosHandler({
         method: "get",
-        url: ANALYTICS_URL + `deposit?clientId=${getClientId()}&startDate=2020-07-27T14:00:18.813&endDate=2020-07-29T14:00:18.813`,
+        url: ANALYTICS_URL + `deposit?startDate=${dateData.startDate.replace(" ", "T")}&endDate=${dateData.endDate.replace(" ", "T")}`,
         token: getToken(),
         clientID: getClientId()
       }),
       axiosHandler({
         method: "get",
-        url: ANALYTICS_URL + `withdrawal?clientId=${getClientId()}&startDate=2020-07-27T14:00:18.813&endDate=2020-07-29T14:00:18.813`,
+        url: ANALYTICS_URL + `withdrawal?startDate=${dateData.startDate.replace(" ", "T")}&endDate=${dateData.endDate.replace(" ", "T")}`,
         token: getToken(),
         clientID: getClientId()
       }),
-      // axiosHandler({
-      //   method: "get",
-      //   url: ANALYTICS_URL + `revenue?clientId=${getClientId()}&startDate=2020-07-27T14:00:18.813&endDate=2020-07-29T14:00:18.813`,
-      //   token: getToken(),
-      //   clientID: getClientId()
-      // })
+      axiosHandler({
+        method: "get",
+        url: ANALYTICS_URL + `revenue?startDate=${dateData.startDate.replace(" ", "T")}&endDate=${dateData.endDate.replace(" ", "T")}`,
+        token: getToken(),
+        clientID: getClientId()
+      })
     ]).then(
-      ([deposit, withdrawal]) => {
+      ([deposit, withdrawal, rev]) => {
         setSummaryData({
-          depo: _.get(deposit, "data.totalSum", 0),
-          withdraw: _.get(withdrawal, "data.totalSum", 0),
+          depo: _.get(deposit, "data.sum", 0),
+          withdraw: _.get(withdrawal, "data.sum", 0),
+          revenue: _.get(rev, "data.sum", 0),
         })
         setFetching(false);
       }
@@ -59,15 +61,26 @@ function Billings(props) {
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Billings" });
-    getSummaryData()
   }, []);
+
+  useEffect(() => {
+    getSummaryData()
+    setFetching(true);
+  }, [dateData]);
+
+  const setDateDataInfo = (data) => {
+    setDateData({
+      startDate: data.startDate + moment(new Date()).format(" HH:mm:ss"),
+      endDate: data.endDate + moment(new Date()).format(" HH:mm:ss"),
+    })
+  }
 
   return (
     <div className="dashboard">
       <div className="flex align-center">
         <DatePicker
           rangePicker
-          onChange={e => setDateData({ ...dateData, ...e })}
+          onChange={e => setDateDataInfo({ ...dateData, ...e })}
         />
         <h3 className="link">
           &nbsp;&nbsp;Showing data between {dateData.startDate} to{" "}
@@ -79,17 +92,17 @@ function Billings(props) {
       <div className="computes">
         <Card heading="Total Deposit">
           <div className="contentCard">
-            <center>{fetching ? <Spinner color={primaryColor} /> : numberWithCommas(summaryData.depo)}</center>
+            <center>{fetching ? <Spinner color={primaryColor} /> : numberWithCommas(summaryData.depo) || 0}</center>
           </div>
         </Card>
         <Card heading="Total Withdrawal">
           <div className="contentCard">
-          <center>{fetching ? <Spinner color={primaryColor} /> : numberWithCommas(summaryData.withdraw)}</center>
+          <center>{fetching ? <Spinner color={primaryColor} /> : numberWithCommas(summaryData.withdraw) || 0}</center>
           </div>
         </Card>
         <Card heading="Total Product Revenue">
           <div className="contentCard">
-            <center>0</center>
+          <center>{fetching ? <Spinner color={primaryColor} /> : numberWithCommas(summaryData.revenue) || 0}</center>
           </div>
         </Card>
       </div>

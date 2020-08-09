@@ -13,13 +13,14 @@ import {
 } from "../../utils/helper";
 import { Select } from "../../components/select/Select";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { GAME_BUNDLE_URL, GAME_INSTANCE_URL } from "../../utils/urls";
+import { GAME_BUNDLE_URL, GAME_INSTANCE_URL, PRODUCTS_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import { TextAreaField } from "../../components/textarea/TextAreaField";
 import { Button } from "../../components/button/Button";
 import "./games.css";
 import { cleanParameters } from "../campaign/campaign";
 import { Spinner } from "../../components/spinner/Spinner";
+import { formatProduct } from "../createGame/createGame";
 
 function NewBundle(props) {
   const {
@@ -33,6 +34,8 @@ function NewBundle(props) {
   const [fetchingInstance, setfetchingInstance] = useState(true);
   const [fetching, setFetching] = useState(props.edit);
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [fetchingProd, setFetchingProd] = useState(true);
 
   useEffect(() => {
     dispatch({
@@ -43,6 +46,7 @@ function NewBundle(props) {
     if (props.edit) {
       getActiveBundle();
     }
+    getProducts();
   }, []);
 
   const getActiveBundle = () => {
@@ -65,6 +69,26 @@ function NewBundle(props) {
         Notification.bubble({
           type: "error",
           content: errorHandler(err)
+        });
+      }
+    );
+  };
+
+  const getProducts = (extra = "") => {
+    axiosHandler({
+      method: "get",
+      clientID: getClientId(),
+      token: getToken(),
+      url: PRODUCTS_URL,
+    }).then(
+      (res) => {
+        setProducts(res.data.data);
+        setFetchingProd(false);
+      },
+      (err) => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err),
         });
       }
     );
@@ -173,6 +197,8 @@ function NewBundle(props) {
             &nbsp; {props.edit ? "Update Bundle" : "Create New Game Bundle"}
           </span>
         </div>
+
+        <div className="grid grid-2 grid-gap-2">
         <FormGroup label="Bundle Label">
           <Input
             name="label"
@@ -181,6 +207,14 @@ function NewBundle(props) {
             onChange={e => genericChangeSingle(e, setBundleData, bundleData)}
           />
         </FormGroup>
+            <FormGroup label="Product">
+              <Select placeholder={fetchingProd ? "loading products..." : "select a product"}
+               optionList={formatProduct(products)} name="productId" onChange={e => genericChangeSingle(e, setBundleData, bundleData)}/>
+            </FormGroup>
+          </div>
+
+
+        
         <div className="grid grid-2 grid-gap-2">
           <FormGroup label="Game Instance">
             <Select

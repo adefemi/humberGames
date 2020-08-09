@@ -53,7 +53,7 @@ function TransactionList(props) {
       clientID: getClientId(),
       token: getToken(),
       url:
-        USER_TRANSACTION_URL + `?limit=20&${extra}&clientId=${getClientId()}`,
+        USER_TRANSACTION_URL + `?limit=20&${extra}`,
     }).then(
       (res) => {
         setCampaigns(_.get(res, "data._embedded.transactions", []));
@@ -135,8 +135,8 @@ function TransactionList(props) {
       <br />
       {!fetching && (
         <Pagination
-          counter={campaigns.limit}
-          total={campaigns.total}
+          counter={pageInfo.size}
+          total={pageInfo.totalElements}
           current={currentPage}
           onChange={setCurrentPage}
         />

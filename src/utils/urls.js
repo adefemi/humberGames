@@ -19,6 +19,9 @@ export const BILLING_BASE_URL = BASE_URL + "billings";
 export const GAME_BASE_URL =
   host[0] === "client" ? productionGameUrl : stagingGameUrl;
 
+export const APP_BASE = GAME_BASE_URL + "apps";
+
+
 export const LOGIN_URL = USER_BASE_URL + "auths/login";
 export const ROLES_URL = USER_BASE_URL + "roles";
 export const FILE_UPLOAD_URL = USER_BASE_URL + "auths/login";

@@ -25,13 +25,16 @@ import qs from "querystring";
 import {
   GAME_BUNDLE_TRANSACTION_URL,
   GAME_TRANSACTION_URL,
-  PAYOUT_URL
+  PAYOUT_URL,
+  APP_BASE
 } from "../../utils/urls";
 import { cleanParameters } from "../campaign/campaign";
 import Divider from "../../components/Divider/divider";
 import { Spinner } from "../../components/spinner/Spinner";
 import { Button } from "../../components/button/Button";
 import TransactionDetailsTwo from "./transactionDetailsTwo";
+import { formatApp } from "./singleGame";
+import _ from "lodash"
 
 function GameTransactions(props) {
   let headings = [
@@ -57,11 +60,39 @@ function GameTransactions(props) {
   const [search, setSearch] = useState("");
   const [showDetails2, setShowDetails2] = useState(false);
 
+  const [apps, setApps] = useState([]);
+  const [fetchingApps, setFetchingApps] = useState(true);
+
+  const getApps = () => {
+    axiosHandler({
+      method: "get",
+      clientID: getClientId(),
+      token: getToken(),
+      url: APP_BASE,
+    }).then(
+      (res) => {
+        console.log(res.data._embedded.apps)
+        setApps(_.get(res, "data._embedded.apps", []));
+        setFetchingApps(false);
+      },
+      (err) => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err),
+        });
+      }
+    );
+  }
+
+  const [appId, setAppId] = useState(null);
+
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
+    queryParams["appId"] = appId;
     extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getTransactions(extra);
-  }, [search, queryParams, currentPage]);
+    getApps();
+  }, [search, queryParams, currentPage, appId]);
 
   const getTransactions = (extra = "") => {
     if (!fetching) {
@@ -237,6 +268,9 @@ function GameTransactions(props) {
                 genericChangeSingle(e, setQueryParams, queryParams)
               }
             />
+            &nbsp;
+            <Select style={{width: 200}} placeholder={fetchingApps ? "loading apps..." : "select an app"}
+                optionList={[{title: "All", value:null}, ...formatApp(apps)]} name="appId" onChange={e => setAppId(e.target.value)}/>
           </div>
         </div>
       )}

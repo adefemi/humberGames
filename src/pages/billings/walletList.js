@@ -51,7 +51,7 @@ function WalletList(props) {
       token: getToken(),
       url:
         WALLET_TRANSACTIONS_URL +
-        `?limit=20&${extra}&clientId=${getClientId()}`,
+        `?limit=20&${extra}`,
     }).then(
       (res) => {
         setCampaigns(_.get(res.data, "_embedded.walletTransactions", []));
