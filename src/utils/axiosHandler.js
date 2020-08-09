@@ -1,5 +1,7 @@
 import Axios from "axios";
 import { checkExpiration, updateExpiration } from "./helper";
+import { USER_ME_URL } from "./urls";
+import { routeToLogin } from "../components/mainLayout/mainLayout";
 
 export const axiosHandler = ({
   method = "",
@@ -27,6 +29,19 @@ export const axiosHandler = ({
     }
     checkExpiration();
     updateExpiration();
+    if(clientID && clientID !== "default" && token){
+      Axios({
+        method: "get",
+        url: USER_ME_URL,
+        headers:{
+          Authorization: `Bearer ${token}`,
+          "client-id": clientID
+        }
+      }).then(
+        _ => null,
+        _ => routeToLogin()
+      )
+    }
     return Axios(axiosProps);
   } else {
     alert(`method ${methodType} is not accepted or data is not an object`);

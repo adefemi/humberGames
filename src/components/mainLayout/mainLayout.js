@@ -20,6 +20,11 @@ import { CLIENT_FETCH_URL, USER_ME_URL } from "../../utils/urls";
 import { setActiveClient, setUserDetails } from "../../stateManagement/actions";
 import jwtDecode from "jwt-decode";
 
+export const routeToLogin = () => {
+  localStorage.removeItem(USERTOKEN);
+  window.location.href = "/login"
+};
+
 function MainLayout(props) {
   const {
     dispatch,
@@ -98,11 +103,6 @@ function MainLayout(props) {
     // verify token
     //
   }, []);
-
-  const routeToLogin = () => {
-    localStorage.clear();
-    props.history.push("/login");
-  };
 
   if (loading) {
     return <Spinner size={15} color={secondaryColor} />;
