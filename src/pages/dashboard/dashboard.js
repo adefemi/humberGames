@@ -5,7 +5,7 @@ import { DATA, OPTIONS } from "./transactionGraphData";
 import Graph from "../../components/graph/Graph";
 import DatePicker from "../../components/DatePicker/datePicker";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { ANALYTICS_GRAPH_URL, ANALYTICS_KPI_URL } from "../../utils/urls";
+import { ANALYTICS_GRAPH_URL, ANALYTICS_KPI_URL, APP_BASE } from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
@@ -13,6 +13,8 @@ import moment from "moment";
 import { Select } from "../../components/select/Select";
 import { cleanParameters } from "../campaign/campaign";
 import qs from "querystring";
+import { formatApp } from "../games/singleGame";
+import _ from "lodash"
 
 let tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
@@ -26,14 +28,38 @@ function Dashboard(props) {
     startDate: moment(new Date()).format("YYYY-MM-DD"),
     endDate: moment(tomorrow).format("YYYY-MM-DD")
   });
+  const [apps, setApps] = useState([]);
+  const [fetchingApps, setFetchingApps] = useState(true);
+
+  const getApps = () => {
+    axiosHandler({
+      method: "get",
+      clientID: getClientId(),
+      token: getToken(),
+      url: APP_BASE,
+    }).then(
+      (res) => {
+        console.log(res.data._embedded.apps)
+        setApps(_.get(res, "data._embedded.apps", []));
+        setFetchingApps(false);
+      },
+      (err) => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err),
+        });
+      }
+    );
+  }
+
 
   useEffect(() => {
-    if (props.bundle) return;
     if (!fetching) {
       setFetching(true);
     }
     
     getDateData(qs.stringify(cleanParameters({appId})));
+    getApps();
   }, [dateData, appId]);
 
 
@@ -92,8 +118,8 @@ function Dashboard(props) {
             {dateData.endDate}
           </h3>
         </div>
-        <Select style={{maxWidth: 200}} placeholder={props.fetchingApp ? "loading apps..." : "select an app"}
-                optionList={[{title: "All", value:null}, ...props.formatApp(props.apps)]} name="appId" onChange={e => setAppId(e.target.value)}/>
+        <Select style={{maxWidth: 200}} placeholder={fetchingApps ? "loading apps..." : "select an app"}
+                optionList={[{title: "All", value:null}, ...formatApp(apps)]} name="appId" onChange={e => setAppId(e.target.value)}/>
       </div>
 
       <br />

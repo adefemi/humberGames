@@ -41,8 +41,7 @@ function Games(props) {
   const [drawsLink, setDrawsLink] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [apps, setApps] = useState([]);
-  const [fetchingApps, setFetchingApps] = useState(true);
+  
 
   useEffect(() => {
     dispatch({
@@ -50,30 +49,9 @@ function Games(props) {
       payload: props.match.params.label
     });
     setGameData();
-    getApps();
   }, []);
 
-  const getApps = () => {
-    axiosHandler({
-      method: "get",
-      clientID: getClientId(),
-      token: getToken(),
-      url: APP_BASE,
-    }).then(
-      (res) => {
-        console.log(res.data._embedded.apps)
-        setApps(_.get(res, "data._embedded.apps", []));
-        setFetchingApps(false);
-      },
-      (err) => {
-        Notification.bubble({
-          type: "error",
-          content: errorHandler(err),
-        });
-      }
-    );
-  }
-
+  
   const setGameData = () => {
     axiosHandler({
       method: "get",
@@ -111,7 +89,7 @@ function Games(props) {
   };
 
   const bodies = [
-    <Dashboard {...props} apps={apps} fetchingApp={fetchingApps} formatApp={formatApp}/>,
+    <Dashboard {...props} formatApp={formatApp}/>,
     <GameDraws
       {...props}
       gameLink={gameLink}
@@ -119,7 +97,7 @@ function Games(props) {
       prizesLink={prizesLink}
       fetching={fetching}
     />,
-    <GameTransactions {...props} transactionLink={transactionLink} apps={apps} fetchingApp={fetchingApps} formatApp={formatApp}/>,
+    <GameTransactions {...props} transactionLink={transactionLink} formatApp={formatApp}/>,
     <InstanceConfig
       {...props}
       gameLink={gameLink}
