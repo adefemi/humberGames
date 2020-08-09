@@ -7,7 +7,7 @@ import Dashboard from "../dashboard/dashboard";
 import GameTransactions from "./gameTransactions";
 import InstanceConfig from "./instanceConfig";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { GAME_INSTANCE_URL } from "../../utils/urls";
+import { GAME_INSTANCE_URL, APP_BASE } from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import AppIcon from "../../components/icons/Icon";
@@ -16,6 +16,20 @@ import GameDraws from "./drawsInfo";
 import { Toggle } from "../../components/toggle/Toggle";
 import { Modal } from "../../components/modal/Modal";
 import { Spinner } from "../../components/spinner/Spinner";
+import _ from "lodash"
+
+export const formatApp = (prodData) => {
+  const returnData = [];
+  prodData.map(item => {
+    returnData.push({
+      title: item.label,
+      value: item.id
+    })
+    return null
+  })
+
+  return returnData;
+}
 
 function Games(props) {
   const { dispatch } = useContext(store);
@@ -27,6 +41,8 @@ function Games(props) {
   const [drawsLink, setDrawsLink] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [apps, setApps] = useState([]);
+  const [fetchingApps, setFetchingApps] = useState(true);
 
   useEffect(() => {
     dispatch({
@@ -34,7 +50,29 @@ function Games(props) {
       payload: props.match.params.label
     });
     setGameData();
+    getApps();
   }, []);
+
+  const getApps = () => {
+    axiosHandler({
+      method: "get",
+      clientID: getClientId(),
+      token: getToken(),
+      url: APP_BASE,
+    }).then(
+      (res) => {
+        console.log(res.data._embedded.apps)
+        setApps(_.get(res, "data._embedded.apps", []));
+        setFetchingApps(false);
+      },
+      (err) => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err),
+        });
+      }
+    );
+  }
 
   const setGameData = () => {
     axiosHandler({
@@ -73,7 +111,7 @@ function Games(props) {
   };
 
   const bodies = [
-    <Dashboard {...props} />,
+    <Dashboard {...props} apps={apps} fetchingApp={fetchingApps} formatApp={formatApp}/>,
     <GameDraws
       {...props}
       gameLink={gameLink}
@@ -81,7 +119,7 @@ function Games(props) {
       prizesLink={prizesLink}
       fetching={fetching}
     />,
-    <GameTransactions {...props} transactionLink={transactionLink} />,
+    <GameTransactions {...props} transactionLink={transactionLink} apps={apps} fetchingApp={fetchingApps} formatApp={formatApp}/>,
     <InstanceConfig
       {...props}
       gameLink={gameLink}

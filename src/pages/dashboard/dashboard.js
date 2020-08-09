@@ -10,6 +10,9 @@ import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
 import moment from "moment";
+import { Select } from "../../components/select/Select";
+import { cleanParameters } from "../campaign/campaign";
+import qs from "querystring";
 
 let tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
@@ -18,6 +21,7 @@ export { tomorrow };
 function Dashboard(props) {
   const [data, setData] = useState(null);
   const [fetching, setFetching] = useState(true);
+  const [appId, setAppId] = useState(null);
   const [dateData, setDateData] = useState({
     startDate: moment(new Date()).format("YYYY-MM-DD"),
     endDate: moment(tomorrow).format("YYYY-MM-DD")
@@ -28,19 +32,16 @@ function Dashboard(props) {
     if (!fetching) {
       setFetching(true);
     }
-    getDateData();
-  }, [dateData]);
+    
+    getDateData(qs.stringify(cleanParameters({appId})));
+  }, [dateData, appId]);
 
-  useEffect(() => {
-    if (props.bundle) return;
-    getDateData();
-  }, []);
 
-  const getDateData = () => {
+  const getDateData = (extra) => {
     Promise.all([
       axiosHandler({
         method: "post",
-        url: ANALYTICS_KPI_URL + props.match.params.uuid,
+        url: ANALYTICS_KPI_URL + props.match.params.uuid + `?${extra}`,
         clientID: getClientId(),
         token: getToken(),
         data: {
@@ -50,7 +51,7 @@ function Dashboard(props) {
       }),
       axiosHandler({
         method: "post",
-        url: ANALYTICS_GRAPH_URL + props.match.params.uuid,
+        url: ANALYTICS_GRAPH_URL + props.match.params.uuid + `?${extra}`,
         clientID: getClientId(),
         token: getToken(),
         data: {
@@ -62,7 +63,6 @@ function Dashboard(props) {
       ([logs, graph]) => {
         setData({ ...data, kpiInfo: logs.data });
         setFetching(false);
-        // console.log(graph);
       },
       err => {
         Notification.bubble({
@@ -76,23 +76,26 @@ function Dashboard(props) {
   const calculateWinningRatio = () => {
     if (!data.kpiInfo) return 0;
     if (data.kpiInfo.totalGamePlays <= 0) return 0;
-    return data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays <= 0
-      ? 1
-      : data.kpiInfo.totalGamePlays;
+    return data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays;
   };
 
   return (
     <div className="dashboard">
-      <div className="flex align-center">
-        <DatePicker
-          rangePicker
-          onChange={e => setDateData({ ...dateData, ...e })}
-        />
-        <h3 className="link">
-          &nbsp;&nbsp;Showing data between {dateData.startDate} to{" "}
-          {dateData.endDate}
-        </h3>
+      <div className="flex align-center justify-between">
+        <div className="flex align-center">
+          <DatePicker
+            rangePicker
+            onChange={e => setDateData({ ...dateData, ...e })}
+          />
+          <h3 className="link">
+            &nbsp;&nbsp;Showing data between {dateData.startDate} to{" "}
+            {dateData.endDate}
+          </h3>
+        </div>
+        <Select style={{maxWidth: 200}} placeholder={props.fetchingApp ? "loading apps..." : "select an app"}
+                optionList={[{title: "All", value:null}, ...props.formatApp(props.apps)]} name="appId" onChange={e => setAppId(e.target.value)}/>
       </div>
+
       <br />
       <br />
 
@@ -126,7 +129,6 @@ function Dashboard(props) {
                 <Spinner color="#000000" />
               ) : (
                 <h1>
-                  {console.log(data.kpiInfo)}
                   {calculateWinningRatio().length > 6
                     ? calculateWinningRatio().toFixed(4)
                     : calculateWinningRatio()}

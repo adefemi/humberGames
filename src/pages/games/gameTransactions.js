@@ -57,11 +57,14 @@ function GameTransactions(props) {
   const [search, setSearch] = useState("");
   const [showDetails2, setShowDetails2] = useState(false);
 
+  const [appId, setAppId] = useState(null);
+
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
+    queryParams["appId"] = appId;
     extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getTransactions(extra);
-  }, [search, queryParams, currentPage]);
+  }, [search, queryParams, currentPage, appId]);
 
   const getTransactions = (extra = "") => {
     if (!fetching) {
@@ -237,6 +240,9 @@ function GameTransactions(props) {
                 genericChangeSingle(e, setQueryParams, queryParams)
               }
             />
+            &nbsp;
+            <Select style={{width: 200}} placeholder={props.fetchingApp ? "loading apps..." : "select an app"}
+                optionList={[{title: "All", value:null}, ...props.formatApp(props.apps)]} name="appId" onChange={e => setAppId(e.target.value)}/>
           </div>
         </div>
       )}
