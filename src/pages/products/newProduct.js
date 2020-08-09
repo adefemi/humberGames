@@ -62,13 +62,10 @@ function NewProduct(props) {
         content: "Product amount is required!",
       });
       setSubmit(false);
-    } else if (
-      !contentData.description ||
-      contentData.description.length < 50
-    ) {
+    } else if (!contentData.description) {
       Notification.bubble({
         type: "error",
-        content: "Product description is too short!",
+        content: "Product description is required!",
       });
       setSubmit(false);
     } else {
