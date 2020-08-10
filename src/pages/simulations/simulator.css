@@ -8,3 +8,8 @@
   height: 35px !important;
   cursor: pointer;
 }
+
+.fade {
+  opacity: 0.8;
+  cursor: not-allowed;
+}

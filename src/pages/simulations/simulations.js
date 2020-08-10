@@ -80,6 +80,7 @@ function Simulations(props) {
       (res) => {
         setSimulations(res.data._embedded);
         setSimulationCounts(res.data._embedded.simulators.length);
+        reloadRule();
         setFetching(false);
       },
       (err) => {
@@ -144,12 +145,13 @@ function Simulations(props) {
           View rules
         </span>,
         <div>
-          <span
-            className="link"
-            onClick={() => props.history.push(`/simulation/${item.id}`)}
-          >
-            Run simulation
-          </span>
+          {item.rules.length ? (
+            <span className="link" onClick={() => runSimulation(item.id)}>
+              Run simulation
+            </span>
+          ) : (
+            <span className="link fade">Run simulation</span>
+          )}
         </div>,
       ]);
       return null;
@@ -194,6 +196,15 @@ function Simulations(props) {
     setRuleId(id);
     setRules(rules);
     toggleRule();
+  };
+
+  const reloadRule = () => {
+    let id = ruleId;
+    if (id) {
+      let rules = simulations.simulators.filter((item) => item.id === id);
+      rules = rules.length ? rules[0].rules : [];
+      setRules(rules);
+    }
   };
 
   const onChangeSimulation = (e) => {
@@ -336,6 +347,38 @@ function Simulations(props) {
     }
   };
 
+  const runSimulation = (id) => {
+    dispatch({
+      type: setGlobalLoader,
+      payload: {
+        status: true,
+        content: "Processing Request, this may take a while, Please wait...",
+      },
+    });
+
+    axiosHandler({
+      method: "get",
+      clientID: getClientId(),
+      token: getToken(),
+      url: SIMULATION_URL + "/simulations/execute/" + id,
+    }).then((res) => {
+      if (res) {
+        dispatch({
+          type: setGlobalLoader,
+          payload: {
+            status: false,
+            content: "",
+          },
+        });
+        setFetching(false);
+        Notification.bubble({
+          type: "success",
+          content: "Simulation started successfully!",
+        });
+      }
+    });
+  };
+
   return (
     <div className="dashboard">
       <ContentModal visible={simulationModal} setVisible={toggleSimulation}>
@@ -411,10 +454,7 @@ function Simulations(props) {
             loading={fetching}
             values={formatRules()}
           />
-          <form
-            // onSubmit={saveRule}
-            style={{ display: rule ? "block" : "none" }}
-          >
+          <form style={{ display: rule ? "block" : "none" }}>
             <hr />
             <span
               className="close-2"
