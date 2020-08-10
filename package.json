@@ -8,6 +8,7 @@
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
     "country-state-city": "^1.0.4",
+    "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
     "microseconds": "^0.2.0",

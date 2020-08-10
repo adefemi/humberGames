@@ -43,7 +43,7 @@ function GameDraws(props) {
       method: "get",
       url:
         DRAWS_URL +
-        `?gameInstance_id=${props.match.params.uuid}&${extra}&size=20`,
+        `?gameInstance_id=${props.match.params.uuid}&${extra}&size=20&sort=createdAt,desc`,
       clientID: getClientId(),
       token: getToken()
     }).then(

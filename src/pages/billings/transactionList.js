@@ -42,7 +42,6 @@ function TransactionList(props) {
     if (props.user) {
       if (props.fetching) return;
       extra = extra + `id=${props.walletID}`;
-      console.log(props.walletID);
       if (props.walletID === 0) {
         setFetching(false);
         return;
@@ -53,7 +52,7 @@ function TransactionList(props) {
       clientID: getClientId(),
       token: getToken(),
       url:
-        USER_TRANSACTION_URL + `?limit=20&${extra}`,
+        USER_TRANSACTION_URL + `?limit=20&${extra}&sort=createdAt,desc`,
     }).then(
       (res) => {
         setCampaigns(_.get(res, "data._embedded.transactions", []));

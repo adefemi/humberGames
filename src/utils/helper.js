@@ -298,7 +298,12 @@ export const genericChangeMulti = (e, setter, current) => {
   setter({ ...current, ...newData });
 };
 
-export const checkExpiration = () => {
+export const checkExpiration = (data=null) => {
+  if(data){
+    const currentDateTime = new Date();
+
+    return data > (currentDateTime.getTime() / 1000);
+  }
   let activeExpiration = localStorage.getItem(SESSION_EXPIRY);
   if (!activeExpiration) return false;
   activeExpiration = moment(activeExpiration, momentFullDateFormat).diff(
