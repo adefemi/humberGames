@@ -15,6 +15,7 @@ import { cleanParameters } from "../campaign/campaign";
 import qs from "querystring";
 import { formatApp } from "../games/singleGame";
 import _ from "lodash"
+import { primaryColor } from "../../utils/data";
 
 let tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
@@ -28,6 +29,7 @@ function Dashboard(props) {
     startDate: moment(new Date()).format("YYYY-MM-DD"),
     endDate: moment(tomorrow).format("YYYY-MM-DD")
   });
+  const [graphData, setGraphData] = useState([]);
   const [apps, setApps] = useState([]);
   const [fetchingApps, setFetchingApps] = useState(true);
 
@@ -62,6 +64,39 @@ function Dashboard(props) {
     getApps();
   }, [dateData, appId]);
 
+  const formatGraphData = data => {
+    const labels = [];
+    const gamePlays = [];
+    const winnings = [];
+
+    data.map(item => {
+      labels.push(
+        moment(new Date(item.date)).format("DD MMM, YY")
+      )
+      gamePlays.push(item.totalGamePlays)
+      winnings.push(item.totalWinnings)
+      return null;
+    })
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: "GamePlays",
+          data: gamePlays,
+          fill: false,
+          borderColor: "#EB008A"
+        },
+        {
+          label: "Winnings",
+          data: winnings,
+          fill: false,
+          borderColor: "#0094D8"
+        }
+      ]
+    }
+  }
+
 
   const getDateData = (extra) => {
     Promise.all([
@@ -88,6 +123,7 @@ function Dashboard(props) {
     ]).then(
       ([logs, graph]) => {
         setData({ ...data, kpiInfo: logs.data });
+        setGraphData(formatGraphData(graph.data.data))
         setFetching(false);
       },
       err => {
@@ -102,7 +138,7 @@ function Dashboard(props) {
   const calculateWinningRatio = () => {
     if (!data.kpiInfo) return 0;
     if (data.kpiInfo.totalGamePlays <= 0) return 0;
-    return data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays;
+    return (data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays).toFixed(2);
   };
 
   return (
@@ -168,16 +204,19 @@ function Dashboard(props) {
       <Card heading="GamePlays/Winnings vs Time">
         <div className="contentCard">
           <div className="graph-container">
-            <div className="">
-              <Graph
-                options={OPTIONS}
-                labels={DATA.labels}
-                datasets={DATA.datasets}
-                height={300}
-                width={1000}
-                className="transaction-graph"
-              />
-            </div>
+            {
+              fetching ? <Spinner color={primaryColor} /> :
+              <div className="">
+                <Graph
+                  options={OPTIONS}
+                  labels={graphData.labels}
+                  datasets={graphData.datasets}
+                  height={300}
+                  width={1000}
+                  className="transaction-graph"
+                />
+              </div>
+            }
           </div>
         </div>
       </Card>

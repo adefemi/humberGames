@@ -71,7 +71,6 @@ function GameTransactions(props) {
       url: APP_BASE,
     }).then(
       (res) => {
-        console.log(res.data._embedded.apps)
         setApps(_.get(res, "data._embedded.apps", []));
         setFetchingApps(false);
       },
@@ -98,21 +97,20 @@ function GameTransactions(props) {
     if (!fetching) {
       setFetching(true);
     }
-    console.log(props);
     let url =
       GAME_TRANSACTION_URL +
       `?${props.user ? "userId" : props.draw ? "draw" : "gameInstance"}=${
         props.match.params.uuid
-      }&size=20&${extra}`;
+      }&size=20&${extra}&sort=createdAt,desc`;
     if (props.bundle) {
       url =
         GAME_BUNDLE_TRANSACTION_URL +
-        `?game_bundle_id=${props.match.params.uuid}&size=20&${extra}`;
+        `?game_bundle_id=${props.match.params.uuid}&size=20&${extra}&sort=createdAt,desc`;
     }
     if (props.transRef) {
       url =
         GAME_TRANSACTION_URL +
-        `?transactionRef=${props.transRef}&size=20&${extra}`;
+        `?transactionRef=${props.transRef}&size=20&${extra}&sort=createdAt,desc`;
     }
     axiosHandler({
       method: "get",

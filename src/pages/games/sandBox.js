@@ -62,7 +62,7 @@ function Sandbox(props) {
 
   useEffect(() => {
     let extra = `page=${currentPage - 1}`;
-    extra += `&${qs.stringify(cleanParameters(queryParams))}`;
+    extra += `&${qs.stringify(cleanParameters(queryParams))}&sort=createdAt,desc`;
     getInstance(extra);
   }, [search, queryParams, currentPage]);
 

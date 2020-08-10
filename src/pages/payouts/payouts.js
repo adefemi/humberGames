@@ -38,7 +38,7 @@ function GameTransactions(props) {
     let extra = `page=${currentPage - 1}`;
     extra += `&${qs.stringify(
       cleanParameters(queryParams)
-    )}&clientId=${getClientId()}`;
+    )}&clientId=${getClientId()}&sort=createdAt,desc`;
     getTransactions(extra);
   }, [search, queryParams, currentPage]);
 

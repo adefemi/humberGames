@@ -59,28 +59,6 @@ function MainLayout(props) {
       routeToLogin();
     }
     let token = localStorage.getItem(USERTOKEN);
-    // if (token) {
-    //   token = JSON.parse(token);
-    //   axiosHandler({
-    //     method: "get",
-    //     url: USER_ME_URL,
-    //     token: token.access,
-    //     clientID
-    //   }).then(
-    //       res => {
-    //         dispatch({ type: setUserDetails, payload: res.data.data });
-    //         setLoading(false);
-    //         props.history.push(
-    //             props.location.pathname + `?${props.location.search}`
-    //         );
-    //       },
-    //       _ => {
-    //         routeToLogin();
-    //       }
-    //   );
-    // } else {
-    //   routeToLogin();
-    // }
     try {
       const decoded = jwtDecode(token);
       axiosHandler({
