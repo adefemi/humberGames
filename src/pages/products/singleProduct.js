@@ -12,6 +12,8 @@ import { store } from "../../stateManagement/store";
 import { Spinner } from "../../components/spinner/Spinner";
 import { secondaryColor } from "../../utils/data";
 import { Card } from "../../components/card/Card";
+import { DATA, OPTIONS } from "./graphData";
+import Graph from "../../components/graph/Graph";
 import moment from "moment";
 import "./product.css";
 import Divider from "../../components/Divider/divider";
@@ -28,12 +30,15 @@ function SingleProduct(props) {
   const [fetchingWalletId, setFetchingWallet] = useState(true);
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
+  const [tab, setTab] = useState(0);
   const [wallets, setWallets] = useState([]);
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
     dispatch({ type: setPageTitleAction, payload: "Single Product" });
     getProduct();
     getWallet();
+    getBalance();
   }, []);
 
   const getProduct = () => {
@@ -45,6 +50,34 @@ function SingleProduct(props) {
     }).then(
       (res) => {
         setProduct(res.data.data);
+        setFetching(false);
+      },
+      (err) => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err),
+        });
+      }
+    );
+  };
+
+  const getBalance = () => {
+    let month = moment().subtract(1, "month").toISOString();
+    month = month.replace("Z", "");
+    let today = moment().toISOString();
+    today = today.replace("Z", "");
+
+    axiosHandler({
+      method: "get",
+      url:
+        PRODUCT_BALANCE_URL +
+        `?productId=${props.match.params.id}&startDate=${month}&endDate=${today}`,
+      token: getToken(),
+      clientID: getClientId(),
+    }).then(
+      (res) => {
+        let balance = res.data.sum / 100;
+        setBalance(balance);
         setFetching(false);
       },
       (err) => {
@@ -73,48 +106,52 @@ function SingleProduct(props) {
     return <Spinner color={secondaryColor} />;
   }
 
-  return (
-    <>
+  const Performance = (
+    <div>
+      <div className="computes">
+        <Card heading="Total Revenue">
+          <div className="contentCard">
+            <br />
+            <center>
+              {new Intl.NumberFormat("en-NG", {
+                style: "currency",
+                currency: "NGN",
+              }).format(balance)}
+            </center>
+            <br />
+          </div>
+        </Card>
+        <Card heading="Total Payout">
+          <div className="contentCard">
+            <br />
+            <center>0</center>
+            <br />
+          </div>
+        </Card>
+      </div>
       <br />
-      <Card className="padding-20">
-        <div className="grid grid-2 grid-gap-2">
-          <div>
-            <div className="info">Product ID</div>{" "}
-            <div className="content">{product.id}</div>
-          </div>
-          <div>
-            <div className="info">Created At</div>{" "}
-            <div className="content">
-              {moment(new Date(product.created_at)).fromNow()}
-            </div>
-          </div>
-          <div>
-            <div className="info">Name</div>{" "}
-            <div className="content">{product.name}</div>
-          </div>
-          <div>
-            <div className="info">Amount</div>{" "}
-            <div className="content">{product.amount}</div>
-          </div>
-          <div>
-            <div className="info">Description</div>{" "}
-            <div className="content">{product.description}</div>
-          </div>
-          <div>
-            <div className="info"></div>{" "}
-            <div className="content">
-              <Button
-                onClick={() =>
-                  props.history.push(`/product/${product.id}/edit`)
-                }
-              >
-                Edit
-              </Button>
+      <Card heading="Revenues vs Time">
+        <div className="contentCard">
+          <div className="graph-container">
+            <div className="">
+              <Graph
+                options={OPTIONS}
+                labels={DATA.labels}
+                datasets={DATA.datasets}
+                height={300}
+                width={1000}
+                className="transaction-graph"
+              />
             </div>
           </div>
         </div>
       </Card>
       <br />
+    </div>
+  );
+
+  const Wallets = (
+    <div>
       <Tabs
         heading={wallets.map((item, key) => `Wallet (${key + 1})`)}
         body={[
@@ -131,8 +168,65 @@ function SingleProduct(props) {
         activeIndex={activeTab}
         onSwitch={setActiveTab}
       />
-
       <br />
+    </div>
+  );
+
+  const Settings = (
+    <div>
+      <Card className="padding-20">
+        <div
+          className="grid grid-2 grid-gap-2"
+          style={{ display: product ? "grid" : "none" }}
+        >
+          <div>
+            <div className="info">Product ID</div>{" "}
+            <div className="content">{product ? product.id : ""}</div>
+          </div>
+          <div>
+            <div className="info">Created At</div>{" "}
+            <div className="content">
+              {product ? moment(new Date(product.created_at)).fromNow() : ""}
+            </div>
+          </div>
+          <div>
+            <div className="info">Name</div>{" "}
+            <div className="content">{product ? product.name : ""}</div>
+          </div>
+          <div>
+            <div className="info">Amount</div>{" "}
+            <div className="content">{product ? product.amount : ""}</div>
+          </div>
+          <div>
+            <div className="info">Description</div>{" "}
+            <div className="content">{product ? product.description : ""}</div>
+          </div>
+          <div>
+            <div className="info"></div>{" "}
+            <div className="content">
+              <Button
+                onClick={() =>
+                  props.history.push(`/product/${product.id}/edit`)
+                }
+              >
+                Edit
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Card>
+      <br />
+    </div>
+  );
+
+  return (
+    <>
+      <Tabs
+        heading={["Performance", "Wallets", "Settings"]}
+        body={[Performance, Wallets, Settings]}
+        activeIndex={tab}
+        onSwitch={setTab}
+      />
     </>
   );
 }
