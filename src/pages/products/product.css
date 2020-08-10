@@ -1,6 +1,15 @@
 .product-card {
   width: 300px;
 }
+
+.computes {
+  display: flex;
+}
+
+.computes .card-main {
+  margin-right: 10px;
+}
+
 textarea {
   resize: none;
   min-height: 120px;

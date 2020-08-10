@@ -66,3 +66,4 @@ export const USER_WALLET_URL = BILLING_BASE_URL + "/wallets";
 export const PRODUCT_BALANCE_URL = BILLING_BASE_URL + "/analytics/revenue";
 export const USER_TRANSACTION_URL = BILLING_BASE_URL + "/transactions";
 export const ANALYTICS_URL = BILLING_BASE_URL + "/analytics/";
+export const SIMULATION_URL = stagingBaseUrl + "tylsim";
