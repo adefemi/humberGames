@@ -11,7 +11,7 @@ import {
   getToken,
   numberWithCommas,
 } from "../../utils/helper";
-import { WALLET_TRANSACTIONS_URL } from "../../utils/urls";
+import { WALLET_TRANSACTIONS_URL, PRODUCT_BALANCE_URL } from "../../utils/urls";
 import { Notification } from "../../components/notification/Notification";
 import Badge from "../../components/Badge/badge";
 import moment from "moment";
@@ -21,6 +21,7 @@ import { walletTransOption } from "../../utils/data";
 
 function WalletList(props) {
   const [wallets, setWallets] = useState([]);
+  const [balance, setBalance] = useState(0);
   const [pageInfo, setPageInfo] = useState({});
   const [fetching, setFetching] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -64,6 +65,13 @@ function WalletList(props) {
     );
   };
 
+  const formatMoney = () => {
+    let balance = props.balance / 100;
+    balance = balance.toFixed(2);
+    balance = "₦" + balance;
+    return balance;
+  };
+
   const headings = [
     "id",
     "Amount",
@@ -77,7 +85,7 @@ function WalletList(props) {
   const formatWallets = () => {
     if (!wallets) return [];
     const result = [];
-    wallets.map((item) => {
+    wallets.map((item, key) => {
       result.push([
         <span>
           {item.id.substring(0, 15)}
@@ -85,7 +93,9 @@ function WalletList(props) {
         </span>,
         <span>
           {numberWithCommas(
-            item.debitAmount < 1 ? item.creditAmount : item.debitAmount
+            item.debitAmount < 1
+              ? item.creditAmount / 100
+              : item.debitAmount / 100
           )}
         </span>,
         <Badge status={item.debitAmount < 1 ? "success" : "error"}>
@@ -106,6 +116,10 @@ function WalletList(props) {
         <div>
           <div className="lease-search-box" />
           ID: {props.walletID}
+          <br />
+          Balance: {formatMoney()}
+          <br />
+          Account type: N/A
         </div>
         <div className="flex align-center props">
           &nbsp;
