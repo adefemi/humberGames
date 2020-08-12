@@ -4,7 +4,6 @@ import AppIcon from "../../components/icons/Icon";
 import { Select } from "../../components/select/Select";
 import {
   secondaryColor,
-  statusMode,
   statusModeTransaction
 } from "../../utils/data";
 import TransactionTable from "../../components/transactionTable/transactionTable";
@@ -26,7 +25,9 @@ import {
   GAME_BUNDLE_TRANSACTION_URL,
   GAME_TRANSACTION_URL,
   PAYOUT_URL,
-  APP_BASE
+  APP_BASE,
+  ANALYTICS_KPI_URL,
+  ANALYTICS_GRAPH_URL
 } from "../../utils/urls";
 import { cleanParameters } from "../campaign/campaign";
 import Divider from "../../components/Divider/divider";
@@ -35,6 +36,9 @@ import { Button } from "../../components/button/Button";
 import TransactionDetailsTwo from "./transactionDetailsTwo";
 import { formatApp } from "./singleGame";
 import _ from "lodash"
+import { Card } from "../../components/card/Card";
+import { calculateWinningRatio } from "../dashboard/dashboard";
+import "../dashboard/dashboard.css";
 
 function GameTransactions(props) {
   let headings = [
@@ -52,6 +56,7 @@ function GameTransactions(props) {
   }
   const [transactions, setTransaction] = useState([]);
   const [fetching, setFetching] = useState(true);
+  const [fetchingSum, setFetchingSum] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   const [activeTransaction, setActiveTransaction] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
@@ -59,6 +64,7 @@ function GameTransactions(props) {
   const [queryParams, setQueryParams] = useState({});
   const [search, setSearch] = useState("");
   const [showDetails2, setShowDetails2] = useState(false);
+  const [data, setData] = useState(null);
 
   const [apps, setApps] = useState([]);
   const [fetchingApps, setFetchingApps] = useState(true);
@@ -90,6 +96,7 @@ function GameTransactions(props) {
     queryParams["appId"] = appId;
     extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getTransactions(extra);
+    getDateData(qs.stringify(cleanParameters({appId})));
     getApps();
   }, [search, queryParams, currentPage, appId]);
 
@@ -135,6 +142,42 @@ function GameTransactions(props) {
           content: errorHandler(err, true)
         });
       });
+  };
+
+  const getDateData = (extra) => {
+    Promise.all([
+      axiosHandler({
+        method: "post",
+        url: ANALYTICS_KPI_URL + `?${extra}`,
+        clientID: getClientId(),
+        token: getToken(),
+        // data: {
+        //   startDate: `${dateData.startDate} 00:00:00`,
+        //   endDate: `${dateData.endDate} 00:00:00`
+        // }
+      }),
+      axiosHandler({
+        method: "post",
+        url: ANALYTICS_GRAPH_URL + `?${extra}`,
+        clientID: getClientId(),
+        token: getToken(),
+        // data: {
+        //   startDate: `${dateData.startDate} 00:00:00`,
+        //   endDate: `${dateData.endDate} 00:00:00`
+        // }
+      })
+    ]).then(
+      ([logs, graph]) => {
+        setData({ ...data, kpiInfo: logs.data });
+        setFetchingSum(false);
+      },
+      err => {
+        Notification.bubble({
+          type: "error",
+          content: errorHandler(err)
+        });
+      }
+    );
   };
 
   const formatTransactions = () => {
@@ -237,7 +280,47 @@ function GameTransactions(props) {
   };
 
   return (
-    <div>
+    <div className="dashboard">
+      <div className="computes">
+        <Card heading="Total GamePlays">
+          <div className="contentCard">
+            <center>
+              {fetchingSum ? (
+                <Spinner color="#000000" />
+              ) : (
+                <h1>{!data ? "-": data.kpiInfo ? data.kpiInfo.totalGamePlays : "-"}</h1>
+              )}
+            </center>
+          </div>
+        </Card>
+        <Card heading="Total Winnings">
+          <div className="contentCard">
+            <center>
+              {fetchingSum ? (
+                <Spinner color="#000000" />
+              ) : (
+                <h1>{!data ? "-":data.kpiInfo ? data.kpiInfo.totalWinnings : "-"}</h1>
+              )}
+            </center>
+          </div>
+        </Card>
+        <Card heading="Winning Ratio">
+          <div className="contentCard">
+            <center>
+              {fetchingSum ? (
+                <Spinner color="#000000" />
+              ) : (
+                <h1>
+                  {!data ? "-":data.kpiInfo && calculateWinningRatio().length > 6
+                    ? calculateWinningRatio().toFixed(4)
+                    : calculateWinningRatio()}
+                </h1>
+              )}
+            </center>
+          </div>
+        </Card>
+      </div>
+      <br />
       {showDetails2 && (
         <TransactionDetailsTwo
           {...props}

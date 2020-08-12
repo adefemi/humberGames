@@ -19,14 +19,25 @@ import { primaryColor } from "../../utils/data";
 
 let tomorrow = new Date();
 tomorrow.setDate(tomorrow.getDate() + 1);
-export { tomorrow };
+
+let yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
+const calculateWinningRatio = (dataMain) => {
+  if (!dataMain.kpiInfo) return 0;
+  if (dataMain.kpiInfo.totalGamePlays <= 0) return 0;
+  return (dataMain.kpiInfo.totalWinnings / dataMain.kpiInfo.totalGamePlays).toFixed(2);
+};
+
+export { tomorrow, yesterday, calculateWinningRatio };
+
 
 function Dashboard(props) {
   const [data, setData] = useState(null);
   const [fetching, setFetching] = useState(true);
   const [appId, setAppId] = useState(null);
   const [dateData, setDateData] = useState({
-    startDate: moment(new Date()).format("YYYY-MM-DD"),
+    startDate: moment(yesterday).format("YYYY-MM-DD"),
     endDate: moment(tomorrow).format("YYYY-MM-DD")
   });
   const [graphData, setGraphData] = useState([]);
@@ -133,12 +144,6 @@ function Dashboard(props) {
         });
       }
     );
-  };
-
-  const calculateWinningRatio = () => {
-    if (!data.kpiInfo) return 0;
-    if (data.kpiInfo.totalGamePlays <= 0) return 0;
-    return (data.kpiInfo.totalWinnings / data.kpiInfo.totalGamePlays).toFixed(2);
   };
 
   return (
