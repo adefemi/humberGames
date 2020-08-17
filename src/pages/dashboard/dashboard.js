@@ -5,7 +5,11 @@ import { DATA, OPTIONS } from "./transactionGraphData";
 import Graph from "../../components/graph/Graph";
 import DatePicker from "../../components/DatePicker/datePicker";
 import { axiosHandler } from "../../utils/axiosHandler";
-import { ANALYTICS_GRAPH_URL, ANALYTICS_KPI_URL, APP_BASE } from "../../utils/urls";
+import {
+  ANALYTICS_GRAPH_URL,
+  ANALYTICS_KPI_URL,
+  APP_BASE,
+} from "../../utils/urls";
 import { errorHandler, getClientId, getToken } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import { Spinner } from "../../components/spinner/Spinner";
@@ -14,7 +18,7 @@ import { Select } from "../../components/select/Select";
 import { cleanParameters } from "../campaign/campaign";
 import qs from "querystring";
 import { formatApp } from "../games/singleGame";
-import _ from "lodash"
+import _ from "lodash";
 import { primaryColor } from "../../utils/data";
 
 let tomorrow = new Date();
@@ -24,13 +28,15 @@ let yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
 
 const calculateWinningRatio = (dataMain) => {
+  if (!dataMain) return 0;
   if (!dataMain.kpiInfo) return 0;
   if (dataMain.kpiInfo.totalGamePlays <= 0) return 0;
-  return (dataMain.kpiInfo.totalWinnings / dataMain.kpiInfo.totalGamePlays).toFixed(2);
+  return (
+    dataMain.kpiInfo.totalWinnings / dataMain.kpiInfo.totalGamePlays
+  ).toFixed(2);
 };
 
 export { tomorrow, yesterday, calculateWinningRatio };
-
 
 function Dashboard(props) {
   const [data, setData] = useState(null);
@@ -38,7 +44,7 @@ function Dashboard(props) {
   const [appId, setAppId] = useState(null);
   const [dateData, setDateData] = useState({
     startDate: moment(yesterday).format("YYYY-MM-DD"),
-    endDate: moment(tomorrow).format("YYYY-MM-DD")
+    endDate: moment(tomorrow).format("YYYY-MM-DD"),
   });
   const [graphData, setGraphData] = useState([]);
   const [apps, setApps] = useState([]);
@@ -52,7 +58,7 @@ function Dashboard(props) {
       url: APP_BASE,
     }).then(
       (res) => {
-        console.log(res.data._embedded.apps)
+        console.log(res.data._embedded.apps);
         setApps(_.get(res, "data._embedded.apps", []));
         setFetchingApps(false);
       },
@@ -63,31 +69,28 @@ function Dashboard(props) {
         });
       }
     );
-  }
-
+  };
 
   useEffect(() => {
     if (!fetching) {
       setFetching(true);
     }
-    
-    getDateData(qs.stringify(cleanParameters({appId})));
+
+    getDateData(qs.stringify(cleanParameters({ appId })));
     getApps();
   }, [dateData, appId]);
 
-  const formatGraphData = data => {
+  const formatGraphData = (data) => {
     const labels = [];
     const gamePlays = [];
     const winnings = [];
 
-    data.map(item => {
-      labels.push(
-        moment(new Date(item.date)).format("DD MMM, YY")
-      )
-      gamePlays.push(item.totalGamePlays)
-      winnings.push(item.totalWinnings)
+    data.map((item) => {
+      labels.push(moment(new Date(item.date)).format("DD MMM, YY"));
+      gamePlays.push(item.totalGamePlays);
+      winnings.push(item.totalWinnings);
       return null;
-    })
+    });
 
     return {
       labels,
@@ -96,18 +99,17 @@ function Dashboard(props) {
           label: "GamePlays",
           data: gamePlays,
           fill: false,
-          borderColor: "#EB008A"
+          borderColor: "#EB008A",
         },
         {
           label: "Winnings",
           data: winnings,
           fill: false,
-          borderColor: "#0094D8"
-        }
-      ]
-    }
-  }
-
+          borderColor: "#0094D8",
+        },
+      ],
+    };
+  };
 
   const getDateData = (extra) => {
     Promise.all([
@@ -118,8 +120,8 @@ function Dashboard(props) {
         token: getToken(),
         data: {
           startDate: `${dateData.startDate} 00:00:00`,
-          endDate: `${dateData.endDate} 00:00:00`
-        }
+          endDate: `${dateData.endDate} 00:00:00`,
+        },
       }),
       axiosHandler({
         method: "post",
@@ -128,19 +130,19 @@ function Dashboard(props) {
         token: getToken(),
         data: {
           startDate: `${dateData.startDate} 00:00:00`,
-          endDate: `${dateData.endDate} 00:00:00`
-        }
-      })
+          endDate: `${dateData.endDate} 00:00:00`,
+        },
+      }),
     ]).then(
       ([logs, graph]) => {
         setData({ ...data, kpiInfo: logs.data });
-        setGraphData(formatGraphData(graph.data.data))
+        setGraphData(formatGraphData(graph.data.data));
         setFetching(false);
       },
-      err => {
+      (err) => {
         Notification.bubble({
           type: "error",
-          content: errorHandler(err)
+          content: errorHandler(err),
         });
       }
     );
@@ -152,15 +154,20 @@ function Dashboard(props) {
         <div className="flex align-center">
           <DatePicker
             rangePicker
-            onChange={e => setDateData({ ...dateData, ...e })}
+            onChange={(e) => setDateData({ ...dateData, ...e })}
           />
           <h3 className="link">
             &nbsp;&nbsp;Showing data between {dateData.startDate} to{" "}
             {dateData.endDate}
           </h3>
         </div>
-        <Select style={{maxWidth: 200}} placeholder={fetchingApps ? "loading apps..." : "select an app"}
-                optionList={[{title: "All", value:null}, ...formatApp(apps)]} name="appId" onChange={e => setAppId(e.target.value)}/>
+        <Select
+          style={{ maxWidth: 200 }}
+          placeholder={fetchingApps ? "loading apps..." : "select an app"}
+          optionList={[{ title: "All", value: null }, ...formatApp(apps)]}
+          name="appId"
+          onChange={(e) => setAppId(e.target.value)}
+        />
       </div>
 
       <br />
@@ -209,8 +216,9 @@ function Dashboard(props) {
       <Card heading="GamePlays/Winnings vs Time">
         <div className="contentCard">
           <div className="graph-container">
-            {
-              fetching ? <Spinner color={primaryColor} /> :
+            {fetching ? (
+              <Spinner color={primaryColor} />
+            ) : (
               <div className="">
                 <Graph
                   options={OPTIONS}
@@ -221,7 +229,7 @@ function Dashboard(props) {
                   className="transaction-graph"
                 />
               </div>
-            }
+            )}
           </div>
         </div>
       </Card>

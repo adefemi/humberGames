@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import Input from "../../components/input/Input";
 import AppIcon from "../../components/icons/Icon";
 import { Select } from "../../components/select/Select";
-import {
-  secondaryColor,
-  statusModeTransaction
-} from "../../utils/data";
+import { secondaryColor, statusModeTransaction } from "../../utils/data";
 import TransactionTable from "../../components/transactionTable/transactionTable";
 import Pagination from "../../components/Pagination/pagination";
 import Badge from "../../components/Badge/badge";
@@ -14,7 +11,7 @@ import {
   errorHandler,
   genericChangeSingle,
   getClientId,
-  getToken
+  getToken,
 } from "../../utils/helper";
 import { Notification } from "../../components/notification/Notification";
 import moment from "moment";
@@ -27,7 +24,7 @@ import {
   PAYOUT_URL,
   APP_BASE,
   ANALYTICS_KPI_URL,
-  ANALYTICS_GRAPH_URL
+  ANALYTICS_GRAPH_URL,
 } from "../../utils/urls";
 import { cleanParameters } from "../campaign/campaign";
 import Divider from "../../components/Divider/divider";
@@ -35,7 +32,7 @@ import { Spinner } from "../../components/spinner/Spinner";
 import { Button } from "../../components/button/Button";
 import TransactionDetailsTwo from "./transactionDetailsTwo";
 import { formatApp } from "./singleGame";
-import _ from "lodash"
+import _ from "lodash";
 import { Card } from "../../components/card/Card";
 import { calculateWinningRatio } from "../dashboard/dashboard";
 import "../dashboard/dashboard.css";
@@ -49,7 +46,7 @@ function GameTransactions(props) {
     "Game Token",
     "User Input",
     "Draw TIme",
-    ""
+    "",
   ];
   if (props.bundle) {
     headings = ["Transaction Ref", "User ID", "User Input", ""];
@@ -87,7 +84,7 @@ function GameTransactions(props) {
         });
       }
     );
-  }
+  };
 
   const [appId, setAppId] = useState(null);
 
@@ -96,7 +93,7 @@ function GameTransactions(props) {
     queryParams["appId"] = appId;
     extra += `&${qs.stringify(cleanParameters(queryParams))}`;
     getTransactions(extra);
-    getDateData(qs.stringify(cleanParameters({appId})));
+    getDateData(qs.stringify(cleanParameters({ appId })));
     getApps();
   }, [search, queryParams, currentPage, appId]);
 
@@ -112,20 +109,20 @@ function GameTransactions(props) {
     if (props.bundle) {
       url =
         GAME_BUNDLE_TRANSACTION_URL +
-        `?game_bundle_id=${props.match.params.uuid}&size=20&${extra}&sort=createdAt,desc`;
+        `?game_bundle_id=${props.match.params.uuid}&size=20&${extra}&sort=drawTime,desc`;
     }
     if (props.transRef) {
       url =
         GAME_TRANSACTION_URL +
-        `?transactionRef=${props.transRef}&size=20&${extra}&sort=createdAt,desc`;
+        `?transactionRef=${props.transRef}&size=20&${extra}&sort=drawTime,desc`;
     }
     axiosHandler({
       method: "get",
       url,
       clientID: getClientId(),
-      token: getToken()
+      token: getToken(),
     })
-      .then(res => {
+      .then((res) => {
         let data;
         if (props.bundle) {
           data = res.data._embedded.gameBundleTransactions;
@@ -136,10 +133,10 @@ function GameTransactions(props) {
         setPageInfo(res.data.page);
         setFetching(false);
       })
-      .catch(err => {
+      .catch((err) => {
         Notification.bubble({
           type: "error",
-          content: errorHandler(err, true)
+          content: errorHandler(err, true),
         });
       });
   };
@@ -165,16 +162,16 @@ function GameTransactions(props) {
         //   startDate: `${dateData.startDate} 00:00:00`,
         //   endDate: `${dateData.endDate} 00:00:00`
         // }
-      })
+      }),
     ]).then(
       ([logs, graph]) => {
         setData({ ...data, kpiInfo: logs.data });
         setFetchingSum(false);
       },
-      err => {
+      (err) => {
         Notification.bubble({
           type: "error",
-          content: errorHandler(err)
+          content: errorHandler(err),
         });
       }
     );
@@ -183,7 +180,7 @@ function GameTransactions(props) {
   const formatTransactions = () => {
     const returnValue = [];
     if (props.bundle) {
-      transactions.map(item => {
+      transactions.map((item) => {
         returnValue.push([
           `${item.transactionRef.substring(0, 10)}${
             item.transactionRef.length > 10 ? "..." : ""
@@ -212,12 +209,12 @@ function GameTransactions(props) {
             }}
           >
             View Transaction
-          </span>
+          </span>,
         ]);
         return null;
       });
     } else {
-      transactions.map(item => {
+      transactions.map((item) => {
         returnValue.push([
           `${item.id.substring(0, 10)}${item.id.length > 10 ? "..." : ""}`,
           `${item.transactionRef.substring(0, 10)}${
@@ -271,7 +268,7 @@ function GameTransactions(props) {
             }}
           >
             View Transaction
-          </span>
+          </span>,
         ]);
         return null;
       });
@@ -288,7 +285,13 @@ function GameTransactions(props) {
               {fetchingSum ? (
                 <Spinner color="#000000" />
               ) : (
-                <h1>{!data ? "-": data.kpiInfo ? data.kpiInfo.totalGamePlays : "-"}</h1>
+                <h1>
+                  {!data
+                    ? "-"
+                    : data.kpiInfo
+                    ? data.kpiInfo.totalGamePlays
+                    : "-"}
+                </h1>
               )}
             </center>
           </div>
@@ -299,7 +302,13 @@ function GameTransactions(props) {
               {fetchingSum ? (
                 <Spinner color="#000000" />
               ) : (
-                <h1>{!data ? "-":data.kpiInfo ? data.kpiInfo.totalWinnings : "-"}</h1>
+                <h1>
+                  {!data
+                    ? "-"
+                    : data.kpiInfo
+                    ? data.kpiInfo.totalWinnings
+                    : "-"}
+                </h1>
               )}
             </center>
           </div>
@@ -311,7 +320,9 @@ function GameTransactions(props) {
                 <Spinner color="#000000" />
               ) : (
                 <h1>
-                  {!data ? "-":data.kpiInfo && calculateWinningRatio().length > 6
+                  {!data
+                    ? "-"
+                    : data.kpiInfo && calculateWinningRatio().length > 6
                     ? calculateWinningRatio().toFixed(4)
                     : calculateWinningRatio()}
                 </h1>
@@ -345,13 +356,18 @@ function GameTransactions(props) {
               name="status"
               defaultOption={statusModeTransaction[0]}
               optionList={statusModeTransaction}
-              onChange={e =>
+              onChange={(e) =>
                 genericChangeSingle(e, setQueryParams, queryParams)
               }
             />
             &nbsp;
-            <Select style={{width: 200}} placeholder={fetchingApps ? "loading apps..." : "select an app"}
-                optionList={[{title: "All", value:null}, ...formatApp(apps)]} name="appId" onChange={e => setAppId(e.target.value)}/>
+            <Select
+              style={{ width: 200 }}
+              placeholder={fetchingApps ? "loading apps..." : "select an app"}
+              optionList={[{ title: "All", value: null }, ...formatApp(apps)]}
+              name="appId"
+              onChange={(e) => setAppId(e.target.value)}
+            />
           </div>
         </div>
       )}
@@ -387,7 +403,7 @@ function GameTransactions(props) {
   );
 }
 
-export const TransactionDetails = props => {
+export const TransactionDetails = (props) => {
   const [fetching, setFetching] = useState(true);
   const [winningInfo, setWinningInfo] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -405,17 +421,17 @@ export const TransactionDetails = props => {
       method: "get",
       token: getToken(),
       clientID: getClientId(),
-      url: GAME_TRANSACTION_URL + `/${props.activeTrans.id}/playerWinning`
+      url: GAME_TRANSACTION_URL + `/${props.activeTrans.id}/playerWinning`,
     }).then(
-      res => {
+      (res) => {
         setWinningInfo(res.data);
         setFetching(false);
         setLoading(false);
       },
-      err => {
+      (err) => {
         Notification.bubble({
           type: "error",
-          content: errorHandler(err)
+          content: errorHandler(err),
         });
       }
     );
@@ -428,19 +444,19 @@ export const TransactionDetails = props => {
       method: "get",
       url,
       clientID: getClientId(),
-      token: getToken()
+      token: getToken(),
     })
-      .then(res => {
+      .then((res) => {
         Notification.bubble({
           type: "success",
-          content: "Payment initiated"
+          content: "Payment initiated",
         });
         getWinningInfo();
       })
-      .catch(err => {
+      .catch((err) => {
         Notification.bubble({
           type: "error",
-          content: errorHandler(err)
+          content: errorHandler(err),
         });
         setLoading(false);
       });
